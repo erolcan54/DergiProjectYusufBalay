@@ -53,6 +53,11 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<OzelDersVeliBasvuruManager>().As<IOzelDersVeliBasvuruService>().SingleInstance();
             builder.RegisterType<EfOzelDersVeliBasvuruDal>().As<IOzelDersVeliBasvuruDal>().SingleInstance();
 
+            builder.RegisterType<OzelOgretmenYorumManager>().As<IOzelOgretmenYorumService>().SingleInstance();
+            builder.RegisterType<EfOzelOgretmenYorumDal>().As<IOzelOgretmenYorumDal>().SingleInstance();
+
+            builder.RegisterType<OzelOgretmenYorumBegeniManager>().As<IOzelOgretmenYorumBegeniService>().SingleInstance();
+            builder.RegisterType<EfOzelOgretmenYorumBegeniDal>().As<IOzelOgretmenYorumBegeniDal>().SingleInstance();
             //var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             //builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

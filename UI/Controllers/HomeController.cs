@@ -14,7 +14,7 @@ using X.PagedList.Mvc.Core;
 
 namespace UI.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -27,8 +27,10 @@ namespace UI.Controllers
         private IBlogService _blogService;
         private IOzelDersOgretmenService _ozelDersOgretmenService;
         private IOzelDersVeliBasvuruService _ozelDersVeliBasvuruService;
+        private IOzelOgretmenYorumService _ozelOgretmenYorumService;
+        private IOzelOgretmenYorumBegeniService _ozelOgretmenYorumBegeniService;
 
-        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService)
+        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService)
         {
             _logger = logger;
             _ilService = ilService;
@@ -40,6 +42,8 @@ namespace UI.Controllers
             _blogService = blogService;
             _ozelDersOgretmenService = ozelDersOgretmenService;
             _ozelDersVeliBasvuruService = ozelDersVeliBasvuruService;
+            _ozelOgretmenYorumService = ozelOgretmenYorumService;
+            _ozelOgretmenYorumBegeniService = ozelOgretmenYorumBegeniService;
         }
 
         public IActionResult Index()
@@ -62,11 +66,11 @@ namespace UI.Controllers
                                      }).ToList();
             ViewData["okulTurleri"] = okulTurSelectList;
 
-            var blogs=_blogService.Get4LastList();
+            var blogs = _blogService.Get4LastList();
             ViewData["Bloglar"] = blogs.Data;
 
             var ozeldersogretmen = _ozelDersOgretmenService.GetAllDisplay4Take();
-            ViewData["OzelDersOgretmen"]=ozeldersogretmen.Data;
+            ViewData["OzelDersOgretmen"] = ozeldersogretmen.Data;
 
             return View();
         }
@@ -81,7 +85,7 @@ namespace UI.Controllers
             if (model.okulTurId == 0)
                 return Json(new ErrorResult("Lütfen okul türü seçiniz."));
             var result = _okulService.GetOkulListFilter(model);
-            if (result.Success && result.Data.Count!=0)
+            if (result.Success && result.Data.Count != 0)
                 return RedirectToAction("KurumListesi", "Home", result.Data);
             else
                 return Json(new ErrorResult("Aranan kriterlerde okul listesi bulunamadı."));
@@ -157,30 +161,40 @@ namespace UI.Controllers
 
         public IActionResult BlogDetail(int id)
         {
-            var result=_blogService.GetById(id);
+            var result = _blogService.GetById(id);
             result.Data.Hit++;
             _blogService.Update(result.Data);
             return View(result.Data);
         }
 
-        public IActionResult BlogListesi(int page=1)
+        public IActionResult BlogListesi(int page = 1)
         {
-            var result=_blogService.GetAll();
-            var data= result.Data.Where(a => a.Status).OrderByDescending(a => a.Id).ToPagedList(page, 12);
+            var result = _blogService.GetAll();
+            var data = result.Data.Where(a => a.Status).OrderByDescending(a => a.Id).ToPagedList(page, 12);
             return View(data);
         }
 
-        public IActionResult OzelDersOgretmenListesi(int page=1)
+        public IActionResult OzelDersOgretmenListesi(int page = 1)
         {
-            var result=_ozelDersOgretmenService.GetAllDisplay();
+            var result = _ozelDersOgretmenService.GetAllDisplay();
             var data = result.Data.Where(a => a.Status).OrderByDescending(a => a.Id).ToPagedList(page, 12);
             return View(data);
         }
 
         public IActionResult ProfileDetail(int id)
         {
+            var yorums = _ozelOgretmenYorumService.GetAllByOgretmenId(id);
+            ViewData["yorumlar"] = yorums.Data.OrderByDescending(a => a.Id).ToList();
+            ViewData["yorumSayisi"] = _ozelOgretmenYorumService.GetCountByOgretmenId(id).Data;
             var result = _ozelDersOgretmenService.GetByIdDisplay(id);
             return View(result.Data);
+        }
+
+        [HttpPost]
+        public IActionResult YorumEkle(OzelOgretmenYorum model)
+        {
+            var result = _ozelOgretmenYorumService.Add(model);
+            return RedirectToAction("ProfileDetail", "Home", new { id = model.OzelOgretmenId });
         }
         public IActionResult OzelDersBasvuru(int id)
         {

@@ -1,6 +1,6 @@
 ﻿@model OzelDersOgretmenDto
 @{
-    ViewData["Title"] = "ProfileDetail";
+    List<YorumDisplayDto> yorums = ViewData["yorumlar"] as List<YorumDisplayDto>;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,7 +10,7 @@
             <div class="row mb-2">
                 <div class="col-12">
                     <div class="text-xxl-start">
-                        <a href="@Url.Action("OzelDersBasvuru","Home",new {id=Model.Id})" class="btn btn-success mb-2">Başvur</a>
+                        <a href="@Url.Action("OzelDersBasvuru","Home",new {id=Model.Id})" class="btn btn-danger mb-2">Başvur</a>
                     </div>
                 </div><!-- end col-->
             </div>
@@ -51,6 +51,47 @@
                 <p class="text-muted mb-1 font-13"><strong>İl Adı :</strong> <span class="ms-2">@Model.ilAdi</span></p>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="mt-0 mb-3">Yorumlar (@ViewData["yorumSayisi"])</h4>
+            <form class="form-vertical" asp-action="YorumEkle" asp-controller="Home" method="post">
+                <input type="hidden" value="@Model.Id" name="OzelOgretmenId" />
+                <div class="mb-1">
+                    <input class="form-control form-control-light" type="text" name="AdSoyad" id="AdSoyad" required="" placeholder="Adınız ve Soyadınızı Yazınız">
+                </div>
+                <textarea class="form-control form-control-light mb-2" name="Yorum" required placeholder="Mesajınızı yazınız..." id="example-textarea" rows="3"></textarea>
+                <div class="text-end">
+                    <div class="btn-group mb-2 ms-2">
+                        <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
+                    </div>
+                </div>
+            </form>
+            
+            @if (yorums != null)
+            {
+                @if (yorums.Count > 0)
+                {
+                    @foreach (var item in yorums)
+                    {
+                        <hr />
+                        <div class="d-flex mb-1 mt-1">
+                            <div class="w-100 overflow-hidden">
+                                <small class="float-end">
+                                    <div class="rateit" data-yorumId="@item.Id" data-rateit-mode="font" data-rateit-readonly="false" data-rateit-value="@item.BegeniAvarege"></div>
+                                </small>
+                                <h6 class="m-0 font-14">@item.AdSoyad</h6>
+                                <small class="text-muted">@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString()</small>
+                            </div>
+                        </div>
+                        <p>@item.Yorum</p>
+                    }
+                }
+            }
+        </div> <!-- end card-body-->
     </div>
 </div>
 

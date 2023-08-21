@@ -29,5 +29,8 @@ namespace DataAccess.Concrete
         public DbSet<Kullanici> Kullanici { get; set; }
         public DbSet<OzelDersOgretmen> OzelDersOgretmen { get; set; }
         public DbSet<OzelDersVeliBasvuru> OzelDersVeliBasvuru { get; set; }
+        public DbSet<OzelOgretmenYorum> OzelOgretmenYorum { get; set; }
+        public DbSet<OzelOgretmenYorumBegeni> OzelOgretmenYorumBegeni { get; set; }
+
     }
 }
