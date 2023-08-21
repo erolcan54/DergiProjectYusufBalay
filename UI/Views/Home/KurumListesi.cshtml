@@ -1,0 +1,51 @@
+﻿@model List<KurumDisplayDto>
+@{
+    ViewData["Title"] = "KurumListesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">KURUM LİSTESİ</h4>
+            <p class="text-muted font-14">Arama yaptığınız kriterlere uygun kurumlar aşağıda listelenmiştir.</p>
+            @if (Model.Count > 0)
+            {
+                <div class="table-responsive">
+                    <table id="basic-datatable" class="table table-hover table-centered mb-0 dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>Ad</th>
+                                <th>İl/İlçe</th>
+                                <th>Adres</th>
+                                <th>Telefon</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Ad.ToUpper()</td>
+                                    <td>@item.ilAdi.ToUpper() / @item.ilceAdi.ToUpper()</td>
+                                    <td class=""><span class="text-muted">@item.Adres</span></td>
+                                    <td><span class="text-muted">@item.Telefon</span></td>
+                                    <td><a href="@Url.Action("KudurmDetay","Home",item.Id)" class="btn btn-sm- btn-outline-dark">İncele</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <strong>Uyarı - </strong> Aradığınız kriterlere uygun kurum bulunamamıştır.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,79 @@
+﻿@model Blog
+@{
+    ViewData["Title"] = "AddBlog";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">BLOG EKLEME PANELİ</h4>
+            <p class="text-muted font-14">Blog yazısı eklemek için aşağıdaki formu doldurunuz.</p>
+            <form class="form-vertical" data-ajax="true" enctype="multipart/form-data"
+                  data-ajax-success="OnAddBlogSuccess"
+                  data-ajax-begin="OnAddBlogBegin"
+                  data-ajax-complete="OnAddBlogComplete" data-ajax-method="POST" asp-action="AddBlog" asp-controller="Admin">
+                <div class="mb-3">
+                    <label for="Baslik" class="form-label">Başlık</label>
+                    <input class="form-control" type="text" asp-for="Baslik" id="Baslik" required="" placeholder="Blog Başlığını Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Resim" class="form-label">Resim</label>
+                    <input class="form-control" type="file" asp-for="Resim" required="" id="Resim">
+                </div>
+                <div class="mb-3">
+                    <label for="Konu" class="form-label">Konu</label>
+                    <textarea rows="10" asp-for="Konu" id="Konu" class="form-control resize-none" placeholder="Blog içeriğini yazınız."></textarea>
+                </div>
+                
+                <div class="d-grid mb-0 text-center">
+                    <button class="btn btn-primary" id="btnaddBlog" type="submit"><i class="mdi mdi-plus"></i> Ekle </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+
+        var OnAddBlogBegin = function () {
+            $("#btnaddBlog").prop("disabled", true);
+            $("#btnaddBlog").html('Lütfen Bekleyin...');
+            $('#loading').show();
+            
+            
+        };
+        var OnAddBlogComplete = function () {
+            $("#btnaddBlog").prop("disabled", false);
+            $("#btnaddBlog").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnAddBlogSuccess = function (data) {
+            if (data.Success) {
+                
+                window.location.href = '@Html.Raw(Url.Action("Blog","Admin"))';
+               
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("Konu");
+    </script>
+}

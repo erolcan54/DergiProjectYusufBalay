@@ -1,0 +1,82 @@
+﻿@model Yonetici
+@{
+    ViewData["Title"] = "UpdateAdmin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <form class="form-vertical" data-ajax="true"
+                  data-ajax-success="OnUpdateAdminSuccess"
+                  data-ajax-begin="OnUpdateAdminBegin"
+                  data-ajax-complete="OnAUpdateAdminComplete" data-ajax-method="POST" asp-action="UpdateAdmin" asp-controller="Admin">
+                <div class="mb-3">
+                    <label for="Ad" class="form-label">Ad</label>
+                    <input class="form-control" type="text" name="Ad" id="Ad" asp-for=Ad required="" placeholder="Admin Adını Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Soyad" class="form-label">Soyad</label>
+                    <input class="form-control" type="text" name="Soyad" asp-for=Soyad id="Soyad" required="" placeholder="Admin Soyadını Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="KullaniciAdi" class="form-label">KullaniciAdi</label>
+                    <input class="form-control" type="text" name="KullaniciAdi" asp-for=KullaniciAdi id="KullaniciAdi" required="" placeholder="Kullanıcı Adını Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Sifre" class="form-label">Şifre</label>
+                    <input class="form-control" type="text" name="Sifre" asp-for=Sifre required="" id="Sifre" placeholder="Şifreni Yazınız">
+                </div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <input type="hidden" asp-for="UpdatedDate" />
+                <input type="hidden" asp-for="DeletedDate" />
+                <div class="d-grid mb-0 text-center">
+                    <button class="btn btn-primary" id="btnupdateadmin" type="submit"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnUpdateAdminBegin = function () {
+            $("#btnupdateadmin").prop("disabled", true);
+            $("#btnupdateadmin").html('Lütfen Bekleyin...');
+        };
+        var OnUpdateAdminComplete = function () {
+            $("#btnupdateadmin").prop("disabled", false);
+            $("#btnupdateadmin").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+        }
+        var OnUpdateAdminSuccess = function (data) {
+            if (data.Success) {
+                swal({
+                    title: 'BAŞARILI',
+                    text: "Yönetici bilgileri güncellendi.",
+                    type: 'success',
+                    confirmButtonClass: 'btn-info',
+                    confirmButtonText: 'Tamam',
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = '@Html.Raw(Url.Action("YoneticiListe","Admin"))';
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}

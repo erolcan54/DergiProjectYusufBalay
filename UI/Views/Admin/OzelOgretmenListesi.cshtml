@@ -1,0 +1,136 @@
+﻿@model List<OzelDersOgretmenDto>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row mb-2 mt-1">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title">
+                <a href="@Url.Action("AddOzelOgretmen","Admin")" class="btn btn-success btn-rounded mb-3"><i class="mdi mdi-plus"></i> Öğretmen Ekle</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            @if (Model.Count > 0)
+            {
+                <table id="alternative-page-datatable" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Telefon</th>
+                            <th>Email</th>
+                            <th>İl Adı</th>
+                            <th>Eklenme Tarihi</th>
+                            <th>Durum</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="table-user">
+                                    <img src="@ByteToImage.DecodeImage(item.Resim)" alt="table-user" class="me-2 rounded-circle">
+                                    <a href="@Url.Action("ProfileDetail","Admin",new {id=item.Id})" class="text-body fw-semibold">@item.AdSoyad</a>
+                                </td>
+                                <td>
+                                    @item.Telefon
+                                </td>
+                                <td>
+                                    @item.Email
+                                </td>
+                                <td>
+                                    @item.ilAdi
+                                </td>
+                                <td class="sorting_1" style="display: none;">
+                                    @Convert.ToDateTime(item.CreatedDate).ToShortDateString()
+                                </td>
+                                <td style="display: none;">
+                                    @if (item.Status)
+                                    {
+                                        <span class="badge badge-success-lighten">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger-lighten">Pasif</span>
+                                    }
+                                </td>
+
+                                <td style="display: none;">
+                                    <a href="@Url.Action("OzelOgretmenGuncelle","Admin",new {id=item.Id})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                    <a href="#" data-id="@item.Id" id="btnozelogretmensil"  class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="body">
+                    <div class="card-body">
+                        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                            <strong>Uyarı - </strong> Özel öğretmen listesi boş.
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).on("click", "#btnozelogretmensil", function () {
+            var id = $(this).data("id");
+            swal({
+                title: "UYARI",
+                text: "Özel öğretmen bilgilerini silmek istediğinize emin misiniz?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                cancelButtonClass: 'btn-success',
+                confirmButtonText: "EVET",
+                cancelButtonText: "HAYIR",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: '/Admin/OzelOgretmenSil/' + id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.Success == true) {
+                            swal({
+                                title: "BAŞARILI!",
+                                type: "success",
+                                text: result.Message,
+                                confirmButtonClass: 'btn-success',
+                                confirmButtonText: "Tamam"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    window.location.href = '@Url.Action("OzelOgretmenListesi", "Admin")';
+                                }
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'HATA',
+                                text: result.Message,
+                                type: 'error',
+                                confirmButtonClass: 'btn-danger',
+                                confirmButtonText: 'Tamam',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+

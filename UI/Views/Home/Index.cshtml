@@ -1,0 +1,352 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
+    List<SelectListItem> okulTurleri = ViewData["okulTurleri"] as List<SelectListItem>;
+    List<Blog> blogs = ViewData["Bloglar"] as List<Blog>;
+    List<OzelDersOgretmenDto> ozelDersOgretmens = ViewData["OzelDersOgretmen"] as List<OzelDersOgretmenDto>;
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">ARAMA PANELİ</h4>
+            <p class="text-muted font-14">Arama yapmak için aşağıdaki formu doldurunuz.</p>
+            <ul class="nav nav-tabs nav-bordered mb-3">
+                <li class="nav-item">
+                    <a href="#home-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                        @* <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                        <span class="d-none d-md-block">Okul Ara</span>*@
+                        <span class="d-md-block">Okul Ara</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#profile-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                        @* <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                        <span class="d-none d-md-block">Kurs Ara</span>*@
+                        <span class="d-md-block">Kurs Ara</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane show active" id="home-b1">
+                    <form class="form-vertical" data-ajax="true"
+                          data-ajax-success="OnOkulAraSuccess"
+                          data-ajax-begin="OnOkulAraBegin"
+                          data-ajax-complete="OnOkulAraComplete" data-ajax-method="POST" asp-action="OkulAra" asp-controller="Home">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="il1" name="il1" class="form-control select2" data-toggle="select2">
+                                        <option value="0">İl Seçiniz</option>
+                                        @foreach (var item in iller)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+
+                            </div> <!-- end col -->
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="ilce1" name="ilce1" class="form-control select2" data-toggle="select2">
+                                        <option value="0">İlçe Seçiniz</option>
+                                    </select>
+                                </div>
+
+                            </div> <!-- end col -->
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="okulTurId" name="okulTurId" class="form-control select2" data-toggle="select2">
+                                        <option value="0">Okul Türü Seçiniz</option>
+                                        @foreach (var item in okulTurleri)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+
+                            </div> <!-- end col -->
+                            <div class="col-lg-3 d-grid mb-2">
+                                <button id="btnOkulAra" type="submit" class="btn btn-outline-warning">Okul Ara</button>
+
+                            </div> <!-- end col -->
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane show" id="profile-b1">
+                    <form class="form-vertical" data-ajax="true"
+                          data-ajax-success="OnKursAraSuccess"
+                          data-ajax-begin="OnKursAraBegin"
+                          data-ajax-complete="OnKursAraComplete" data-ajax-method="POST" asp-action="KursAra" asp-controller="Home">
+                        <div class="row">
+                            <div class="col-lg-4 mb-2">
+                                <select id="il2" name="il2" class="form-control select2" data-toggle="select2">
+                                    <option value="0">İl Seçiniz</option>
+                                    @foreach (var item in iller)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div> <!-- end col -->
+                            <div class="col-lg-4 mb-2">
+                                <select id="ilce2" name="ilce2" class="form-control select2" data-toggle="select2">
+                                    <option>İlçe Seçiniz</option>
+                                </select>
+                            </div> <!-- end col -->
+                            <div class="col-lg-4 d-grid mb-2">
+                                <button id="btnKursAra" type="submit" class="btn btn-outline-dark">Kurs Ara</button>
+                            </div> <!-- end col -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">EN ÇOK ZİYARET EDİLENLER</h4>
+            <p class="text-muted font-14">En çok ziyaret edilen kurumların listesi</p>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">ÖZEL İNDİRİMLER</h4>
+            <p class="text-muted font-14">Kurumların indirim fırsatlarını buradan görebilirsiniz.</p>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">BURSLULUK SINAVLARI</h4>
+            <p class="text-muted font-14">Bursluluk sınavları ile ilgili bilgiler .</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            @if (blogs.Count > 0)
+            {
+                <div class="float-end"><a href="@Url.Action("BlogListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+            }
+            <h4 class="header-title">EĞİTİM İÇERİKLERİ / BLOG</h4>
+            <p class="text-muted font-14">Eğitim ile ilgili yazılan makalelere buradan ulaşabilirsiniz.</p>
+            <div class="row">
+                @foreach (var item in blogs)
+                {
+                    <div class="col-md-3 col-xxl-3">
+                        <!-- project card -->
+                        <div class="card d-block">
+                            <!-- project-thumbnail -->
+                            <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            <div class="card-img-overlay">
+                                <div class="badge bg-secondary text-light p-1">@item.CreatedDate</div>
+                            </div>
+
+                            <div class="card-body position-relative">
+                                <!-- project title-->
+                                <h4 class="mt-0">
+                                    <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})" class="text-title">@item.Baslik</a>
+                                </h4>
+
+                                <!-- project detail-->
+                                <p class="mb-1">
+                                    <span class="pe-2 text-nowrap">
+                                        <i class="mdi mdi-eye"></i>
+                                        <b>@item.Hit kez görüntülendi.</b>
+                                    </span>
+                                </p>
+                                @if (item.UpdatedDate != null)
+                                {
+                                    <span class="mb-3">
+                                        <span class="pe-2">
+                                            <i class="mdi mdi-update"></i>
+                                            <b>@Convert.ToDateTime(item.UpdatedDate).ToShortDateString() güncellendi.</b>
+                                        </span>
+                                    </span>
+                                }
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            @if (ozelDersOgretmens.Count > 0)
+            {
+                <div class="float-end"><a href="@Url.Action("OzelDersOgretmenListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+            }
+            <h4 class="header-title">ÖZEL DERS VERENLER</h4>
+            <p class="text-muted font-14">Özel ders veren öğretmenlerin bilgileri aşağıda listelenmiştir.</p>
+            <div class="row">
+                @foreach (var item in ozelDersOgretmens)
+                {
+                    <div class="col-md-4 col-xxl-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+
+                                <h4 class="mb-0 mt-2"><a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">@item.AdSoyad</a></h4>
+                                <p class="text-muted font-14">@item.BransAdi</p>
+                                <p class="text-muted font-14">@item.ilAdi</p>
+
+                                @if (item.Online)
+                                {
+                                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Online</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Online</button>
+                                }
+                                @if (item.Yuzyuze)
+                                {
+                                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Yüzyüze</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Yüzyüze</button>
+                                }
+                            </div> <!-- end card-body -->
+                        </div> <!-- end card -->
+                        <!-- Messages-->
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script>
+
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnOkulAraBegin = function () {
+            $("#btnOkulAra").prop("disabled", true);
+            $("#btnOkulAra").html('Lütfen Bekleyin...');
+            $("#btnKursAra").prop("disabled", true);
+        };
+        var OnOkulAraComplete = function () {
+            $("#btnOkulAra").prop("disabled", false);
+            $("#btnOkulAra").html('Okul Ara');
+            $("#btnKursAra").prop("disabled", false);
+        }
+        var OnOkulAraSuccess = function (data) {
+            if (data.Success) {
+                //swal({
+                //    title: 'BAŞARILI',
+                //    text: "Tebrikler. Okul bilgileriniz eklendi. Hesabınız onaylandıktan sonra sistemi kullanmaya başlayabilirsiniz. Onaylama işlemi sonrasında belirtmiş olduğunuz e-posta adresine bilgilendirme postası otomatik olarak gönderilecektir.",
+                //    type: 'success',
+                //    confirmButtonClass: 'btn-info',
+                //    confirmButtonText: 'Tamam',
+                //}, function (isConfirm) {
+                //    if (isConfirm) {
+                //        window.location.href = '@Html.Raw(Url.Action("Index","Home"))';
+                //    }
+                //});
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+        var OnKursAraBegin = function () {
+            $("#btnKursAra").prop("disabled", true);
+            $("#btnKursAra").html('Lütfen Bekleyin...');
+            $("#btnOkulAra").prop("disabled", true);
+        };
+        var OnKursAraComplete = function () {
+            $("#btnKursAra").prop("disabled", false);
+            $("#btnKursAra").html('Kurs Ara');
+            $("#btnOkulAra").prop("disabled", false);
+        }
+        var OnKursAraSuccess = function (data) {
+            if (data.Success) {
+                //swal({
+                //    title: 'BAŞARILI',
+                //    text: "Tebrikler. Okul bilgileriniz eklendi. Hesabınız onaylandıktan sonra sistemi kullanmaya başlayabilirsiniz. Onaylama işlemi sonrasında belirtmiş olduğunuz e-posta adresine bilgilendirme postası otomatik olarak gönderilecektir.",
+                //    type: 'success',
+                //    confirmButtonClass: 'btn-info',
+                //    confirmButtonText: 'Tamam',
+                //}, function (isConfirm) {
+                //    if (isConfirm) {
+                //        window.location.href = '@Html.Raw(Url.Action("Index","Home"))';
+                //    }
+                //});
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+        $(document).ready(function () {
+            $('#il1').on('change', function () {
+                var id = $(this).val();
+                var ilceListe = $("#ilce1");
+                ilceListe.empty();
+                $.ajax({
+                    url: '../Home/GetSelectListilce/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'ilId': id },
+                    success: function (data) {
+                        $.each(data, function (index, option) {
+                            ilceListe.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function () {
+            $('#il2').on('change', function () {
+                var id = $(this).val();
+                var ilceListe = $("#ilce2");
+                ilceListe.empty();
+                $.ajax({
+                    url: '../Home/GetSelectListilce/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'ilId': id },
+                    success: function (data) {
+                        $.each(data, function (index, option) {
+                            ilceListe.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

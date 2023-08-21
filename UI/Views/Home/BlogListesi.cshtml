@@ -1,0 +1,64 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common;
+@model IPagedList<Blog>
+@{
+    ViewData["Title"] = "BlogListesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">EĞİTİM İÇERİKLERİ / BLOG</h4>
+            <p class="text-muted font-14">Eğitim ile ilgili yazılan makalelere buradan ulaşabilirsiniz.</p>
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3 col-xxl-3">
+                        <!-- project card -->
+                        <div class="card d-block">
+                            <!-- project-thumbnail -->
+                            <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            <div class="card-img-overlay">
+                                <div class="badge bg-secondary text-light p-1">@item.CreatedDate</div>
+                            </div>
+
+                            <div class="card-body position-relative">
+                                <!-- project title-->
+                                <h4 class="mt-0">
+                                    <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})" class="text-title">@item.Baslik</a>
+                                </h4>
+
+                                <!-- project detail-->
+                                <p class="mb-1">
+                                    <span class="pe-2 text-nowrap">
+                                        <i class="mdi mdi-eye"></i>
+                                        <b>@item.Hit kez görüntülendi.</b>
+                                    </span>
+                                </p>
+                                @if (item.UpdatedDate != null)
+                                {
+                                    <span class="mb-3">
+                                        <span class="pe-2">
+                                            <i class="mdi mdi-update"></i>
+                                            <b>@Convert.ToDateTime(item.UpdatedDate).ToShortDateString() güncellendi.</b>
+                                        </span>
+                                    </span>
+                                }
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                    </div>
+                }
+            </div>
+             <div class="row">
+                @Html.PagedListPager((IPagedList)Model,page=>Url.Action("BlogListesi","Home",new {page}),
+                new PagedListRenderOptions {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+                })
+            </div>
+        </div>
+    </div>
+</div>
+

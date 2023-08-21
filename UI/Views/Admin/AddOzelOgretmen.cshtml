@@ -1,0 +1,135 @@
+﻿@model OzelDersOgretmen
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
+    List<SelectListItem> branslar = ViewData["branslar"] as List<SelectListItem>;
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">ÖZEL DERS ÖĞRETMEN EKLEME PANELİ</h4>
+            <p class="text-muted font-14">Özel ders öğretmen bilgilerini eklemek için aşağıdaki formu doldurunuz.</p>
+            <form class="form-vertical" data-ajax="true" enctype="multipart/form-data"
+                  data-ajax-success="OnAddOzelOgretmenSuccess"
+                  data-ajax-begin="OnAddOzelOgretmenBegin"
+                  data-ajax-complete="OnAddOzelOgretmenComplete" data-ajax-method="POST" asp-action="AddOzelOgretmen" asp-controller="Admin">
+                <div class="mb-3">
+                    <label for="AdSoyad" class="form-label">Ad Soyad</label>
+                    <input class="form-control" type="text" asp-for="AdSoyad" id="AdSoyad" required="" placeholder="Ad Soyad Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Resim" class="form-label">Resim</label>
+                    <input class="form-control" type="file" asp-for="Resim" required="" id="Resim">
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="Telefon" class="form-label">Telefon</label>
+                            <input type="tel" name="Telefon" class="form-control" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" asp-for="Telefon" id="Telefon" required="" placeholder="Telefon Yazınız">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="Email" class="form-label">Email</label>
+                            <input class="form-control" type="email" asp-for="Email" id="Email" required="" placeholder="Email Yazınız">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="ilId" class="form-label">İl</label>
+                            <select id="ilId" name="ilId" asp-for="ilId" class="form-control select2" data-toggle="select2">
+                                <option value="0">İl Seçiniz</option>
+                                @foreach (var item in iller)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div> <!-- end col -->
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="BransId" class="form-label">Branş</label>
+                            <select id="BransId" asp-for="BransId" name="BransId" class="form-control select2" data-toggle="select2">
+                                <option value="0">Branş Seçiniz</option>
+                                @foreach (var item in branslar)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div> <!-- end col -->
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-3">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" asp-for="Online" id="Online">
+                            <label class="form-check-label" for="Online">ONLINE ders verebilir</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" asp-for="Yuzyuze" id="Yuzyuze">
+                            <label class="form-check-label" for="Yuzyuze">YÜZYÜZE ders verebilir</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="Hakkinda" class="form-label">Hakkında</label>
+                    <textarea class="form-control" asp-for="Hakkinda" id="Hakkinda" rows="3" required="" placeholder="Öğretmen hakkında bilgileri yazınız"></textarea>
+                </div>
+                <div class="d-grid mb-0 text-center">
+                    <button class="btn btn-primary" id="btnaddOzelOgretmen" type="submit"><i class="mdi mdi-plus"></i> Ekle </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+
+        var OnAddOzelOgretmenBegin = function () {
+            $("#btnaddOzelOgretmen").prop("disabled", true);
+            $("#btnaddOzelOgretmen").html('Lütfen Bekleyin...');
+            $('#loading').show();
+
+
+        };
+        var OnAddOzelOgretmenComplete = function () {
+            $("#btnaddOzelOgretmen").prop("disabled", false);
+            $("#btnaddOzelOgretmen").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnAddOzelOgretmenSuccess = function (data) {
+            if (data.Success) {
+
+                window.location.href = '@Html.Raw(Url.Action("OzelOgretmenListesi","Admin"))';
+
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+
+@*    <script src="~/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("Konu");
+    </script>*@
+}
+

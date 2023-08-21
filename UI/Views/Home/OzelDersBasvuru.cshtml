@@ -1,0 +1,149 @@
+﻿@model OzelDersVeliBasvuru
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    OzelDersOgretmenDto oob = ViewData["OzelOgretmen"] as OzelDersOgretmenDto;
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <img src="@ByteToImage.DecodeImage(oob.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+
+                <h4 class="mb-0 mt-2">@oob.AdSoyad</h4>
+                <p class="text-muted font-14">@oob.BransAdi</p>
+                <p class="text-muted font-14">@oob.ilAdi</p>
+
+                @if (oob.Online)
+                {
+                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Online</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Online</button>
+                }
+                @if (oob.Yuzyuze)
+                {
+                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Yüzyüze</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Yüzyüze</button>
+                }
+            </div> <!-- end card-body -->
+        </div> <!-- end card -->
+        <!-- Messages-->
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title">ÖZEL DERS BAŞVURU PANELİ</h4>
+                <p class="text-muted font-14">Özel ders başvuru bilgilerini eklemek için aşağıdaki formu doldurunuz.</p>
+                <form class="form-vertical" data-ajax="true"
+                      data-ajax-success="OnAddOzelBasvuruSuccess"
+                      data-ajax-begin="OnAddOzelBasvuruBegin"
+                      data-ajax-complete="OnAddOzelBasvuruComplete" data-ajax-method="POST" asp-action="AddOzelBasvuru" asp-controller="Home">
+                    <div class="mb-3">
+                        <label for="AdSoyad" class="form-label">Ad Soyad</label>
+                        <input class="form-control" type="text" asp-for="AdSoyad" id="AdSoyad" required="" placeholder="Ad Soyad Yazınız">
+                    </div>
+                    <input type="hidden" asp-for="OzelDersOgretmenId" value="@oob.Id" />
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Telefon" class="form-label">Telefon</label>
+                                <input type="tel" asp-for="Telefon" class="form-control" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" name="Telefon" id="Telefon" required="" placeholder="Telefon Yazınız">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Email" class="form-label">Email</label>
+                                <input class="form-control" type="email" asp-for="Email" id="Email" required="" placeholder="Email Yazınız">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="Sinif" class="form-label">Sınıf</label>
+                            <select id="Sinif" asp-for="Sinif" class="form-control select2" data-toggle="select2">
+                                <option value="0">Sınıf Seçiniz</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="Mezun">Mezun</option>
+                            </select>
+                        </div> <!-- end col -->
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" asp-for="Online" id="Online">
+                                <label class="form-check-label" for="Online">ONLINE ders almak istiyorum</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" asp-for="Yuzyuze" id="Yuzyuze">
+                                <label class="form-check-label" for="Yuzyuze">YÜZYÜZE ders almak istiyorum</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid mb-0 text-center">
+                        <button class="btn btn-primary" id="btnaddOzelBasvuru" type="submit"><i class="mdi mdi-plus"></i> Başvur </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+        var OnAddOzelBasvuruBegin = function () {
+            $("#btnaddOzelBasvuru").prop("disabled", true);
+            $("#btnaddOzelBasvuru").html('Lütfen Bekleyin...');
+            $('#loading').show();
+        };
+        var OnAddOzelBasvuruComplete = function () {
+            $("#btnaddOzelBasvuru").prop("disabled", false);
+            $("#btnaddOzelBasvuru").html('<i class="mdi mdi-plus"></i> Başvur ');
+            $('#loading').hide();
+        };
+        var OnAddOzelBasvuruSuccess = function (data) {
+            if (data.Success) {
+                swal({
+                    title: 'BAŞARILI',
+                    text: data.Message,
+                    type: 'success',
+                    confirmButtonClass: 'btn-success',
+                    confirmButtonText: 'Tamam',
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = '/Home/ProfileDetail/'+@Html.Raw(oob.Id);
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}
+

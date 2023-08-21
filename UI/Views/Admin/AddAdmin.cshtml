@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "AddAdmin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <form class="form-vertical" data-ajax="true"
+                  data-ajax-success="OnAddAdminSuccess"
+                  data-ajax-begin="OnAddAdminBegin"
+                  data-ajax-complete="OnAddAdminComplete" data-ajax-method="POST" asp-action="AddAdmin" asp-controller="Admin">
+                <div class="mb-3">
+                    <label for="Ad" class="form-label">Ad</label>
+                    <input class="form-control" type="text" name="Ad" id="Ad" required="" placeholder="Admin Adını Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Soyad" class="form-label">Soyad</label>
+                    <input class="form-control" type="text" name="Soyad" id="Soyad" required="" placeholder="Admin Soyadını Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="KullaniciAdi" class="form-label">KullaniciAdi</label>
+                    <input class="form-control" type="text" name="KullaniciAdi" id="KullaniciAdi" required="" placeholder="Kullanıcı Adını Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Sifre" class="form-label">Şifre</label>
+                    <input class="form-control" type="password" name="Sifre" required="" id="Sifre" placeholder="Şifreni Yazınız">
+                </div>
+                <div class="d-grid mb-0 text-center">
+                    <button class="btn btn-primary" id="btnaddadmin" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnAddAdminBegin = function () {
+            $("#btnaddadmin").prop("disabled", true);
+            $("#btnaddadmin").html('Lütfen Bekleyin...');
+        };
+        var OnAddAdminComplete = function () {
+            $("#btnaddadmin").prop("disabled", false);
+            $("#btnaddadmin").html('<i class="mdi mdi-plus"></i> Kaydet ');
+        }
+        var OnAddAdminSuccess = function (data) {
+            if (data.Success) {
+                swal({
+                    title: 'BAŞARILI',
+                    text: "Yönetici bilgileri eklendi.",
+                    type: 'success',
+                    confirmButtonClass: 'btn-info',
+                    confirmButtonText: 'Tamam',
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = '@Html.Raw(Url.Action("YoneticiListe","Admin"))';
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}
+
