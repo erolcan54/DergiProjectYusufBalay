@@ -3,6 +3,7 @@
     ViewData["Title"] = "ProfileDetail";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     List<OzelDersVeliBasvuru> basvurus = ViewData["Basvurular"] as List<OzelDersVeliBasvuru>;
+    List<YorumDisplayDto> yorums = ViewData["yorumlar"] as List<YorumDisplayDto>;
 }
 
 <div class="row">
@@ -56,7 +57,6 @@
     </div>
 </div>
 <div class="row">
-
     <div class="card">
         <div class="card-body">
             <h4 class="header-title">ÖZEL DERS VELİ BAŞVURULARI</h4>
@@ -82,14 +82,14 @@
                                 <td>@item.Email</td>
                                 <td>@item.Telefon</td>
                                 <td>
-                                   @if (item.Online)
-                                {
-                                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Evet</button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Hayır</button>
-                                }
+                                    @if (item.Online)
+                                    {
+                                        <button type="button" class="btn btn-success btn-sm mb-2" disabled>Evet</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Hayır</button>
+                                    }
                                 </td>
                                 <td>
                                     @if (item.Yuzyuze)
@@ -119,7 +119,45 @@
 </div>
 
 
-
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">YORUMLAR</h4>
+            @if (yorums.Count > 0)
+            {
+                <table id="basic-datatable" class="table dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Yorum</th>
+                            <th>Puan</th>
+                            <th>Eklenme Tarihi</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in yorums)
+                        {
+                            <tr>
+                                <td>@item.AdSoyad</td>
+                                <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@item.Yorum</td>
+                                <td>@item.BegeniAvarege</td>
+                                <td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString()</td>
+                                <td><button type="button" class="btn btn-sm btn-danger" data-id="@item.Id" id="btnyorumSil">Sil</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <strong>Uyarı - </strong> Yorum listesi boş.
+                </div>
+            }
+        </div>
+    </div>
+</div>
 
 
 
@@ -152,6 +190,50 @@
                             }, function (isConfirm) {
                                 if (isConfirm) {
                                     window.location.href = '@Url.Action("OzelOgretmenListesi", "Admin")';
+                                }
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'HATA',
+                                text: result.Message,
+                                type: 'error',
+                                confirmButtonClass: 'btn-danger',
+                                confirmButtonText: 'Tamam',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        $(document).on("click", "#btnyorumSil", function () {
+            var id = $(this).data("id");
+            swal({
+                title: "UYARI",
+                text: "Yorumu silmek istediğinize emin misiniz?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                cancelButtonClass: 'btn-success',
+                confirmButtonText: "EVET",
+                cancelButtonText: "HAYIR",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: '/Admin/YorumSil/' + id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.Success == true) {
+                            swal({
+                                title: "BAŞARILI!",
+                                type: "success",
+                                text: result.Message,
+                                confirmButtonClass: 'btn-success',
+                                confirmButtonText: "Tamam"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    window.location.href = '@Url.Action("ProfileDetail", "Admin",new {id=Model.Id})';
                                 }
                             });
                         }

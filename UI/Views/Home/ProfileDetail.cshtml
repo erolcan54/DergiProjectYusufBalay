@@ -81,7 +81,7 @@
                         <div class="d-flex mb-1 mt-1">
                             <div class="w-100 overflow-hidden">
                                 <small class="float-end">
-                                    <div class="rateit" data-yorumId="@item.Id" data-rateit-mode="font" data-rateit-readonly="false" data-rateit-value="@item.BegeniAvarege"></div>
+                                    <div class="rateit" data-id="@item.Id" id="rateitYorum" data-rateit-mode="font" data-rateit-readonly="false" data-rateit-value="@item.BegeniAvarege"></div>
                                 </small>
                                 <h6 class="m-0 font-14">@item.AdSoyad</h6>
                                 <small class="text-muted">@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString()</small>
@@ -95,3 +95,29 @@
     </div>
 </div>
 
+@section Scripts{
+    <script>
+        $(document).on("click",
+            "#rateitYorum",
+            function () {
+                var deger = $(this).rateit('value');
+                var id = $(this).data('id');
+                var _url = '@Url.Action("YorumPuanla", "Home")';
+                $.ajax({
+                    type: "POST",
+                    url: _url,
+                    data: { deger: deger, id: id },
+                    success: function (result) {
+                        if(result.Success)
+                        {
+                            toastr.success(result.Message);
+                        }
+                        else
+                        {
+                            toastr.error(result.Message);
+                        }
+                    }
+                });
+            });
+    </script>
+}

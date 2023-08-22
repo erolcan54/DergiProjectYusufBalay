@@ -24,6 +24,8 @@ namespace Business.Concrete
         {
             entity.CreatedDate = DateTime.Now;
             entity.Status = true;
+            if (IPAddressControltoYorum(entity.YorumId, entity.IPAddress).Success)
+                return new ErrorResult("Daha önce bu yorum için değerlendirme yapmışsınız.");
             _ozelOgretmenYorumBegeniDal.Add(entity);
             return new SuccessResult("Yorum begenisi eklendi");
         }

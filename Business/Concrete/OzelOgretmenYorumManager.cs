@@ -57,7 +57,7 @@ namespace Business.Concrete
                 y.UpdatedDate= item.UpdatedDate;
                 y.CreatedDate= item.CreatedDate;
                 y.OzelOgretmenId = item.OzelOgretmenId;
-                y.BegeniAvarege = _ozelOgretmenYorumBegeniService.GetByYorumIdBegeniAvarege(id).Data;
+                y.BegeniAvarege = _ozelOgretmenYorumBegeniService.GetByYorumIdBegeniAvarege(item.Id).Data;
                 y.Id= item.Id;
                 y.Status= item.Status;
                 y.Yorum= item.Yorum;

@@ -11,6 +11,7 @@ using System.Security.Claims;
 using UI.Filters;
 using X.PagedList;
 using X.PagedList.Mvc.Core;
+using UI.Utilities;
 
 namespace UI.Controllers
 {
@@ -29,8 +30,9 @@ namespace UI.Controllers
         private IOzelDersVeliBasvuruService _ozelDersVeliBasvuruService;
         private IOzelOgretmenYorumService _ozelOgretmenYorumService;
         private IOzelOgretmenYorumBegeniService _ozelOgretmenYorumBegeniService;
+        private IHttpContextAccessor _contextAccessor;
 
-        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService)
+        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor)
         {
             _logger = logger;
             _ilService = ilService;
@@ -44,6 +46,7 @@ namespace UI.Controllers
             _ozelDersVeliBasvuruService = ozelDersVeliBasvuruService;
             _ozelOgretmenYorumService = ozelOgretmenYorumService;
             _ozelOgretmenYorumBegeniService = ozelOgretmenYorumBegeniService;
+            _contextAccessor = contextAccessor;
         }
 
         public IActionResult Index()
@@ -188,6 +191,18 @@ namespace UI.Controllers
             ViewData["yorumSayisi"] = _ozelOgretmenYorumService.GetCountByOgretmenId(id).Data;
             var result = _ozelDersOgretmenService.GetByIdDisplay(id);
             return View(result.Data);
+        }
+
+        [HttpPost]
+        public IActionResult YorumPuanla(int deger, int id)
+        {
+            string address = _contextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
+            OzelOgretmenYorumBegeni model = new OzelOgretmenYorumBegeni();
+            model.YorumId = id;
+            model.IPAddress = address;
+            model.Begeni= deger;
+            var result = _ozelOgretmenYorumBegeniService.Add(model);
+            return Json(result);
         }
 
         [HttpPost]

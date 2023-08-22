@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews()
     .AddJsonOptions(opts=>opts.JsonSerializerOptions.PropertyNamingPolicy=null);
 builder.Services.AddSession(opt=>opt.IdleTimeout= TimeSpan.FromSeconds(60));
 builder.Services.AddMvcCore();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>

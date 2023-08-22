@@ -22,7 +22,10 @@ namespace UI.Controllers
         private IilService _ilService;
         private IBransService _bransService;
         private IOzelDersVeliBasvuruService _ozelDersVeliBasvuruService;
-        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService)
+        private IOzelOgretmenYorumService _ozelOgretmenYorumService;
+        private IOzelOgretmenYorumBegeniService _ozelOgretmenYorumBegeniService;
+
+        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService)
         {
             _blogService = blogService;
             _yoneticiService = yoneticiService;
@@ -31,6 +34,8 @@ namespace UI.Controllers
             _ilService = ilService;
             _bransService = bransService;
             _ozelDersVeliBasvuruService = ozelDersVeliBasvuruService;
+            _ozelOgretmenYorumService = ozelOgretmenYorumService;
+            _ozelOgretmenYorumBegeniService = ozelOgretmenYorumBegeniService;
         }
 
         public IActionResult Index()
@@ -208,8 +213,18 @@ namespace UI.Controllers
         {
             var basvuru = _ozelDersVeliBasvuruService.GetListByOgretmenId(id);
             ViewData["Basvurular"] = basvuru.Data;
+            var yorums = _ozelOgretmenYorumService.GetAllByOgretmenId(id);
+            ViewData["yorumlar"] = yorums.Data.OrderByDescending(a => a.Id).ToList();
+            ViewData["yorumSayisi"] = _ozelOgretmenYorumService.GetCountByOgretmenId(id).Data;
             var result = _ozelDersOgretmenService.GetByIdDisplay(id);
             return View(result.Data);
+        }
+
+        [HttpPost]
+        public IActionResult YorumSil(int id)
+        {
+            var result = _ozelOgretmenYorumService.Delete(id);
+            return Json(result);
         }
 
         [HttpPost]
