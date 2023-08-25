@@ -81,34 +81,42 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult OkulAra(OkulAraDto model)
         {
-            if (model.il1 == 0)
-                return Json(new ErrorResult("Lütfen il seçiniz."));
-            if (model.ilce1 == 0)
-                return Json(new ErrorResult("Lütfen ilçe seçiniz."));
-            if (model.okulTurId == 0)
-                return Json(new ErrorResult("Lütfen okul türü seçiniz."));
+            //if (model.il1 == 0)
+            //    return Json(new ErrorResult("Lütfen il seçiniz."));
+            //if (model.ilce1 == 0)
+            //    return Json(new ErrorResult("Lütfen ilçe seçiniz."));
+            //if (model.okulTurId == 0)
+            //    return Json(new ErrorResult("Lütfen okul türü seçiniz."));
             var result = _okulService.GetOkulListFilter(model);
             if (result.Success && result.Data.Count != 0)
-                return RedirectToAction("KurumListesi", "Home", result.Data);
+                return View("KurumListesi", result.Data);
+            //return RedirectToAction("KurumListesi", "Home", result.Data);
             else
-                return Json(new ErrorResult("Aranan kriterlerde okul listesi bulunamadı."));
+            {
+                TempData["OkulAraUyari"] = "Aranan kriterlerde okul listesi bulunamadı.";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
         public IActionResult KursAra(KursAraDto model)
         {
-            if (model.il2 == 0)
-                return Json(new ErrorResult("Lütfen il seçiniz."));
-            if (model.ilce2 == 0)
-                return Json(new ErrorResult("Lütfen ilçe seçiniz."));
+            //if (model.il2 == 0)
+            //    return Json(new ErrorResult("Lütfen il seçiniz."));
+            //if (model.ilce2 == 0)
+            //    return Json(new ErrorResult("Lütfen ilçe seçiniz."));
             var result = _okulService.GetKursListFilter(model);
             if (result.Success && result.Data.Count != 0)
-                return RedirectToAction("KurumListesi", "Home", result.Data);
+                return View("KurumListesi", result.Data);
+
             else
-                return Json(new ErrorResult("Aranan kriterlerde kurs listesi bulunamadı."));
+            {
+                TempData["KursAraUyari"] = "Aranan kriterlerde kurs listesi bulunamadı.";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
-        public IActionResult KurumListesi(List<KurumDisplayDto> liste)
+        public IActionResult KurumListesi([FromBody] List<KurumDisplayDto> liste)
         {
             return View(liste);
         }
@@ -200,7 +208,7 @@ namespace UI.Controllers
             OzelOgretmenYorumBegeni model = new OzelOgretmenYorumBegeni();
             model.YorumId = id;
             model.IPAddress = address;
-            model.Begeni= deger;
+            model.Begeni = deger;
             var result = _ozelOgretmenYorumBegeniService.Add(model);
             return Json(result);
         }

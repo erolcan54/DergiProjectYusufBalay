@@ -1,0 +1,81 @@
+﻿@model Brans
+@{
+    ViewData["Title"] = "BransGuncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row mb-2 mt-1">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="form-horizontal" data-ajax="true"
+                      data-ajax-success="OnUpdateBransSuccess"
+                      data-ajax-begin="OnUpdateBransBegin"
+                      data-ajax-complete="OnUpdateBransComplete"
+                      asp-action="UpdateBrans"
+                      asp-controller="Admin"
+                      data-ajax-method="POST">
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <input type="hidden" asp-for="CreatedDate" value="@Model.CreatedDate" />
+                    <input type="hidden" asp-for="UpdatedDate" value="@Model.UpdatedDate" />
+                    <input type="hidden" asp-for="DeletedDate" value="@Model.DeletedDate" />
+                    <input type="hidden" asp-for="Status" value="@Model.Status" />
+                    <div class="row mb-3">
+                        <label class="col-3 col-form-label text-right">Branş/Bölüm Adı</label>
+                        <div class="col-9">
+                            <input type="text" name="Ad" asp-for="Ad" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="justify-content-end row">
+                        <div class="col-9">
+                            <button class="btn btn-primary" id="btnUpdatebrans" type="submit"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+
+        var OnUpdateBransBegin = function () {
+            $("#btnbrans").prop("disabled", true);
+            $("#btnaddbrans").html('Lütfen Bekleyin...');
+            $('#loading').show();
+
+
+        };
+        var OnUpdateBransComplete = function () {
+            $("#btnaddbrans").prop("disabled", false);
+            $("#btnaddbrans").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+            $('#loading').hide();
+        }
+        var OnUpdateBransSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("Branslar","Admin"))';
+
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+
+}
+
+

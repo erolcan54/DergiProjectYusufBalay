@@ -13,5 +13,7 @@ namespace DataAccess.Abstract
     {
         List<KurumDisplayDto> GetOkulListFilter(OkulAraDto model);
         List<KurumDisplayDto> GetKursListFilter(KursAraDto model);
+        List<KurumDisplayDto> GetAllKurum();
+        KurumDisplayDto GetByIdDisplay(int id);
     }
 }

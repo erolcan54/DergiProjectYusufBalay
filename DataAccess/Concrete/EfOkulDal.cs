@@ -12,6 +12,111 @@ namespace DataAccess.Concrete
 {
     public class EfOkulDal : EfEntityRepositoryBase<Okul, EfContext>, IOkulDal
     {
+        public List<KurumDisplayDto> GetAllKurum()
+        {
+            using (EfContext context = new EfContext())
+            {
+                var result = from k in context.Okul
+                             join il in context.il on k.ilId equals il.Id
+                             join ilce in context.ilce on k.ilceId equals ilce.Id
+                             join egitimTur in context.EgitimTur on k.EgitimTurId equals egitimTur.Id
+                             select new KurumDisplayDto
+                             {
+                                 Id = k.Id,
+                                 Ad = k.Ad,
+                                 Adres = k.Adres,
+                                 EgitimTurAdi = egitimTur.Ad,
+                                 EgitimTurId = k.EgitimTurId,
+                                 Email = k.Email,
+                                 ilAdi = il.Ad,
+                                 ilceAdi = ilce.Ad,
+                                 ilceId = k.ilceId,
+                                 ilId = k.ilId,
+                                 Resim = k.Resim,
+                                 Telefon = k.Telefon,
+                                 TikSayisi = k.TikSayisi,
+                                 Web = k.Web,
+                                 CeratedDate=k.CreatedDate,
+                                 DeletedDate=k.DeletedDate,
+                                 Status= k.Status,
+                                 UpdatedDate=k.UpdatedDate,
+                             };
+                return result.ToList();
+
+            }
+        }
+
+        //public List<KurumDisplayDto> GetAllOkul()
+        //{
+        //    using (EfContext context = new EfContext())
+        //    {
+        //        var result = from k in context.Okul.Where(a=> a.EgitimTurId == 1)
+        //                     join il in context.il on k.ilId equals il.Id
+        //                     join ilce in context.ilce on k.ilceId equals ilce.Id
+        //                     join okulTur in context.OkulTur on k.OkulTurId equals okulTur.Id
+        //                     join egitimTur in context.EgitimTur on k.EgitimTurId equals egitimTur.Id
+        //                     select new KurumDisplayDto
+        //                     {
+        //                         Id = k.Id,
+        //                         Ad = k.Ad,
+        //                         Adres = k.Adres,
+        //                         EgitimTurAdi = egitimTur.Ad,
+        //                         EgitimTurId = k.EgitimTurId,
+        //                         Email = k.Email,
+        //                         ilAdi = il.Ad,
+        //                         ilceAdi = ilce.Ad,
+        //                         ilceId = k.ilceId,
+        //                         ilId = k.ilId,
+        //                         OkulTurAdi = okulTur.Tip,
+        //                         OkulTurId = k.OkulTurId,
+        //                         Resim = k.Resim,
+        //                         Telefon = k.Telefon,
+        //                         TikSayisi = k.TikSayisi,
+        //                         Web = k.Web,
+        //                         CeratedDate = k.CreatedDate,
+        //                         DeletedDate = k.DeletedDate,
+        //                         Status = k.Status,
+        //                         UpdatedDate = k.UpdatedDate,
+        //                     };
+        //        return result.ToList();
+        //    }
+        //}
+
+
+        public KurumDisplayDto GetByIdDisplay(int id)
+        {
+            using (EfContext context = new EfContext())
+            {
+                var result = from k in context.Okul.Where(a => a.Id==id)
+                             join il in context.il on k.ilId equals il.Id
+                             join ilce in context.ilce on k.ilceId equals ilce.Id
+                             join egitimTur in context.EgitimTur on k.EgitimTurId equals egitimTur.Id
+                             select new KurumDisplayDto
+                             {
+                                 Id = k.Id,
+                                 Ad = k.Ad,
+                                 Adres = k.Adres,
+                                 EgitimTurAdi = egitimTur.Ad,
+                                 EgitimTurId = k.EgitimTurId,
+                                 Email = k.Email,
+                                 ilAdi = il.Ad,
+                                 ilceAdi = ilce.Ad,
+                                 ilceId = k.ilceId,
+                                 ilId = k.ilId,
+                                 OkulTurId=k.OkulTurId,
+                                 Resim = k.Resim,
+                                 Telefon = k.Telefon,
+                                 TikSayisi = k.TikSayisi,
+                                 Web = k.Web,
+                                 CeratedDate = k.CreatedDate,
+                                 DeletedDate = k.DeletedDate,
+                                 Status = k.Status,
+                                 UpdatedDate = k.UpdatedDate,
+                             };
+                return result.FirstOrDefault();
+            }
+        }
+
         public List<KurumDisplayDto> GetKursListFilter(KursAraDto model)
         {
             using(EfContext context=new EfContext())
@@ -35,7 +140,11 @@ namespace DataAccess.Concrete
                                  Resim = k.Resim,
                                  Telefon = k.Telefon,
                                  TikSayisi = k.TikSayisi,
-                                 Web = k.Web
+                                 Web = k.Web,
+                                 CeratedDate = k.CreatedDate,
+                                 DeletedDate = k.DeletedDate,
+                                 Status = k.Status,
+                                 UpdatedDate = k.UpdatedDate,
                              };
                 return result.ToList();
 
@@ -68,7 +177,11 @@ namespace DataAccess.Concrete
                                  Resim = k.Resim,
                                  Telefon = k.Telefon,
                                  TikSayisi = k.TikSayisi,
-                                 Web = k.Web
+                                 Web = k.Web,
+                                 CeratedDate = k.CreatedDate,
+                                 DeletedDate = k.DeletedDate,
+                                 Status = k.Status,
+                                 UpdatedDate = k.UpdatedDate,
                              };
                 return result.ToList();
             }

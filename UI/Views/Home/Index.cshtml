@@ -29,10 +29,13 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane show active" id="home-b1">
-                    <form class="form-vertical" data-ajax="true"
-                          data-ajax-success="OnOkulAraSuccess"
-                          data-ajax-begin="OnOkulAraBegin"
-                          data-ajax-complete="OnOkulAraComplete" data-ajax-method="POST" asp-action="OkulAra" asp-controller="Home">
+                    @if (TempData["OkulAraUyari"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                            <strong>Uyarı - </strong> @TempData["OkulAraUyari"]
+                        </div>
+                    }
+                    <form class="form-vertical" method="post" asp-action="OkulAra" asp-controller="Home">
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="mb-2">
@@ -74,10 +77,13 @@
                     </form>
                 </div>
                 <div class="tab-pane show" id="profile-b1">
-                    <form class="form-vertical" data-ajax="true"
-                          data-ajax-success="OnKursAraSuccess"
-                          data-ajax-begin="OnKursAraBegin"
-                          data-ajax-complete="OnKursAraComplete" data-ajax-method="POST" asp-action="KursAra" asp-controller="Home">
+                    @if (TempData["KursAraUyari"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                            <strong>Uyarı - </strong> @TempData["KursAraUyari"]
+                        </div>
+                    }
+                    <form class="form-vertical method="post" asp-action="KursAra" asp-controller="Home">
                         <div class="row">
                             <div class="col-lg-4 mb-2">
                                 <select id="il2" name="il2" class="form-control select2" data-toggle="select2">
@@ -231,6 +237,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts{
 
     <script>
@@ -238,6 +245,7 @@
         $(window).on('load',
             function () {
                 $('#loading').hide();
+
             });
 
         var OnOkulAraBegin = function () {
@@ -252,17 +260,9 @@
         }
         var OnOkulAraSuccess = function (data) {
             if (data.Success) {
-                //swal({
-                //    title: 'BAŞARILI',
-                //    text: "Tebrikler. Okul bilgileriniz eklendi. Hesabınız onaylandıktan sonra sistemi kullanmaya başlayabilirsiniz. Onaylama işlemi sonrasında belirtmiş olduğunuz e-posta adresine bilgilendirme postası otomatik olarak gönderilecektir.",
-                //    type: 'success',
-                //    confirmButtonClass: 'btn-info',
-                //    confirmButtonText: 'Tamam',
-                //}, function (isConfirm) {
-                //    if (isConfirm) {
-                //        window.location.href = '@Html.Raw(Url.Action("Index","Home"))';
-                //    }
-                //});
+                toastr.success(data.Data.length + " adet kayıt bulundu.");
+                console.log(data.Data);
+                window.location.href = "/Home/KurumListesi/" + JSON.stringify(data.Data);
             }
             else {
                 swal({

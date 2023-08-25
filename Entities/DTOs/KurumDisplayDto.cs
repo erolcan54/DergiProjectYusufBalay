@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,5 +25,9 @@ namespace Entities.DTOs
         public string EgitimTurAdi { get; set; }
         public int TikSayisi { get; set; }
         public byte[] Resim { get; set; }
+        public DateTime? CeratedDate { get; set; }
+        public DateTime? UpdatedDate{ get; set; }
+        public DateTime? DeletedDate { get; set; }
+        public bool Status { get; set; }
     }
 }

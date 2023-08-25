@@ -13,10 +13,12 @@ namespace Business.Concrete
 {
     public class OkulManager : IOkulService
     {
-        IOkulDal _okulDal;
-        public OkulManager(IOkulDal okulDal)
+        private IOkulDal _okulDal;
+        private IOkulTurService _okulTurService;
+        public OkulManager(IOkulDal okulDal, IOkulTurService okulTurService)
         {
             _okulDal = okulDal;
+            _okulTurService = okulTurService;
         }
 
         public IResult Add(Okul entity)
@@ -32,7 +34,7 @@ namespace Business.Concrete
             var result=_okulDal.Get(a=>a.Id==id);
             result.Status= false;
             result.DeletedDate= DateTime.Now;
-            _okulDal.Delete(result);
+            _okulDal.Update(result);
             return new SuccessResult("Okul bilgisi silindi.");
         }
 
@@ -41,9 +43,26 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Okul>>(_okulDal.GetAll(),"Okul listesi getirildi.");
         }
 
+        public IDataResult<List<KurumDisplayDto>> GetAllKurum()
+        {
+            var result=_okulDal.GetAllKurum();
+            return new SuccessDataResult<List<KurumDisplayDto>>(result, "Kurum listesi getirildi.");
+        }
+
         public IDataResult<Okul> GetById(int id)
         {
             return new SuccessDataResult<Okul>(_okulDal.Get(a => a.Id == id), "Okul bilgisi getirildi.");
+        }
+
+        public IDataResult<KurumDisplayDto> GetByIdDisplay(int id)
+        {
+            var result = _okulDal.GetByIdDisplay(id);
+            if (result.OkulTurId != 0)
+            {
+                var okulturu = _okulTurService.GetById(result.OkulTurId);
+                result.OkulTurAdi = okulturu.Data.Tip;
+            }
+            return new SuccessDataResult<KurumDisplayDto>(result, "Kurum bilgileri getirildi.");
         }
 
         public IDataResult<List<KurumDisplayDto>> GetKursListFilter(KursAraDto model)

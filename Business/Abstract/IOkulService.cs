@@ -13,8 +13,9 @@ namespace Business.Abstract
     {
         IResult Add(Okul entity);
         IDataResult<Okul> GetById(int id);
+        IDataResult<KurumDisplayDto> GetByIdDisplay(int id);
         IResult Update(Okul entity);
-        IDataResult<List<Okul>> GetAll();
+        IDataResult<List<KurumDisplayDto>> GetAllKurum();
         IResult Delete(int id);
         IDataResult<List<KurumDisplayDto>> GetOkulListFilter(OkulAraDto model);
         IDataResult<List<KurumDisplayDto>> GetKursListFilter(KursAraDto model);

@@ -1,0 +1,150 @@
+﻿@model Okul
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
+    List<SelectListItem> okulTurleri = ViewData["okulTurleri"] as List<SelectListItem>;
+    List<SelectListItem> ilceler = ViewData["ilceler"] as List<SelectListItem>;
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">KURUM GÜNCELLEME PANELİ</h4>
+            <form class="form-vertical" data-ajax="true" enctype="multipart/form-data"
+                  data-ajax-success="OnUpdateOkulSuccess"
+                  data-ajax-begin="OnUpdateOkulBegin"
+                  data-ajax-complete="OnUpdateOkulComplete" data-ajax-method="POST" asp-action="KurumGuncelle" asp-controller="Admin">
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <input type="hidden" asp-for="TikSayisi" value="@Model.TikSayisi" />
+                <input type="hidden" asp-for="EgitimTurId" value="@Model.EgitimTurId" />
+                <input type="hidden" asp-for="CreatedDate" value="@Model.CreatedDate" />
+                <input type="hidden" asp-for="UpdatedDate" value="@Model.UpdatedDate" />
+                <input type="hidden" asp-for="DeletedDate" value="@Model.DeletedDate"/>
+                <input type="hidden" asp-for="OkulTurId" value="@Model.OkulTurId" />
+                <input type="hidden" asp-for="Status" value="@Model.Status" />
+                
+                <div class="mb-3">
+                    <label for="Ad" class="form-label">Kurum Adı</label>
+                    <input class="form-control" type="text" asp-for="Ad" id="Ad" required="" placeholder="Kurum Adını Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Adres" class="form-label">Adres</label>
+                    <input class="form-control" type="text" asp-for="Adres" id="Adres" required="" placeholder="Okul Adresini Yazınız">
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="Telefon" class="form-label">Telefon</label>
+                        <input class="form-control" type="text" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" asp-for="Telefon" id="Telefon" required="" placeholder="Kurum Telefonu Yazınız">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Web" class="form-label">Web</label>
+                        <input class="form-control" type="text" asp-for="Web" id="Web" required="" placeholder="Kurum Web Adresini Yazınız">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="Email" class="form-label">Email</label>
+                        <input class="form-control" type="email" asp-for="Email" id="Email" required="" placeholder="Kurum Email Adresini Yazınız">
+                    </div>
+                </div>
+                <div class="row">
+                    <img src="@ByteToImage.DecodeImage(Model.Resim)" class="img-fluid" style="max-width: 280px;" alt="Product-img">
+                    <div class="mb-3">
+                        <label for="Resim" class="form-label">Resim</label>
+                        <input class="form-control" type="file" asp-for="Resim" id="Resim">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <select id="ilId" name="ilId" asp-for="ilId" class="form-control select2" data-toggle="select2">
+                            <option value="0">İl Seçiniz</option>
+                            @foreach (var item in iller)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div> <!-- end col -->
+                    <div class="col-md-4">
+                        <select id="ilceId" asp-for="ilceId" name="ilceId" class="form-control select2" data-toggle="select2">
+                            <option value="0">İlçe Seçiniz</option>
+                            @foreach (var item in ilceler)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div> <!-- end col -->
+                    @if (Model.EgitimTurId == 1)
+                    {
+                        <div class="col-md-4">
+                            <select id="OkulTurId" asp-for="OkulTurId" class="form-control select2" data-toggle="select2">
+                                <option value="0">Okul Türü Seçiniz</option>
+                                @foreach (var item in okulTurleri)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div> <!-- end col -->
+                    }
+                </div>
+                <div class="d-grid mb-2">
+                    <button id="btnokulguncelle" type="submit" class="btn btn-primary"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                </div> <!-- end col -->
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnUpdateOkulBegin = function () {
+            $("#btnokulguncelle").prop("disabled", true);
+            $("#btnokulguncelle").html('Lütfen Bekleyin...');
+        };
+        var OnUpdateOkulComplete = function () {
+            $("#btnokulguncelle").prop("disabled", false);
+            $("#btnokulguncelle").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+        }
+        var OnUpdateOkulSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("KurumListesi","Admin"))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+        $(document).ready(function () {
+            $('#ilId').on('change', function () {
+                var id = $(this).val();
+                var ilceListe = $("#ilceId");
+                ilceListe.empty();
+                $.ajax({
+                    url: '@Html.Raw(Url.Action("GetSelectListilce","Admin"))',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'ilId': id },
+                    success: function (data) {
+                        console.log(data);
+                        $.each(data, function (index, option) {
+                            ilceListe.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+
+
+    </script>
+}
+

@@ -14,5 +14,6 @@ namespace Business.Abstract
         IDataResult<Brans> GetById(int id);
         IResult Update(Brans entity);
         IDataResult<List<Brans>> GetAll();
+        IResult Delete(int id);
     }
 }

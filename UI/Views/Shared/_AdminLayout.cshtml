@@ -81,22 +81,11 @@
                             <span> Blog Yazıları </span>
                         </a>
                     </li>
-                    <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#sabitveriler" aria-expanded="false" aria-controls="sabitveriler" class="side-nav-link">
-                            <i class="uil-clipboard-alt"></i>
-                            <span> Kurumlar</span>
-                            <span class="menu-arrow"></span>
+                     <li class="side-nav-item">
+                       <a href="@Url.Action("KurumListesi","Admin")" class="side-nav-link">
+                            <i class="uil-notes"></i>
+                            <span> Kurumlar </span>
                         </a>
-                        <div class="collapse" id="sabitveriler">
-                            <ul class="side-nav-second-level">
-                                <li>
-                                    <a href="@Url.Action("OkulListesi","Admin")">Okul Listesi</a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("KursListesi","Admin")">Kurs Listesi</a>
-                                </li>
-                            </ul>
-                        </div>
                     </li>
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#okulbilgileri" aria-expanded="false" aria-controls="okulbilgileri" class="side-nav-link">

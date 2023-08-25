@@ -1,6 +1,5 @@
 ﻿@model List<KurumDisplayDto>
 @{
-    ViewData["Title"] = "KurumListesi";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,12 +11,11 @@
             @if (Model.Count > 0)
             {
                 <div class="table-responsive">
-                    <table id="basic-datatable" class="table table-hover table-centered mb-0 dt-responsive nowrap w-100">
+                    <table id="alternative-page-datatable" class="table table-hover table-centered mb-0 dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Ad</th>
                                 <th>İl/İlçe</th>
-                                <th>Adres</th>
                                 <th>Telefon</th>
                                 <th></th>
                             </tr>
@@ -28,9 +26,8 @@
                                 <tr>
                                     <td>@item.Ad.ToUpper()</td>
                                     <td>@item.ilAdi.ToUpper() / @item.ilceAdi.ToUpper()</td>
-                                    <td class=""><span class="text-muted">@item.Adres</span></td>
                                     <td><span class="text-muted">@item.Telefon</span></td>
-                                    <td><a href="@Url.Action("KudurmDetay","Home",item.Id)" class="btn btn-sm- btn-outline-dark">İncele</a></td>
+                                    <td><a href="@Url.Action("KurumDetay","Home",item.Id)" class="btn btn-sm- btn-outline-dark">İncele</a></td>
                                 </tr>
                             }
                         </tbody>

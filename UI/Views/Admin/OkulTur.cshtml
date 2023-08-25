@@ -1,0 +1,117 @@
+﻿@model List<OkulTur>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row mb-2 mt-1">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="form-horizontal" data-ajax="true"
+                      data-ajax-success="OnAddOkulTurSuccess"
+                      data-ajax-begin="OnAddOkulTurBegin"
+                      data-ajax-complete="OnAddOkulTurComplete"
+                      asp-action="AddOkulTur"
+                      asp-controller="Admin"
+                      data-ajax-method="POST">
+                    <div class="row mb-3">
+                        <label class="col-3 col-form-label text-right">Okul Tür Adı</label>
+                        <div class="col-9">
+                            <input type="text" name="Tip" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="justify-content-end row">
+                        <div class="col-9">
+                            <button class="btn btn-primary" id="btnaddOkulTur" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+
+    @if (Model.Count > 0)
+    {
+        <div class="card">
+            <div class="card-body">
+                <table id="alternative-page-datatable" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <td>Tür Adı</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Tip</td>
+                                <td>
+                                    <a href="@Url.Action("OkulTurGuncelle","Admin",new {id=item.Id} )" class="btn btn-sm btn-success"> Güncelle</a>
+                                </td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    }
+    else
+    {
+        <div class="body">
+            <div class="card-body">
+                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <strong>Uyarı - </strong> Okul Tür listesi boş.
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+
+        var OnAddOkulTurBegin = function () {
+            $("#btnaddOkulTur").prop("disabled", true);
+            $("#btnaddOkulTur").html('Lütfen Bekleyin...');
+            $('#loading').show();
+
+
+        };
+        var OnAddOkulTurComplete = function () {
+            $("#btnaddOkulTur").prop("disabled", false);
+            $("#btnaddOkulTur").html('<i class="mdi mdi-plus"></i> Kaydet ');
+            $('#loading').hide();
+        }
+        var OnAddOkulTurSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("OkulTur","Admin"))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}
+
+
+

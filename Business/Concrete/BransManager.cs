@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,15 @@ namespace Business.Concrete
             entity.Status = true;
             _bransDal.Add(entity);
             return new SuccessResult("Branş eklendi");
+        }
+
+        public IResult Delete(int id)
+        {
+            var result = _bransDal.Get(a => a.Id == id);
+            result.Status = false;
+            result.DeletedDate = DateTime.Now;
+            _bransDal.Update(result);
+            return new SuccessResult("Blog silindi.");
         }
 
         public IDataResult<List<Brans>> GetAll()

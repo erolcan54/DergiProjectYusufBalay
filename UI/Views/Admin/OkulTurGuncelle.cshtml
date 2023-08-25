@@ -1,0 +1,78 @@
+﻿@model OkulTur
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row mb-2 mt-1">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="form-horizontal" data-ajax="true"
+                      data-ajax-success="OnUpdateOkulTurSuccess"
+                      data-ajax-begin="OnUpdateOkulTurBegin"
+                      data-ajax-complete="OnUpdateOkulTurComplete"
+                      asp-action="UpdateOkulTur"
+                      asp-controller="Admin"
+                      data-ajax-method="POST">
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <div class="row mb-3">
+                        <label class="col-3 col-form-label text-right">Okul Tür Adı</label>
+                        <div class="col-9">
+                            <input type="text" name="Tip" asp-for="Tip" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="justify-content-end row">
+                        <div class="col-9">
+                            <button class="btn btn-primary" id="btnUpdateOkulTur" type="submit"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+
+        var OnUpdateOkulTurBegin = function () {
+            $("#btnOkulTur").prop("disabled", true);
+            $("#btnaddOkulTur").html('Lütfen Bekleyin...');
+            $('#loading').show();
+
+
+        };
+        var OnUpdateOkulTurComplete = function () {
+            $("#btnaddOkulTur").prop("disabled", false);
+            $("#btnaddOkulTur").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+            $('#loading').hide();
+        }
+        var OnUpdateOkulTurSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("OkulTur","Admin"))';
+
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+
+}
+
+
+
+
