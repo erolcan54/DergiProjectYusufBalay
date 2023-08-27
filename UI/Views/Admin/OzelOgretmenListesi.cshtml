@@ -45,10 +45,10 @@
                                 <td>
                                     @item.ilAdi
                                 </td>
-                                <td class="sorting_1" style="display: none;">
+                                <td>
                                     @Convert.ToDateTime(item.CreatedDate).ToShortDateString()
                                 </td>
-                                <td style="display: none;">
+                                <td>
                                     @if (item.Status)
                                     {
                                         <span class="badge badge-success-lighten">Aktif</span>
@@ -59,7 +59,7 @@
                                     }
                                 </td>
 
-                                <td style="display: none;">
+                                <td>
                                     <a href="@Url.Action("OzelOgretmenGuncelle","Admin",new {id=item.Id})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
                                     <a href="#" data-id="@item.Id" id="btnozelogretmensil"  class="action-icon"> <i class="mdi mdi-delete"></i></a>
                                 </td>

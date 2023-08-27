@@ -2,6 +2,7 @@
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,11 @@ namespace Business.Concrete
         public IDataResult<List<Ogretmen>> GetAll()
         {
             return new SuccessDataResult<List<Ogretmen>>(_ogretmenDal.GetAll(), "Öğretmen listesi getirildi.");
+        }
+
+        public IDataResult<List<OgretmenDisplayDto>> GetAllGetByKurumId(int id)
+        {
+            return new SuccessDataResult<List<OgretmenDisplayDto>>(_ogretmenDal.GetAllGetByKurumId(id), "Öğretmen listesi getirildi.");
         }
 
         public IDataResult<Ogretmen> GetById(int id)

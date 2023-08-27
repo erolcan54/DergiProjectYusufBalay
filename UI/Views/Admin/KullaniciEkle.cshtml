@@ -1,0 +1,104 @@
+﻿@model Kullanici
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Okul kurum = ViewData["Kurum"] as Okul;
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">@kurum.Ad</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Left sidebar -->
+                <div class="page-aside-left">
+                    @await Component.InvokeAsync("KurumMenu",new {id=kurum.Id})
+
+                </div>
+                <!-- End Left sidebar -->
+
+                <div class="page-aside-right">
+                    <h4 class="header-title">KULLANICI EKLEME PANELİ</h4>
+                    <p class="text-muted font-14">Kullanıcı eklemek için aşağıdaki formu doldurunuz.</p>
+                    <form class="form-vertical" data-ajax="true"
+                          data-ajax-success="OnAddKullaniciSuccess"
+                          data-ajax-begin="OnAddKullaniciBegin"
+                          data-ajax-complete="OnAddKullaniciComplete" data-ajax-method="POST" asp-action="KullaniciEkle" asp-controller="Admin">
+                        <div class="mb-3">
+                            <label for="Ad" class="form-label">Ad</label>
+                            <input class="form-control" type="text" asp-for="Ad" id="Ad" required="" placeholder="Kullanıcının Adını Yazınız">
+                        </div>
+                        <input type="hidden" asp-for="Id" value="" />
+                        <input type="hidden" asp-for="OkulId" value="@kurum.Id" />
+                        <div class="mb-3">
+                            <label for="Soyad" class="form-label">Soyad</label>
+                            <input class="form-control" type="text" asp-for="Soyad" id="Soyad" required="" placeholder="Kullanıcının Soyadını Yazınız">
+                        </div>
+                        <div class="mb-3">
+                            <label for="KullaniciAdi" class="form-label">KullaniciAdi</label>
+                            <input class="form-control" type="text" asp-for="KullaniciAdi" id="KullaniciAdi" required="" placeholder="Giriş için Kullanıcı adını Yazınız">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Sifre" class="form-label">Şifre</label>
+                            <input class="form-control" type="text" asp-for="Sifre" id="Sifre" required="" placeholder="Şifre Yazınız">
+                        </div>
+                        <div class="d-grid mb-0 text-center">
+                            <button class="btn btn-primary" id="btnaddKullanici" type="submit"><i class="mdi mdi-plus"></i> Ekle </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- end row-->
+            </div>
+            <!-- end inbox-rightbar-->
+        </div>
+        <!-- end card-body -->
+        <div class="clearfix"></div>
+    </div> <!-- end card-box -->
+
+</div> <!-- end Col -->
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+
+        var OnAddKullaniciBegin = function () {
+            $("#btnaddKullanici").prop("disabled", true);
+            $("#btnaddKullanici").html('Lütfen Bekleyin...');
+            $('#loading').show();
+
+
+        };
+        var OnAddKullaniciComplete = function () {
+            $("#btnaddKullanici").prop("disabled", false);
+            $("#btnaddKullanici").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnAddKullaniciSuccess = function (data) {
+            if (data.Success) {
+
+                window.location.href = '@Html.Raw(Url.Action("KullaniciListesi","Admin",new{id=kurum.Id}))';
+
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}

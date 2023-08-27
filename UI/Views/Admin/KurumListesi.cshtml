@@ -63,7 +63,7 @@
         <div class="body">
             <div class="card-body">
                 <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-                    <strong>Uyarı - </strong> Okul listesi boş.
+                    <strong>Uyarı - </strong> Kurum listesi boş.
                 </div>
             </div>
         </div>
@@ -82,7 +82,7 @@
             var id = $(this).data("id");
             swal({
                 title: "UYARI",
-                text: "Okul bilgilerini silmek istediğinize emin misiniz?",
+                text: "Kurum bilgilerini silmek istediğinize emin misiniz?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: 'btn-danger',
@@ -104,7 +104,7 @@
                                 confirmButtonText: "Tamam"
                             }, function (isConfirm) {
                                 if (isConfirm) {
-                                    window.location.href = '@Url.Action("OkulListesi", "Admin")';
+                                    window.location.href = '@Url.Action("KurumListesi", "Admin")';
                                 }
                             });
                         }

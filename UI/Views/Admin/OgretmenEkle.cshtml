@@ -1,0 +1,111 @@
+﻿@model Ogretmen
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Okul kurum = ViewData["Kurum"] as Okul;
+    List<SelectListItem> branslar = ViewData["branslar"] as List<SelectListItem>;
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">@kurum.Ad</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Left sidebar -->
+                <div class="page-aside-left">
+                    @await Component.InvokeAsync("KurumMenu",new {id=kurum.Id})
+
+                </div>
+                <!-- End Left sidebar -->
+
+                <div class="page-aside-right">
+                    <h4 class="header-title">ÖĞRETMEN EKLEME PANELİ</h4>
+                    <p class="text-muted font-14">Öğretmen eklemek için aşağıdaki formu doldurunuz.</p>
+                    <form class="form-vertical" data-ajax="true" enctype="multipart/form-data"
+                          data-ajax-success="OnAddOgretmenSuccess"
+                          data-ajax-begin="OnAddOgretmenBegin"
+                          data-ajax-complete="OnAddOgretmenComplete" data-ajax-method="POST" asp-action="OgretmenEkle" asp-controller="Admin">
+                        <div class="mb-3">
+                            <label for="Ad" class="form-label">Ad</label>
+                            <input class="form-control" type="text" asp-for="Ad" id="Ad" required="" placeholder="Öğretmen Adını Yazınız">
+                        </div>
+                        <input type="hidden" asp-for="Id" value="" />
+                        <input type="hidden" asp-for="KurumId" value="@kurum.Id" />
+                        <div class="mb-3">
+                            <label for="Soyad" class="form-label">Soyad</label>
+                            <input class="form-control" type="text" asp-for="Soyad" id="Soyad" required="" placeholder="Öğretmenin Soyadını Yazınız">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Resim" class="form-label">Resim</label>
+                            <input class="form-control" type="file" asp-for="Resim" required="" id="Resim">
+                        </div><div class="mb-3">
+                            <label for="BransId" class="form-label">Branş</label>
+                            <select id="BransId" asp-for="BransId" name="BransId" class="form-control select2" data-toggle="select2">
+                                <option value="0">Branş Seçiniz</option>
+                                @foreach (var item in branslar)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="d-grid mb-0 text-center">
+                            <button class="btn btn-primary" id="btnaddOgretmen" type="submit"><i class="mdi mdi-plus"></i> Ekle </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- end row-->
+            </div>
+            <!-- end inbox-rightbar-->
+        </div>
+        <!-- end card-body -->
+        <div class="clearfix"></div>
+    </div> <!-- end card-box -->
+
+</div> <!-- end Col -->
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+
+        var OnAddOgretmenBegin = function () {
+            $("#btnaddOgretmen").prop("disabled", true);
+            $("#btnaddOgretmen").html('Lütfen Bekleyin...');
+            $('#loading').show();
+
+
+        };
+        var OnAddOgretmenComplete = function () {
+            $("#btnaddOgretmen").prop("disabled", false);
+            $("#btnaddOgretmen").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnAddOgretmenSuccess = function (data) {
+            if (data.Success) {
+
+                window.location.href = '@Html.Raw(Url.Action("OgretmenListesi","Admin",new{id=kurum.Id}))';
+
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}
+

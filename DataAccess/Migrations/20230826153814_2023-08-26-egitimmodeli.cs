@@ -5,19 +5,19 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccess.Migrations
 {
-    public partial class _2020821ozelogretmenyorumbegeni : Migration
+    public partial class _20230826egitimmodeli : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "OzelOgretmenYorum",
+                name: "EgitimModeli",
+                schema:"dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AdSoyad = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Yorum = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OzelOgretmenId = table.Column<int>(type: "int", nullable: false),
+                    KurumId = table.Column<int>(type: "int", nullable: false),
+                    Icerik = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -25,17 +25,18 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OzelOgretmenYorum", x => x.Id);
+                    table.PrimaryKey("PK_EgitimModeli", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OzelOgretmenYorumBegeni",
+                name: "EgitimModeliResim",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IPAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    YorumId = table.Column<int>(type: "int", nullable: false),
+                    KurumId = table.Column<int>(type: "int", nullable: false),
+                    Resim = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -43,17 +44,17 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OzelOgretmenYorumBegeni", x => x.Id);
+                    table.PrimaryKey("PK_EgitimModeliResim", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OzelOgretmenYorum");
+                name: "EgitimModeli");
 
             migrationBuilder.DropTable(
-                name: "OzelOgretmenYorumBegeni");
+                name: "EgitimModeliResim");
         }
     }
 }

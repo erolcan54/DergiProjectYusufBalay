@@ -1,6 +1,5 @@
 ﻿using Core.DataAccess;
 using Entities;
-using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IOgretmenDal : IEntityRepository<Ogretmen>
+    public interface IEgitimModeliResimDal:IEntityRepository<KurumEgitimModeliResim>
     {
-        List<OgretmenDisplayDto> GetAllGetByKurumId(int id);
     }
 }

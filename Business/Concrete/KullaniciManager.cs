@@ -74,5 +74,11 @@ namespace Business.Concrete
            _kullaniciDal.Update(entity);
             return new SuccessResult("Kullanıcı bilgisi güncellendi.");
         }
+
+        public IDataResult<List<Kullanici>> GetAllByIdKurum(int id)
+        {
+            var result = _kullaniciDal.GetAll(a => a.OkulId == id);
+            return new SuccessDataResult<List<Kullanici>>(result, "Kurum kullanıcıları listelendi.");
+        }
     }
 }

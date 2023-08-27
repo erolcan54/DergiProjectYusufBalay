@@ -58,6 +58,13 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<OzelOgretmenYorumBegeniManager>().As<IOzelOgretmenYorumBegeniService>().SingleInstance();
             builder.RegisterType<EfOzelOgretmenYorumBegeniDal>().As<IOzelOgretmenYorumBegeniDal>().SingleInstance();
+
+            builder.RegisterType<EgitimModeliManager>().As<IEgitimModeliService>().SingleInstance();
+            builder.RegisterType<EfEgitimModeliDal>().As<IEgitimModeliDal>().SingleInstance();
+
+            builder.RegisterType<EgitimModeliResimManager>().As<IEgitimModeliResimService>().SingleInstance();
+            builder.RegisterType<EfEgitimModeliResimDal>().As<IEgitimModeliResimDal>().SingleInstance();
+
             //var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             //builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

@@ -25,7 +25,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="Konu" class="form-label">Konu</label>
-                    <textarea rows="10" asp-for="Konu" id="Konu" class="form-control resize-none" placeholder="Blog içeriğini yazınız."></textarea>
+                    <textarea rows="10" asp-for="Konu" id="Konu" class="form-control resize-none" placeholder="Blog içeriğini yazınız.">@Model.Konu</textarea>
                 </div>
                 <div class="d-grid mb-0 text-center">
                     <button class="btn btn-primary" id="btnupdateBlog" type="submit"><i class="mdi mdi-pencil"></i> Güncelle </button>
