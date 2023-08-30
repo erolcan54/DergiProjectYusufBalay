@@ -152,7 +152,8 @@
         }
         var OnEtkinlikEkleSuccess = function (data) {
             if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("Etkinlikler","Admin",new{id=kurum.Id}))';
+                var id=data.Data.Id;
+                window.location.href = '/Admin/EtkinlikDetay/'+id;
             }
             else {
                 swal({

@@ -886,6 +886,57 @@ namespace UI.Controllers
         public IActionResult EtkinlikEkle(Etkinlik model)
         {
             var result = _etkinlikService.Add(model);
+            DataResult<Etkinlik> etk;
+            if(result.Success)
+            {
+                etk=new SuccessDataResult<Etkinlik>(model,result.Message);
+            }
+            else
+            {
+                etk = new ErrorDataResult<Etkinlik>(null, result.Message);
+            }
+            return Json(etk);
+        }
+
+        public IActionResult EtkinlikDetay(int id)
+        {
+            var result = _etkinlikService.GetById(id);
+            ViewData["Etkinlik"] = result.Data;
+            var resimler = _etkinlikResimService.GetAllByEtkinlikId(result.Data.Id);
+            ViewData["Resimler"]= resimler.Data;
+            var kurum = _okulService.GetById(result.Data.KurumId);
+            ViewData["Kurum"]=kurum.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EtkinlikGuncelle(Etkinlik model) 
+        {
+            var result= _etkinlikService.Update(model);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult EtkinlikResimEkle(EtkinlikResim model, IFormFile Resim)
+        {
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    model.Resim = stream.ToArray();
+                }
+                var result = _etkinlikResimService.Add(model);
+                return Json(result);
+            }
+            else
+                return Json(new ErrorResult("Resim seçmediniz."));
+        }
+
+        [HttpPost]
+        public IActionResult EtkinlikResimSil(int id)
+        {
+            var result = _etkinlikResimService.Delete(id);
             return Json(result);
         }
         #endregion
