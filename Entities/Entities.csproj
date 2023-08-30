@@ -14,4 +14,12 @@
     <Folder Include="Enums\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\PROJECTS\YusufBeyDergiProject\DergiProject\Entities\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\PROJECTS\YusufBeyDergiProject\DergiProject\Entities\.editorconfig" />
+  </ItemGroup>
+
 </Project>

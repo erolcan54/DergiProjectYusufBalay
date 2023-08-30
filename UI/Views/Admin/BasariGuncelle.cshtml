@@ -1,0 +1,109 @@
+﻿@{
+    Basari basari = ViewData["Basari"] as Basari;
+    Okul kurum = ViewData["Kurum"] as Okul;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/lightbox/css/lightbox.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">@kurum.Ad</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Left sidebar -->
+                <div class="page-aside-left">
+                    @await Component.InvokeAsync("KurumMenu",new {id=kurum.Id})
+                </div>
+                <!-- End Left sidebar -->
+
+                <div class="page-aside-right">
+                    <div class="mt-2">
+                        <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
+                              data-ajax-success="OnBasariGuncelleSuccess"
+                              data-ajax-begin="OnBasariGuncelleBegin"
+                              data-ajax-complete="OnBasariGuncelleComplete" data-ajax-method="POST" asp-action="BasariGuncelle" asp-controller="Admin">
+                            <input type="hidden" name="KurumId" value="@kurum.Id" />
+                            <input type="hidden" name="Id" value="@basari.Id" />
+
+                            <div class="mb-2">
+                                <label for="Baslik" class="form-label">Başlık</label>
+                                <textarea rows="1" name="Baslik" id="Baslik" class="form-control resize-none" placeholder="Başlık yazınız." required>@basari.Baslik</textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label for="Icerik" class="form-label">İçerik</label>
+                                <textarea rows="10" name="Icerik" id="Icerik" class="form-control resize-none" placeholder="İçerik yazınız." required>@basari.Icerik</textarea>
+                            </div>
+                            <div class="mb-2">
+                                <div class="mb-1">
+                                    <img src="@ByteToImage.DecodeImage(basari.Resim)" class="img-fluid" style="max-width: 400px;" alt="Product-img">
+                                </div>
+                                <label for="Resim" class="form-label">Resim</label>
+                                <input class="form-control" type="file" name="Resim" id="Resim">
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-sm btn-info" id="btnbasariguncelle"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- end row-->
+                </div>
+                <!-- end inbox-rightbar-->
+            </div>
+            <!-- end card-body -->
+            <div class="clearfix"></div>
+        </div> <!-- end card-box -->
+
+    </div> <!-- end Col -->
+</div>
+
+@section Scripts{
+
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("Icerik");
+        CKEDITOR.replace("Baslik");
+    </script>
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnBasariGuncelleBegin = function () {
+            $("#btnbasariguncelle").prop("disabled", true);
+            $("#btnbasariguncelle").html('Lütfen Bekleyin...');
+            $('#loading').show();
+        };
+        var OnBasariGuncelleComplete = function () {
+            $("#btnbasariguncelle").prop("disabled", false);
+            $("#btnbasariguncelle").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+            $('#loading').hide();
+        }
+        var OnBasariGuncelleSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("Basarilar","Admin",new{id=kurum.Id}))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+    </script>
+}

@@ -1,0 +1,170 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Okul kurum = ViewData["Kurum"] as Okul;
+    List<Etkinlik> etkinlikler = ViewData["Etkinlikler"] as List<Etkinlik>;
+}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">@kurum.Ad</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Left sidebar -->
+                <div class="page-aside-left">
+                    @await Component.InvokeAsync("KurumMenu",new {id=kurum.Id})
+                </div>
+                <!-- End Left sidebar -->
+
+                <div class="page-aside-right">
+                    <div class="mt-1">
+                        <div class="mb-2 mt-1">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#etkinlikekle-modal" class="btn btn-primary btn-rounded"><i class="mdi mdi-plus"></i> Etkinlik Ekle</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (etkinlikler.Count > 0)
+                        {
+                            <div class="row">
+                                @foreach (var item in etkinlikler)
+                                {
+                                    <div class="col-md-6 col-xxl-3">
+                                        <!-- project card -->
+                                        <div class="card d-block">
+                                            <!-- project-thumbnail -->
+                                            @*<img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                                    <div class="card-img-overlay">
+                                    <div class="badge bg-secondary text-light p-1">@item.CreatedDate</div>
+                                    </div>*@
+
+                                            <div class="card-body position-relative">
+                                                <!-- project title-->
+                                                <h4 class="mt-0">
+                                                    <a href="/Admin/EtkinlikDetay/@item.Id" class="text-title">@item.Baslik</a>
+                                                </h4>
+
+                                                @if (item.UpdatedDate != null)
+                                                {
+                                                    <p class="mb-3">
+                                                        <span class="pe-2 text-nowrap">
+                                                            <i class="mdi mdi-update"></i>
+                                                            <b>@item.UpdatedDate</b>
+                                                        </span>
+                                                    </p>
+                                                }
+                                                <div class="mb-1">
+                                                    <a href="#" id="btnetkinlikSil" data-id="@item.Id" class="btn btn-danger btn-small ">Sil</a>
+                                                    <a href="@Url.Action("EtkinlikGuncelle","Admin",new {id=item.Id })" class="btn btn-success btn-small ">Güncelle</a>
+                                                </div>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col -->
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="body">
+                                <div class="card-body">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong> Etkinlik listesi boş.
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!-- end row-->
+                </div>
+                <!-- end inbox-rightbar-->
+            </div>
+            <!-- end card-body -->
+            <div class="clearfix"></div>
+        </div> <!-- end card-box -->
+
+    </div> <!-- end Col -->
+</div>
+
+<div id="etkinlikekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Etkinlik Ekleme Paneli</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" data-ajax="true"
+                      data-ajax-success="OnEtkinlikEkleSuccess"
+                      data-ajax-begin="OnEtkinlikEkleBegin"
+                      data-ajax-complete="OnEtkinlikEkleComplete" data-ajax-method="POST" asp-action="EtkinlikEkle" asp-controller="Admin">
+                    <input type="hidden" name="KurumId" value="@kurum.Id" />
+                    <div class="mb-2">
+                        <label for="Baslik" class="form-label">Başlık</label>
+                        <input class="form-control" type="text" name="Baslik" id="Baslik">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Aciklama" class="form-label">Açıklama</label>
+                        <textarea rows="10" name="Aciklama" id="Aciklama" class="form-control resize-none" placeholder="Etkinlik açıklamasını yazınız."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-sm btn-info" id="btnetkinlikekle"><i class="mdi mdi-plus"></i> Ekle</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("Aciklama");
+    </script>
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnEtkinlikEkleBegin = function () {
+            $("#btnetkinlikekle").prop("disabled", true);
+            $("#btnetkinlikekle").html('Lütfen Bekleyin...');
+            $('#loading').show();
+            $('#etkinlikekle-modal').modal().hide();
+        };
+        var OnEtkinlikEkleComplete = function () {
+            $("#btnetkinlikekle").prop("disabled", false);
+            $("#btnetkinlikekle").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnEtkinlikEkleSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("Etkinlikler","Admin",new{id=kurum.Id}))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}
+
+

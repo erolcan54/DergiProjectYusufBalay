@@ -65,6 +65,24 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EgitimModeliResimManager>().As<IEgitimModeliResimService>().SingleInstance();
             builder.RegisterType<EfEgitimModeliResimDal>().As<IEgitimModeliResimDal>().SingleInstance();
 
+            builder.RegisterType<BasariManager>().As<IBasariService>().SingleInstance();
+            builder.RegisterType<EfBasariDal>().As<IBasariDal>().SingleInstance();
+
+            builder.RegisterType<KatalogManager>().As<IKatalogService>().SingleInstance();
+            builder.RegisterType<EfKatalogDal>().As<IKatalogDal>().SingleInstance();
+
+            builder.RegisterType<IcGorselManager>().As<IIcGorselService>().SingleInstance();
+            builder.RegisterType<EfIcGorselDal>().As<IIcGorselDal>().SingleInstance();
+
+            builder.RegisterType<DisGorselManager>().As<IDisGorselService>().SingleInstance();
+            builder.RegisterType<EfDisGorselDal>().As<IDisGorselDal>().SingleInstance();
+
+            builder.RegisterType<EtkinlikManager>().As<IEtkinlikService>().SingleInstance();
+            builder.RegisterType<EfEtkinlikDal>().As <IEtkinlikDal>().SingleInstance();
+
+            builder.RegisterType<EtkinlikResimManager>().As<IEtkinlikResimService>().SingleInstance();
+            builder.RegisterType<EfEtkinlikResimDal>().As<IEtkinlikResimDal>().SingleInstance();
+
             //var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             //builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

@@ -34,6 +34,12 @@ namespace DataAccess.Concrete
         public DbSet<OzelOgretmenYorumBegeni> OzelOgretmenYorumBegeni { get; set; }
         public DbSet<KurumEgitimModeli> EgitimModeli { get; set; }
         public DbSet<KurumEgitimModeliResim> EgitimModeliResim{ get; set; }
+        public DbSet<Basari> Basari { get; set; }
+        public DbSet<Katalog> Katalog { get; set; }
+        public DbSet<IcGorsel> IcGorsel { get; set; }
+        public DbSet<DisGorsel> DisGorsel { get; set; }
+        public DbSet<Etkinlik> Etkinlik { get; set; }
+        public DbSet<EtkinlikResim> EtkinlikResim { get; set; }
 
     }
 }

@@ -1,11 +1,15 @@
 ﻿using Business.Abstract;
 using Core.Utilities.Results;
 using Entities;
+using Humanizer.Bytes;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Newtonsoft.Json.Linq;
+using System.Collections;
 using System.Net.WebSockets;
 using UI.Filters;
 
@@ -31,7 +35,13 @@ namespace UI.Controllers
         private IOgretmenService _ogretmenService;
         private IEgitimModeliService _egitimModeliService;
         private IEgitimModeliResimService _egitimModeliResimService;
-        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService)
+        private IBasariService _basariService;
+        private IKatalogService _katalogService;
+        private IIcGorselService _icGorselService;
+        private IDisGorselService _disGorselService;
+        private IEtkinlikService _etkinlikService;
+        private IEtkinlikResimService _etkinlikResimService;
+        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService)
         {
             _blogService = blogService;
             _yoneticiService = yoneticiService;
@@ -49,6 +59,12 @@ namespace UI.Controllers
             _ogretmenService = ogretmenService;
             _egitimModeliService = egitimModeliService;
             _egitimModeliResimService = egitimModeliResimService;
+            _basariService = basariService;
+            _katalogService = katalogService;
+            _icGorselService = icGorselService;
+            _disGorselService = disGorselService;
+            _etkinlikService = etkinlikService;
+            _etkinlikResimService = etkinlikResimService;
         }
 
         public IActionResult Index()
@@ -527,7 +543,7 @@ namespace UI.Controllers
         {
             var result = _okulService.GetById(id);
             ViewData["Kurum"] = result.Data;
-            Kullanici k=new Kullanici();
+            Kullanici k = new Kullanici();
             return View(k);
         }
 
@@ -563,23 +579,24 @@ namespace UI.Controllers
             return View(kurum.Data);
         }
 
-        public IActionResult OgretmenEkle(int id) {
+        public IActionResult OgretmenEkle(int id)
+        {
             var result = _okulService.GetById(id);
             ViewData["Kurum"] = result.Data;
             List<SelectListItem> branss = (from i in _bransService.GetAll().Data
-                                              select new SelectListItem
-                                              {
-                                                  Text = i.Ad.ToUpper(),
-                                                  Value = i.Id.ToString()
-                                              }).ToList();
+                                           select new SelectListItem
+                                           {
+                                               Text = i.Ad.ToUpper(),
+                                               Value = i.Id.ToString()
+                                           }).ToList();
             ViewData["branslar"] = branss;
-            Ogretmen ogretmen=new Ogretmen();
+            Ogretmen ogretmen = new Ogretmen();
             return View(ogretmen);
 
         }
 
         [HttpPost]
-        public IActionResult OgretmenEkle(Ogretmen model,IFormFile Resim)
+        public IActionResult OgretmenEkle(Ogretmen model, IFormFile Resim)
         {
             using (var stream = new MemoryStream())
             {
@@ -592,13 +609,13 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-         public IActionResult OgretmenSil(int id)
+        public IActionResult OgretmenSil(int id)
         {
-            var result=_ogretmenService.Delete(id);
+            var result = _ogretmenService.Delete(id);
             return Json(result);
         }
 
-        public IActionResult OgretmenGuncelle(int kurumId,int ogretmenId)
+        public IActionResult OgretmenGuncelle(int kurumId, int ogretmenId)
         {
             var result = _ogretmenService.GetById(ogretmenId);
             var kurum = _okulService.GetById(kurumId);
@@ -614,9 +631,9 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult OgretmenGuncelle(Ogretmen model,IFormFile Resim)
+        public IActionResult OgretmenGuncelle(Ogretmen model, IFormFile Resim)
         {
-            if(Resim!=null)
+            if (Resim != null)
             {
                 using (var stream = new MemoryStream())
                 {
@@ -630,11 +647,11 @@ namespace UI.Controllers
         #endregion
 
         #region EgitimModeli
-        public IActionResult EgitimModeli(int id) 
+        public IActionResult EgitimModeli(int id)
         {
             var kurum = _okulService.GetById(id);
             ViewData["Kurum"] = kurum.Data;
-            var egitimModel=_egitimModeliService.GetByKurumId(id);
+            var egitimModel = _egitimModeliService.GetByKurumId(id);
             ViewData["EgitimModeli"] = egitimModel.Data;
             var resimler = _egitimModeliResimService.GetAllByKurumId(id);
             ViewData["Resimler"] = resimler.Data;
@@ -671,7 +688,7 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult EgitimModeliIcerikGuncelle(int kurumId, string Icerik1)
         {
-            var model=_egitimModeliService.GetByKurumId(kurumId);
+            var model = _egitimModeliService.GetByKurumId(kurumId);
             model.Data.Icerik = Icerik1;
             var result = _egitimModeliService.Update(model.Data);
             return Json(result);
@@ -680,9 +697,199 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult ResimSil(int id)
         {
-            var result=_egitimModeliResimService.Delete(id);
+            var result = _egitimModeliResimService.Delete(id);
             return Json(result);
         }
         #endregion
+
+        #region Başarı
+        public IActionResult Basarilar(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var basariListe = _basariService.GetAllByKurumId(id);
+            ViewData["Basarilar"] = basariListe.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult BasariEkle(Basari model, IFormFile Resim)
+        {
+            using (var stream = new MemoryStream())
+            {
+                Resim.CopyTo(stream);
+                model.Resim = stream.ToArray();
+            }
+            var result = _basariService.Add(model);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult BasariSil(int id)
+        {
+            var result = _basariService.Delete(id);
+            return Json(result);
+        }
+
+        public IActionResult BasariGuncelle(int id)
+        {
+            var basari = _basariService.GetById(id);
+            ViewData["Basari"] = basari.Data;
+            var kurum = _okulService.GetById(basari.Data.KurumId);
+            ViewData["Kurum"] = kurum.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult BasariGuncelle(Basari model, IFormFile Resim)
+        {
+            var basari = _basariService.GetById(model.Id);
+            basari.Data.Baslik = model.Baslik;
+            basari.Data.Icerik = model.Icerik;
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    basari.Data.Resim = stream.ToArray();
+                }
+            }
+            var result = _basariService.Update(basari.Data);
+            return Json(result);
+        }
+        #endregion
+
+        #region Kataloglar
+        public IActionResult Kataloglar(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var katalogliste = _katalogService.GetAllByKurumId(id);
+            ViewData["Kataloglar"] = katalogliste.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult KatalogEkle(Katalog model, IFormFile katalogpdf)
+        {
+            
+            if (katalogpdf != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    katalogpdf.CopyTo(stream);
+                    model.KatalogPDF = stream.ToArray();
+                }
+                model.SeriNo = Guid.NewGuid();
+                var result = _katalogService.Add(model);
+                return Json(result);
+            }
+            else
+                return Json(new ErrorResult("Katalog için pdf seçiniz..."));
+        }
+
+        public IActionResult KatalogIndir(Guid seriNo)
+        {
+            var result = _katalogService.GetBySeriNo(seriNo);
+            return File(result.Data.KatalogPDF, "application/pdf",result.Data.KatalogAdi+".pdf");
+        }
+
+        [HttpPost]
+        public IActionResult KatalogSil(int id)
+        {
+            var result = _katalogService.Delete(id);
+            return Json(result);
+        }
+        #endregion
+
+        #region İç görseller
+        public IActionResult IcGorseller(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var gorseller = _icGorselService.GetAllByKurumId(id);
+            ViewData["Resimler"]=gorseller.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult IcGorselResimSil(int id)
+        {
+            var result = _icGorselService.Delete(id);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult IcGorselResimEkle(IcGorsel model, IFormFile Resim)
+        {
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    model.Resim = stream.ToArray();
+                }
+                var result = _icGorselService.Add(model);
+                return Json(result);
+            }
+            else
+                return Json(new ErrorResult("Resim seçmediniz."));
+        }
+        #endregion
+
+        #region Dış Görseller
+        public IActionResult DisGorseller(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var gorseller = _disGorselService.GetAllByKurumId(id);
+            ViewData["Resimler"] = gorseller.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DisGorselResimSil(int id)
+        {
+            var result = _disGorselService.Delete(id);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult DisGorselResimEkle(DisGorsel model, IFormFile Resim)
+        {
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    model.Resim = stream.ToArray();
+                }
+                var result = _disGorselService.Add(model);
+                return Json(result);
+            }
+            else
+                return Json(new ErrorResult("Resim seçmediniz."));
+        }
+        #endregion
+
+        #region Etkinlik-Etkinlik Resim
+        public IActionResult Etkinlikler(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var etkinlikler = _etkinlikService.GetAllByKurumId(id);
+            ViewData["Etkinlikler"] = etkinlikler.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EtkinlikEkle(Etkinlik model)
+        {
+            var result = _etkinlikService.Add(model);
+            return Json(result);
+        }
+        #endregion
+
+
     }
 }
