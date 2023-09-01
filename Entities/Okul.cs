@@ -13,5 +13,7 @@
         public int EgitimTurId { get; set; }
         public int TikSayisi { get; set; }
         public byte[] Resim { get; set; }
+        public string? TanitimVideo { get; set; }
+        public string? Hakkinda { get; set; }
     }
 }

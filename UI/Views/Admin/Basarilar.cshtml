@@ -23,7 +23,7 @@
                 <!-- End Left sidebar -->
 
                 <div class="page-aside-right">
-                    <div class="mt-2">
+                    <div class="mt-1">
                         <div class="row">
                             <div class="mb-2">
                                 <a href="#" class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="modal" data-bs-target="#basariekle-modal"><i class="mdi mdi-plus"></i> Başarı Ekle</a>
@@ -31,6 +31,7 @@
                         </div><hr />
                         @if (basarilar.Count > 0)
                         {
+                            <div class="row">
                             @foreach (var item in basarilar)
                             {
                                 <div class="col-md-6 col-xxl-3">
@@ -45,7 +46,7 @@
                                         <div class="card-body position-relative">
                                             <!-- project title-->
                                             <h4 class="mt-0">
-                                                <a href="/Home/BlogDetail/@item.Id" target="_blank" class="text-title">@Html.Raw(item.Baslik)</a>
+                                                @Html.Raw(item.Baslik)
                                             </h4>
 
                                             <!-- project detail-->
@@ -63,6 +64,7 @@
                                     </div> <!-- end card-->
                                 </div> <!-- end col -->
                             }
+                            </div>
                         }
                         else
                         {

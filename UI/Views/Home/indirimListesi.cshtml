@@ -1,0 +1,55 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common;
+@model IPagedList<indirimDisplayDto>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">İNDİRİM LİSTESİ</h4>
+            <p class="text-muted font-14">Kurumlara ait indirim bilgilerine buradan ulaşabilirsiniz.</p>
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3 col-xxl-3">
+                        <!-- project card -->
+                        <div class="card d-block">
+                            <!-- project-thumbnail -->
+                            <img class="card-img-top" height="200px" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            <div class="card-body position-relative">
+                                <h5>@item.KurumAdi</h5>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>@item.ilAdi / @item.ilceAdi</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>Oran : % @item.indirimOrani</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>@Convert.ToDateTime(item.SonTarih).ToLongDateString()</b>
+                                    </span>
+                                </p>
+                            </div>
+                        </div> <!-- end card-->
+                    </div>
+                }
+            </div>
+            <div class="row">
+                @Html.PagedListPager((IPagedList)Model,page=>Url.Action("indirimListesi","Home",new {page}),
+                new PagedListRenderOptions {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+                })
+            </div>
+        </div>
+    </div>
+</div>
+
+

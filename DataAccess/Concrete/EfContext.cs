@@ -40,6 +40,10 @@ namespace DataAccess.Concrete
         public DbSet<DisGorsel> DisGorsel { get; set; }
         public DbSet<Etkinlik> Etkinlik { get; set; }
         public DbSet<EtkinlikResim> EtkinlikResim { get; set; }
+        public DbSet<Kulup> Kulup { get; set; }
+        public DbSet<KurumYorum> KurumYorum { get; set; }
+        public DbSet<KurumYorumBegeni> KurumYorumBegeni { get; set; }
+        public DbSet<KurumBeniAra> KurumBeniAra { get; set; }
 
     }
 }

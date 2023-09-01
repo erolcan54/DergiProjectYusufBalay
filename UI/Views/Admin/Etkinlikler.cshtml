@@ -62,8 +62,8 @@
                                                     </p>
                                                 }
                                                 <div class="mb-1">
-                                                    <a href="#" id="btnetkinlikSil" data-id="@item.Id" class="btn btn-danger btn-small ">Sil</a>
-                                                    <a href="@Url.Action("EtkinlikGuncelle","Admin",new {id=item.Id })" class="btn btn-success btn-small ">Güncelle</a>
+                                                    <a href="#" id="btnetkinlikSil" data-id="@item.Id" class="btn btn-danger btn-sm ">Sil</a>
+                                                    <a href="@Url.Action("EtkinlikDetay","Admin",new {id=item.Id })" class="btn btn-info btn-sm ">Detay</a>
                                                 </div>
                                             </div> <!-- end card-body-->
                                         </div> <!-- end card-->
@@ -165,6 +165,50 @@
                 });
             }
         };
+
+        $(document).on("click", "#btnetkinlikSil", function () {
+            var id = $(this).data("id");
+            swal({
+                title: "UYARI",
+                text: "Etkinlik bilgilerini silmek istediğinize emin misiniz?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                cancelButtonClass: 'btn-success',
+                confirmButtonText: "EVET",
+                cancelButtonText: "HAYIR",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: '/Admin/EtkinlikSil/' + id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.Success == true) {
+                            swal({
+                                title: "BAŞARILI!",
+                                type: "success",
+                                text: result.Message,
+                                confirmButtonClass: 'btn-success',
+                                confirmButtonText: "Tamam"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    window.location.href = '@Url.Action("Etkinlikler", "Admin",new {id=kurum.Id})';
+                                }
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'HATA',
+                                text: result.Message,
+                                type: 'error',
+                                confirmButtonClass: 'btn-danger',
+                                confirmButtonText: 'Tamam',
+                            });
+                        }
+                    }
+                });
+            });
+        });
     </script>
 }
 

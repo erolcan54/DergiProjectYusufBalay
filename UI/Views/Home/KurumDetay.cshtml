@@ -1,0 +1,308 @@
+﻿@model KurumDisplayDto
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<KurumYorumDisplayDto> yorums = ViewData["Yorumlar"] as List<KurumYorumDisplayDto>;
+}
+
+<div class="row">
+
+    @if (Model != null)
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="row text-center">
+                    <h4 class="header-title">@Model.Ad</h4>
+                </div>
+                <hr />
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <img src="@ByteToImage.DecodeImage(Model.Resim)" class="img-fluid img-thumbnail" style="max-height:400px;max-width:%75" alt="Product-img">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-widget-list mt-1">
+                            <p>
+                                İl
+                                <span class="float-end">@Model.ilAdi</span>
+                            </p>
+                            <p>
+                                İlçe
+                                <span class="float-end">@Model.ilceAdi</span>
+                            </p>
+                            <p>
+                                Web
+                                <span class="float-end">@Model.Web</span>
+                            </p>
+                            <p>
+                                Email
+                                <span class="float-end">@Model.Email</span>
+                            </p>
+                            <p>
+                                Telefon
+                                <span class="float-end">@Model.Telefon</span>
+                            </p>
+                            <p>
+                                Adres
+                                <span class="float-end">@Model.Adres</span>
+                            </p>
+                            <p>
+                                Görüntülenme Sayısı
+                                <span class="float-end">@Model.TikSayisi</span>
+                            </p>
+                            <p class="d-grid">
+                                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#videoizle-modal">Tanıtım Videosu İzle</a>
+                            </p>
+                            <p class="d-grid">
+                                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#kurumbeniarasin-modal">Okul Beni Arasın</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-xl-3 m-1">
+                        <div class="row align-items-center">
+                            <a href="#" class="btn btn-success btn-sm p-3"><b>Öğretmen Kadrosu</b></a>
+                        </div> <!-- end row-->
+                    </div> <!-- end col -->
+                    <div class="col-lg-6 col-xl-3 m-1">
+                        <div class="row align-items-center">
+                            <a href="" class="btn btn-warning btn-sm p-3"><b>Eğitim Modeli</b></a>
+                        </div> <!-- end row-->
+                    </div> <!-- end col -->
+                    <div class="col-lg-6 col-xl-3 m-1">
+                        <div class="row align-items-center">
+                            <a href="" class="btn btn-primary btn-sm p-3"><b>Başarılar</b></a>
+                        </div> <!-- end row-->
+                    </div> <!-- end col -->
+                    <div class="col-lg-6 col-xl-3 m-1">
+                        <div class="row align-items-center">
+                            <a href="" class="btn btn-danger btn-sm p-3"><b>Kataloglar</b></a>
+                        </div> <!-- end row-->
+                    </div> <!-- end col -->
+                    <div class="col-lg-6 col-xl-3 m-1">
+                        <div class="row align-items-center">
+                            <a href="" class="btn btn-secondary btn-sm p-3"><b>İç Görseller</b></a>
+                        </div> <!-- end row-->
+                    </div> <!-- end col -->
+                    <div class="col-lg-6 col-xl-3 m-1">
+                        <div class="row align-items-center">
+                            <a href="" class="btn btn-info btn-sm p-3"><b>Dış Görseller</b></a>
+                        </div> <!-- end row-->
+                    </div> <!-- end col -->
+                    <div class="col-lg-6 col-xl-3 m-1">
+                        <div class="row align-items-center">
+                            <a href="" class="btn btn-warning btn-sm p-3"><b>Etkinlikler</b></a>
+                        </div> <!-- end row-->
+                    </div> <!-- end col -->
+                    <div class="col-lg-6 col-xl-3 m-1">
+                        <div class="row align-items-center">
+                            <a href="" class="btn btn-success btn-sm p-3"><b>Kulüpler</b></a>
+                        </div> <!-- end row-->
+                    </div> <!-- end col -->
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        @Html.Raw(Model.Hakkinda)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="mt-0 mb-3">Yorumlar (@ViewData["yorumSayisi"])</h4>
+                    <form class="form-vertical" asp-action="KurumYorumEkle" asp-controller="Home" method="post">
+                        <input type="hidden" value="@Model.Id" name="KurumId" />
+                        <div class="mb-1">
+                            <input class="form-control form-control-light" type="text" name="AdSoyad" id="AdSoyad" required="" placeholder="Adınız ve Soyadınızı Yazınız">
+                        </div>
+                        <textarea class="form-control form-control-light mb-2" name="Yorum" required placeholder="Mesajınızı yazınız..." id="example-textarea" rows="3"></textarea>
+                        <div class="text-end">
+                            <div class="btn-group mb-2 ms-2">
+                                <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    @if (yorums != null)
+                    {
+                        @if (yorums.Count > 0)
+                        {
+                            @foreach (var item in yorums)
+                            {
+                                <hr />
+                                <div class="d-flex mb-1 mt-1">
+                                    <div class="w-100 overflow-hidden">
+                                        <small class="float-end">
+                                            <div class="rateit" data-id="@item.Id" id="rateitYorum" data-rateit-mode="font" data-rateit-readonly="false" data-rateit-value="@item.BegeniAvarege"></div>
+                                        </small>
+                                        <h6 class="m-0 font-14">@item.AdSoyad</h6>
+                                        <small class="text-muted">@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString()</small>
+                                    </div>
+                                </div>
+                                <p>@item.Yorum</p>
+                            }
+                        }
+                    }
+                </div> <!-- end card-body-->
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+            <strong>Uyarı - </strong> Aradığınız kriterlere uygun kurum bulunamamıştır.
+        </div>
+    }
+
+</div>
+
+<div id="videoizle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Tanıtım Videosu</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        @Html.Raw(Model.TanitimVideo)
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="kurumbeniarasin-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Kurum İletişim Kursun</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-vertical" data-ajax="true"
+                      data-ajax-success="OnKurumAraSuccess"
+                      data-ajax-begin="OnKurumAraBegin"
+                      data-ajax-complete="OnKurumAraComplete" data-ajax-method="POST" asp-action="KurumBeniArasin" asp-controller="Home">
+                    <div class="mb-3">
+                        <label for="AdSoyad" class="form-label">Ad Soyad</label>
+                        <input class="form-control" type="text" name="AdSoyad" id="AdSoyad" required="" placeholder="Ad Soyad Yazınız">
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="Sinif" class="form-label">Sınıf</label>
+                            <select id="Sinif" name="Sinif" class="form-control">
+                                <option value="0">Sınıf Seçiniz</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                @if (Model.EgitimTurId == 2)
+                                {
+                                    <option value="Mezun">Mezun</option>
+                                }
+                            </select>
+                        </div> <!-- end col -->
+                    </div>
+                    <input type="hidden" name="KurumId" value="@Model.Id" />
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Telefon" class="form-label">Telefon</label>
+                                <input type="tel" name="Telefon" class="form-control" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" name="Telefon" id="Telefon" required="" placeholder="Telefon Yazınız">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Email" class="form-label">Email</label>
+                                <input class="form-control" type="email" name="Email" id="Email" required="" placeholder="Email Yazınız">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-0 text-center">
+                        <button class="btn btn-primary" id="btnaddBeniArasin" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        $(document).on("click",
+            "#rateitYorum",
+            function () {
+                var deger = $(this).rateit('value');
+                var id = $(this).data('id');
+                var _url = '@Url.Action("KurumYorumPuanla", "Home")';
+                $.ajax({
+                    type: "POST",
+                    url: _url,
+                    data: { deger: deger, id: id },
+                    success: function (result) {
+                        if (result.Success) {
+                            toastr.success(result.Message);
+                        }
+                        else {
+                            toastr.error(result.Message);
+                        }
+                    }
+                });
+            });
+
+
+        var OnKurumAraBegin = function () {
+            $("#btnaddBeniArasin").prop("disabled", true);
+            $("#btnaddBeniArasin").html('Lütfen Bekleyin...');
+            $('#loading').show();
+            $('#kurumbeniarasin-modal').modal().hide();
+        };
+        var OnKurumAraComplete = function () {
+            $("#btnaddBeniArasin").prop("disabled", false);
+            $("#btnaddBeniArasin").html('<i class="mdi mdi-plus"></i> Kaydet ');
+            $('#loading').hide();
+        };
+        var OnKurumAraSuccess = function (data) {
+            if (data.Success) {
+                swal({
+                    title: 'BAŞARILI',
+                    text: "Bilgileriniz kaydedilmiştir. En kısa sürede tarafınıza ulaşılacaktır. Teşekkür ederiz.",
+                    type: 'success',
+                    confirmButtonClass: 'btn-success',
+                    confirmButtonText: 'Tamam',
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = "/Home/KurumDetay/" + @Html.Raw(Model.Id);
+                        //toastr.success("Bilgileriniz kaydedilmiştir. En kısa sürede tarafınıza ulaşılacaktır. Teşekkür ederiz.");
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}

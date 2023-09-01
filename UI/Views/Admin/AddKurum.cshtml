@@ -38,10 +38,14 @@
                         <input class="form-control" type="email" asp-for="Email" id="Email" required="" placeholder="Kurum Email Adresini Yazınız">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="mb-3">
+                <div class="row mb-3">
+                    <div class="col-md-6">
                         <label for="Resim" class="form-label">Resim</label>
                         <input class="form-control" type="file" asp-for="Resim" required="" id="Resim">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="TanitimVideo" class="form-label">Tanıtım Video Linki</label>
+                        <input class="form-control" type="text" asp-for="TanitimVideo" id="TanitimVideo">
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -80,6 +84,12 @@
                         </select>
                     </div> <!-- end col -->
                 </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label for="Hakkinda" class="form-label">Hakkında</label>
+                        <textarea rows="10" name="Hakkinda" id="Hakkinda" class="form-control resize-none" placeholder="Kurum hakkında bilgi yazınız."></textarea>
+                    </div>
+                </div>
                 <div class="d-grid mb-2">
                     <button id="btnokulekle" type="submit" class="btn btn-primary"><i class="mdi mdi-plus"></i> Ekle </button>
                 </div> <!-- end col -->
@@ -89,13 +99,17 @@
 </div>
 
 @section Scripts{
-
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("Hakkinda");
+    </script>
     <script>
 
         $(window).on('load',
             function () {
                 $('#loading').hide();
             });
+
 
         var OnAddOkulBegin = function () {
             $("#btnokulekle").prop("disabled", true);
@@ -143,11 +157,15 @@
             $('#EgitimTurId').on('change', function () {
                 var id = $(this).val();
                 var okulDiv = document.getElementById('okulTurDiv');
-                if(id==1)
+                if (id == 1) {
+                    if (okulDiv.style.display === "none") {
+                        okulDiv.style.display = "block";
+                    }
+                }
+                else
                 {
-                    if(okulDiv.style.display==="none")
-                    {
-                        okulDiv.style.display="block";
+                    if (okulDiv.style.display === "block") {
+                        okulDiv.style.display = "none";
                     }
                 }
             });

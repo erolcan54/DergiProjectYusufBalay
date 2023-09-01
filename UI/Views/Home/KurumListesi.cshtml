@@ -27,7 +27,7 @@
                                     <td>@item.Ad.ToUpper()</td>
                                     <td>@item.ilAdi.ToUpper() / @item.ilceAdi.ToUpper()</td>
                                     <td><span class="text-muted">@item.Telefon</span></td>
-                                    <td><a href="@Url.Action("KurumDetay","Home",item.Id)" class="btn btn-sm- btn-outline-dark">İncele</a></td>
+                                    <td><a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm- btn-outline-dark">İncele</a></td>
                                 </tr>
                             }
                         </tbody>

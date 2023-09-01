@@ -30,9 +30,14 @@ namespace UI.Controllers
         private IOzelDersVeliBasvuruService _ozelDersVeliBasvuruService;
         private IOzelOgretmenYorumService _ozelOgretmenYorumService;
         private IOzelOgretmenYorumBegeniService _ozelOgretmenYorumBegeniService;
+        private IindirimService _indirimService;
+        private IOgretmenService _ogretmenService;
+        private IKurumBeniAraService _kurumBeniAraService;
+        private IKurumYorumService _kurumYorumService;
+        private IKurumYorumBegeniService _kurumYorumBegeniService;
         private IHttpContextAccessor _contextAccessor;
 
-        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor)
+        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService)
         {
             _logger = logger;
             _ilService = ilService;
@@ -47,6 +52,11 @@ namespace UI.Controllers
             _ozelOgretmenYorumService = ozelOgretmenYorumService;
             _ozelOgretmenYorumBegeniService = ozelOgretmenYorumBegeniService;
             _contextAccessor = contextAccessor;
+            _indirimService = indirimService;
+            _ogretmenService = ogretmenService;
+            _kurumBeniAraService = kurumBeniAraService;
+            _kurumYorumService = kurumYorumService;
+            _kurumYorumBegeniService = kurumYorumBegeniService;
         }
 
         public IActionResult Index()
@@ -74,6 +84,12 @@ namespace UI.Controllers
 
             var ozeldersogretmen = _ozelDersOgretmenService.GetAllDisplay4Take();
             ViewData["OzelDersOgretmen"] = ozeldersogretmen.Data;
+
+            var indirimler = _indirimService.GetAllDisplay4Take();
+            ViewData["indirimler"] = indirimler.Data;
+
+            var encokgorunenler = _okulService.GetAllKurum().Data.OrderByDescending(a => a.TikSayisi).Take(4).ToList();
+            ViewData["EnCokTiklananlar"] = encokgorunenler;
 
             return View();
         }
@@ -119,6 +135,50 @@ namespace UI.Controllers
         public IActionResult KurumListesi([FromBody] List<KurumDisplayDto> liste)
         {
             return View(liste);
+        }
+
+        public IActionResult KurumDetay(int id)
+        {
+            var result = _okulService.GetByIdDisplay(id);
+            var kurum = _okulService.GetById(id);
+            kurum.Data.TikSayisi++;
+            var resultupt = _okulService.Update(kurum.Data);
+            var kurumYorum = _kurumYorumService.GetAllByKurumId(id);
+            ViewData["Yorumlar"] = kurumYorum.Data.OrderByDescending(a=>a.Id).ToList();
+            ViewData["yorumSayisi"] = _kurumYorumService.GetCountByKurumId(id).Data;
+            return View(result.Data);
+        }
+
+        [HttpPost]
+        public IActionResult KurumYorumPuanla(int deger, int id)
+        {
+            string address = _contextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
+            KurumYorumBegeni model = new KurumYorumBegeni();
+            model.YorumId = id;
+            model.IPAddress = address;
+            model.Begeni = deger;
+            var result = _kurumYorumBegeniService.Add(model);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult KurumYorumEkle(KurumYorum model)
+        {
+            var result = _kurumYorumService.Add(model);
+            return RedirectToAction("KurumDetay", "Home", new { id = model.KurumId });
+        }
+
+        [HttpPost]
+        public IActionResult KurumBeniArasin(KurumBeniAra model)
+        {
+            var result = _kurumBeniAraService.Add(model);
+            return Json(result);
+        }
+
+        public IActionResult OgretmenKadrosu(int id)
+        {
+            var result = _ogretmenService.GetAllGetByKurumId(id);
+            return View(result.Data);
         }
 
         public IActionResult KullaniciGiris()
@@ -181,6 +241,13 @@ namespace UI.Controllers
         public IActionResult BlogListesi(int page = 1)
         {
             var result = _blogService.GetAll();
+            var data = result.Data.Where(a => a.Status).OrderByDescending(a => a.Id).ToPagedList(page, 12);
+            return View(data);
+        }
+
+        public IActionResult indirimListesi(int page = 1)
+        {
+            var result = _indirimService.GetAllDisplay();
             var data = result.Data.Where(a => a.Status).OrderByDescending(a => a.Id).ToPagedList(page, 12);
             return View(data);
         }

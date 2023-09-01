@@ -1,0 +1,198 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Okul kurum = ViewData["Kurum"] as Okul;
+    List<indirimDisplayDto> indirimler = ViewData["indirimler"] as List<indirimDisplayDto>;
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">@kurum.Ad</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Left sidebar -->
+                <div class="page-aside-left">
+                    @await Component.InvokeAsync("KurumMenu",new {id=kurum.Id})
+                </div>
+                <!-- End Left sidebar -->
+
+                <div class="page-aside-right">
+                    <div class="mt-1">
+                        <div class="mb-2 mt-1">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#indirimekle-modal" class="btn btn-primary btn-rounded"><i class="mdi mdi-plus"></i> İndirim Ekle</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-1">
+                            <div class="row">
+                                <h4 class="header-title">İNDİRİM LİSTESİ</h4>
+                                @if (indirimler.Count > 0)
+                                {
+                                    <table id="basic-datatable" class="table dt-responsive nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>İndirim Oranı</th>
+                                                <th>Son Tarih</th>
+                                                <th>Eklenme Tarihi</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in indirimler)
+                                            {
+                                                <tr>
+                                                    <td>@item.indirimOrani</td>
+                                                    <td>@Convert.ToDateTime(item.SonTarih).ToShortDateString()</td>
+                                                    <td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString()</td>
+                                                    <td><button type="button" class="btn btn-sm btn-danger" data-id="@item.Id" id="btnindirimSil">Sil</button></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong> İndirim listesi boş.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row-->
+                </div>
+                <!-- end inbox-rightbar-->
+            </div>
+            <!-- end card-body -->
+            <div class="clearfix"></div>
+        </div> <!-- end card-box -->
+
+    </div> <!-- end Col -->
+</div>
+
+<div id="indirimekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">İndirim Ekleme Paneli</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" data-ajax="true"
+                      data-ajax-success="OnindirimEkleSuccess"
+                      data-ajax-begin="OnindirimEkleBegin"
+                      data-ajax-complete="OnindirimEkleComplete" data-ajax-method="POST" asp-action="indirimEkle" asp-controller="Admin">
+                    <input type="hidden" name="KurumId" value="@kurum.Id" />
+                    <div class="mb-2">
+                        <label for="indirimOrani" class="form-label">İndirim Oranı</label>
+                        <input class="form-control" type="text" name="indirimOrani" id="indirimOrani">
+                    </div>
+                    <div class="mb-3">
+                        <label for="SonTarih" class="form-label">Son Tarih</label>
+                        <input class="form-control" type="date" name="SonTarih" id="SonTarih">
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-sm btn-info" id="btnindirimekle"><i class="mdi mdi-plus"></i> Ekle</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnindirimEkleBegin = function () {
+            $("#btnindirimekle").prop("disabled", true);
+            $("#btnindirimekle").html('Lütfen Bekleyin...');
+            $('#loading').show();
+            $('#indirimekle-modal').modal().hide();
+        };
+        var OnindirimEkleComplete = function () {
+            $("#btnindirimekle").prop("disabled", false);
+            $("#btnindirimekle").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnindirimEkleSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '/Admin/indirimler/' + @Html.Raw(kurum.Id);
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+        $(document).on("click", "#btnindirimSil", function () {
+            var id = $(this).data("id");
+            swal({
+                title: "UYARI",
+                text: "İndirim bilgilerini silmek istediğinize emin misiniz?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                cancelButtonClass: 'btn-success',
+                confirmButtonText: "EVET",
+                cancelButtonText: "HAYIR",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: '/Admin/indirimSil/' + id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.Success == true) {
+                            swal({
+                                title: "BAŞARILI!",
+                                type: "success",
+                                text: result.Message,
+                                confirmButtonClass: 'btn-success',
+                                confirmButtonText: "Tamam"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    window.location.href = '@Url.Action("indirimler", "Admin",new {id=kurum.Id})';
+                                }
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'HATA',
+                                text: result.Message,
+                                type: 'error',
+                                confirmButtonClass: 'btn-danger',
+                                confirmButtonText: 'Tamam',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+

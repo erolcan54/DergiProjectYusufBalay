@@ -41,7 +41,11 @@ namespace UI.Controllers
         private IDisGorselService _disGorselService;
         private IEtkinlikService _etkinlikService;
         private IEtkinlikResimService _etkinlikResimService;
-        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService)
+        private IKulupService _kulupService;
+        private IKurumYorumService _kurumYorumService;
+        private IKurumYorumBegeniService _kurumYorumBegeniService;
+        private IindirimService _indirimService;
+        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IindirimService indirimService)
         {
             _blogService = blogService;
             _yoneticiService = yoneticiService;
@@ -65,6 +69,10 @@ namespace UI.Controllers
             _disGorselService = disGorselService;
             _etkinlikService = etkinlikService;
             _etkinlikResimService = etkinlikResimService;
+            _kulupService = kulupService;
+            _kurumYorumService = kurumYorumService;
+            _kurumYorumBegeniService = kurumYorumBegeniService;
+            _indirimService = indirimService;
         }
 
         public IActionResult Index()
@@ -140,6 +148,12 @@ namespace UI.Controllers
             model.Status = result.Data.Status;
             var upt = _blogService.Update(model);
             return Json(upt);
+        }
+
+        public IActionResult BlogDetail(int id)
+        {
+            var result = _blogService.GetById(id);
+            return View(result.Data);
         }
         #endregion
 
@@ -772,7 +786,7 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult KatalogEkle(Katalog model, IFormFile katalogpdf)
         {
-            
+
             if (katalogpdf != null)
             {
                 using (var stream = new MemoryStream())
@@ -791,7 +805,7 @@ namespace UI.Controllers
         public IActionResult KatalogIndir(Guid seriNo)
         {
             var result = _katalogService.GetBySeriNo(seriNo);
-            return File(result.Data.KatalogPDF, "application/pdf",result.Data.KatalogAdi+".pdf");
+            return File(result.Data.KatalogPDF, "application/pdf", result.Data.KatalogAdi + ".pdf");
         }
 
         [HttpPost]
@@ -808,7 +822,7 @@ namespace UI.Controllers
             var kurum = _okulService.GetById(id);
             ViewData["Kurum"] = kurum.Data;
             var gorseller = _icGorselService.GetAllByKurumId(id);
-            ViewData["Resimler"]=gorseller.Data;
+            ViewData["Resimler"] = gorseller.Data;
             return View();
         }
 
@@ -887,9 +901,9 @@ namespace UI.Controllers
         {
             var result = _etkinlikService.Add(model);
             DataResult<Etkinlik> etk;
-            if(result.Success)
+            if (result.Success)
             {
-                etk=new SuccessDataResult<Etkinlik>(model,result.Message);
+                etk = new SuccessDataResult<Etkinlik>(model, result.Message);
             }
             else
             {
@@ -903,16 +917,23 @@ namespace UI.Controllers
             var result = _etkinlikService.GetById(id);
             ViewData["Etkinlik"] = result.Data;
             var resimler = _etkinlikResimService.GetAllByEtkinlikId(result.Data.Id);
-            ViewData["Resimler"]= resimler.Data;
+            ViewData["Resimler"] = resimler.Data;
             var kurum = _okulService.GetById(result.Data.KurumId);
-            ViewData["Kurum"]=kurum.Data;
+            ViewData["Kurum"] = kurum.Data;
             return View();
         }
 
         [HttpPost]
-        public IActionResult EtkinlikGuncelle(Etkinlik model) 
+        public IActionResult EtkinlikSil(int id)
         {
-            var result= _etkinlikService.Update(model);
+            var result = _etkinlikService.Delete(id);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult EtkinlikGuncelle(Etkinlik model)
+        {
+            var result = _etkinlikService.Update(model);
             return Json(result);
         }
 
@@ -941,6 +962,143 @@ namespace UI.Controllers
         }
         #endregion
 
+        #region Kulüp İşlemleri
+        public IActionResult Kulupler(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var kulupler = _kulupService.GetAllByKurumId(id);
+            ViewData["Kulupler"] = kulupler.Data;
+            return View();
+        }
 
+        [HttpPost]
+        public IActionResult KulupEkle(Kulup model, IFormFile Resim)
+        {
+            using (var stream = new MemoryStream())
+            {
+                Resim.CopyTo(stream);
+                model.Resim = stream.ToArray();
+            }
+            var result = _kulupService.Add(model);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult KulupSil(int id)
+        {
+            var result = _kulupService.Delete(id);
+            return Json(result);
+        }
+
+        public IActionResult KulupGuncelle(int id)
+        {
+            var kulup = _kulupService.GetById(id);
+            ViewData["Kulup"] = kulup.Data;
+            var kurum = _okulService.GetById(kulup.Data.KurumId);
+            ViewData["Kurum"] = kurum.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult KulupGuncelle(Kulup model, IFormFile Resim)
+        {
+            var kulup = _kulupService.GetById(model.Id);
+            kulup.Data.Ad = model.Ad;
+            kulup.Data.Icerik = model.Icerik;
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    kulup.Data.Resim = stream.ToArray();
+                }
+            }
+            var result = _kulupService.Update(kulup.Data);
+            return Json(result);
+        }
+
+        #endregion
+
+        #region TanıtımVideosu
+        public IActionResult TanitimVideo(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult VideoEkle(int kurumId, string TanitimVideo)
+        {
+            var result = _okulService.GetById(kurumId);
+            result.Data.TanitimVideo = TanitimVideo;
+            var guncelle = _okulService.Update(result.Data);
+            return Json(guncelle);
+        }
+
+        [HttpPost]
+        public IActionResult VideoGuncelle(int kurumId, string TanitimVideo)
+        {
+            var result = _okulService.GetById(kurumId);
+            result.Data.TanitimVideo = TanitimVideo;
+            var guncelle = _okulService.Update(result.Data);
+            return Json(guncelle);
+        }
+        #endregion
+
+        #region Yorumlar
+        public IActionResult Yorumlar(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var yorums = _kurumYorumService.GetAllByKurumId(id);
+            ViewData["yorumlar"] = yorums.Data.OrderByDescending(a => a.Id).ToList();
+            ViewData["yorumSayisi"] = _kurumYorumService.GetCountByKurumId(id).Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult KurumYorumSil(int id)
+        {
+            var result = _kurumYorumService.Delete(id);
+            return Json(result);
+
+        }
+        #endregion
+        #region İndirimler
+        public IActionResult indirimler(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var indirims = _indirimService.GetAllByKurumId(id);
+            ViewData["indirimler"] = indirims.Data;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult indirimEkle(indirim model)
+        {
+            var result = _indirimService.Add(model);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult indirimSil(int id)
+        {
+            var result = _indirimService.Delete(id);
+            return Json(result);
+        }
+        #endregion
+        #region Bursluluk Sınavları
+        public IActionResult BurslulukSinavlari(int id)
+        {
+            var kurum = _okulService.GetById(id);
+            ViewData["Kurum"] = kurum.Data;
+            var indirims = _indirimService.GetAllByKurumId(id);
+            ViewData["indirimler"] = indirims.Data;
+            return View();
+        }
+        #endregion
     }
 }

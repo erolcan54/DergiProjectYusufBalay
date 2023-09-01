@@ -1,6 +1,6 @@
 ﻿@model OzelDersOgretmenDto
 @{
-    ViewData["Title"] = "ProfileDetail";
+    ViewData["Title"] = Model.AdSoyad ;
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     List<OzelDersVeliBasvuru> basvurus = ViewData["Basvurular"] as List<OzelDersVeliBasvuru>;
     List<YorumDisplayDto> yorums = ViewData["yorumlar"] as List<YorumDisplayDto>;
@@ -62,12 +62,13 @@
             <h4 class="header-title">ÖZEL DERS VELİ BAŞVURULARI</h4>
             @if (basvurus.Count > 0)
             {
-                <table id="alternative-page-datatable" class="table dt-responsive nowrap">
+                <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
                     <thead>
                         <tr>
                             <th>Ad Soyad</th>
                             <th>Email</th>
                             <th>Telefon</th>
+                            <th>Sınıf</th>
                             <th>Online</th>
                             <th>Yüzyüze</th>
                             <th>Eklenme Tarihi</th>
@@ -81,6 +82,7 @@
                                 <td>@item.AdSoyad</td>
                                 <td>@item.Email</td>
                                 <td>@item.Telefon</td>
+                                <td>@item.Sinif</td>
                                 <td>
                                     @if (item.Online)
                                     {
@@ -102,7 +104,6 @@
                                     }
                                 </td>
                                 <td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString()</td>
-
                             </tr>
                         }
                     </tbody>
@@ -163,6 +164,8 @@
 
 @section Scripts{
     <script>
+
+
         $(document).on("click", "#btnozelogretmensil", function () {
             var id = $(this).data("id");
             swal({

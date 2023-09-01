@@ -8,7 +8,7 @@ namespace Entities
 {
     public class BurslulukSinav : EntityBase
     {
-        public int OkulId { get; set; }
+        public int KurumId { get; set; }
         public DateTime SinavTarih { get; set; }
         public DateTime SonBasvuruTarih { get; set; }
     }

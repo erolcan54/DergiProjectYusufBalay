@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,9 @@ namespace Business.Abstract
         IDataResult<indirim> GetById(int id);
         IResult Update(indirim entity);
         IDataResult<List<indirim>> GetAll();
+        IResult Delete(int id);
+        IDataResult<List<indirimDisplayDto>> GetAllByKurumId(int id);
+        IDataResult<List<indirimDisplayDto>> GetAllDisplay4Take();
+        IDataResult<List<indirimDisplayDto>> GetAllDisplay();
     }
 }

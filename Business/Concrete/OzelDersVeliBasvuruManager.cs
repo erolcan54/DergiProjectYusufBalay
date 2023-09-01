@@ -34,7 +34,7 @@ namespace Business.Concrete
             result.Status = false;
             result.DeletedDate = DateTime.Now;
             _ozelDersVeliBasvuruDal.Update(result);
-            return new SuccessResult("Basvuru silindi.");
+            return new SuccessResult("Başvuru silindi.");
         }
 
         public IDataResult<List<OzelDersVeliBasvuru>> GetAll()
@@ -44,7 +44,7 @@ namespace Business.Concrete
 
         public IDataResult<OzelDersVeliBasvuru> GetById(int id)
         {
-            return new SuccessDataResult<OzelDersVeliBasvuru>(_ozelDersVeliBasvuruDal.Get(a => a.Id == id), "Blog getirildi.");
+            return new SuccessDataResult<OzelDersVeliBasvuru>(_ozelDersVeliBasvuruDal.Get(a => a.Id == id), "Başvuru getirildi.");
         }
 
         public IDataResult<List<OzelDersVeliBasvuru>> GetListByOgretmenId(int id)
@@ -57,7 +57,7 @@ namespace Business.Concrete
             entity.UpdatedDate = DateTime.Now;
             entity.Status = true;
             _ozelDersVeliBasvuruDal.Update(entity);
-            return new SuccessResult("Bavuru güncellendi.");
+            return new SuccessResult("Başvuru güncellendi.");
         }
 
     }

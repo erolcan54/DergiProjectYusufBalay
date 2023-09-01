@@ -19,10 +19,10 @@
                 <input type="hidden" asp-for="EgitimTurId" value="@Model.EgitimTurId" />
                 <input type="hidden" asp-for="CreatedDate" value="@Model.CreatedDate" />
                 <input type="hidden" asp-for="UpdatedDate" value="@Model.UpdatedDate" />
-                <input type="hidden" asp-for="DeletedDate" value="@Model.DeletedDate"/>
+                <input type="hidden" asp-for="DeletedDate" value="@Model.DeletedDate" />
                 <input type="hidden" asp-for="OkulTurId" value="@Model.OkulTurId" />
                 <input type="hidden" asp-for="Status" value="@Model.Status" />
-                
+
                 <div class="mb-3">
                     <label for="Ad" class="form-label">Kurum Adı</label>
                     <input class="form-control" type="text" asp-for="Ad" id="Ad" required="" placeholder="Kurum Adını Yazınız">
@@ -50,6 +50,13 @@
                     <div class="mb-3">
                         <label for="Resim" class="form-label">Resim</label>
                         <input class="form-control" type="file" asp-for="Resim" id="Resim">
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="mb-3">
+                        <label for="TanitimVideo" class="form-label">Tanıtım Video Linki</label>
+                        <input class="form-control" type="text" asp-for="TanitimVideo" id="TanitimVideo">
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -84,6 +91,12 @@
                         </div> <!-- end col -->
                     }
                 </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label for="Hakkinda" class="form-label">Hakkında</label>
+                        <textarea rows="10" asp-for="Hakkinda" id="Hakkinda" class="form-control resize-none" placeholder="Kurum hakkında bilgi yazınız."></textarea>
+                    </div>
+                </div>
                 <div class="d-grid mb-2">
                     <button id="btnokulguncelle" type="submit" class="btn btn-primary"><i class="mdi mdi-pencil"></i> Güncelle </button>
                 </div> <!-- end col -->
@@ -93,7 +106,10 @@
 </div>
 
 @section Scripts{
-
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("Hakkinda");
+    </script>
     <script>
 
         $(window).on('load',
@@ -111,7 +127,7 @@
         }
         var OnUpdateOkulSuccess = function (data) {
             if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("KurumListesi","Admin"))';
+                window.location.href = '@Html.Raw(Url.Action("KurumDetay","Admin",new {id=Model.Id}))';
             }
             else {
                 swal({

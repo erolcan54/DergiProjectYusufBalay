@@ -8,7 +8,7 @@ namespace Entities
 {
     public class indirim : EntityBase
     {
-        public int OkulId { get; set; }
+        public int KurumId { get; set; }
         public double indirimOrani { get; set; }
         public DateTime SonTarih { get; set; }
 

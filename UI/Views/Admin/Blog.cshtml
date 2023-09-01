@@ -29,7 +29,7 @@
                     <div class="card-body position-relative">
                         <!-- project title-->
                         <h4 class="mt-0">
-                            <a href="/Home/BlogDetail/@item.Id" target="_blank" class="text-title">@item.Baslik</a>
+                            <a href="@Url.Action("BlogDetail","Admin",new {id=item.Id})" target="_blank" class="text-title">@item.Baslik</a>
                         </h4>
 
                         <!-- project detail-->

@@ -83,6 +83,18 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EtkinlikResimManager>().As<IEtkinlikResimService>().SingleInstance();
             builder.RegisterType<EfEtkinlikResimDal>().As<IEtkinlikResimDal>().SingleInstance();
 
+            builder.RegisterType<KulupManager>().As<IKulupService>().SingleInstance();
+            builder.RegisterType<EfKulupDal>().As<IKulupDal>().SingleInstance();
+
+            builder.RegisterType<KurumYorumManager>().As<IKurumYorumService>().SingleInstance();
+            builder.RegisterType<EfKurumYorumDal>().As<IKurumYorumDal>().SingleInstance();
+
+            builder.RegisterType<KurumYorumBegeniManager>().As<IKurumYorumBegeniService>().SingleInstance();
+            builder.RegisterType<EfKurumYorumBegeniDal>().As<IKurumYorumBegeniDal>().SingleInstance();
+
+            builder.RegisterType<KurumBeniAraManager>().As<IKurumBeniAraService>().SingleInstance();
+            builder.RegisterType<EfKurumBeniAraDal>().As<IKurumBeniAraDal>().SingleInstance();
+
             //var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             //builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

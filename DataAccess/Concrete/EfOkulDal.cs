@@ -40,6 +40,8 @@ namespace DataAccess.Concrete
                                  DeletedDate=k.DeletedDate,
                                  Status= k.Status,
                                  UpdatedDate=k.UpdatedDate,
+                                 Hakkinda=k.Hakkinda,
+                                 TanitimVideo=k.TanitimVideo
                              };
                 return result.ToList();
 
@@ -112,6 +114,8 @@ namespace DataAccess.Concrete
                                  DeletedDate = k.DeletedDate,
                                  Status = k.Status,
                                  UpdatedDate = k.UpdatedDate,
+                                 Hakkinda = k.Hakkinda,
+                                 TanitimVideo = k.TanitimVideo
                              };
                 return result.FirstOrDefault();
             }
@@ -145,6 +149,8 @@ namespace DataAccess.Concrete
                                  DeletedDate = k.DeletedDate,
                                  Status = k.Status,
                                  UpdatedDate = k.UpdatedDate,
+                                 Hakkinda = k.Hakkinda,
+                                 TanitimVideo = k.TanitimVideo
                              };
                 return result.ToList();
 
@@ -182,6 +188,8 @@ namespace DataAccess.Concrete
                                  DeletedDate = k.DeletedDate,
                                  Status = k.Status,
                                  UpdatedDate = k.UpdatedDate,
+                                 Hakkinda = k.Hakkinda,
+                                 TanitimVideo = k.TanitimVideo
                              };
                 return result.ToList();
             }
