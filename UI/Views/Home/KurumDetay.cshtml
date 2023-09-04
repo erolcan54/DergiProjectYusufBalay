@@ -34,11 +34,11 @@
                             </p>
                             <p>
                                 Email
-                                <span class="float-end">@Model.Email</span>
+                                <span class="float-end"><a href="mailto:@Model.Email">@Model.Email</a></span>
                             </p>
                             <p>
                                 Telefon
-                                <span class="float-end">@Model.Telefon</span>
+                                <span class="float-end"><a href="tel:@Model.Telefon">@Model.Telefon</a></span>
                             </p>
                             <p>
                                 Adres
@@ -48,12 +48,20 @@
                                 Görüntülenme Sayısı
                                 <span class="float-end">@Model.TikSayisi</span>
                             </p>
+                            <p class="text-muted mb-0" id="tooltip-container">
+                                <strong>Sosyal Medya Hesaplarımız :</strong>
+                                <a href="@Model.Facebook" class="d-inline-block ms-2 text-muted float-end" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Facebook" aria-label="Facebook"><i class="mdi mdi-facebook"></i></a>
+                                <a href="@Model.Twitter" class="d-inline-block ms-2 text-muted float-end" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Twitter" aria-label="Twitter"><i class="mdi mdi-twitter"></i></a>
+                                <a href="https://wa.me/@Html.Raw(Model.Whatsapp)" target="_blank" class="d-inline-block ms-2 text-muted float-end" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Whatsapp" aria-label="Whatsapp"><i class="mdi mdi-whatsapp"></i></a>
+                                <a href="@Model.Instagram" class="d-inline-block ms-2 text-muted float-end" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Instagram" aria-label="Instagram"><i class="mdi mdi-instagram w-100"></i></a>
+                            </p>
                             <p class="d-grid">
                                 <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#videoizle-modal">Tanıtım Videosu İzle</a>
                             </p>
                             <p class="d-grid">
                                 <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#kurumbeniarasin-modal">Okul Beni Arasın</a>
                             </p>
+
                         </div>
                     </div>
                 </div>
@@ -109,46 +117,45 @@
 
             </div>
         </div>
-        <div class="row">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="mt-0 mb-3">Yorumlar (@ViewData["yorumSayisi"])</h4>
-                    <form class="form-vertical" asp-action="KurumYorumEkle" asp-controller="Home" method="post">
-                        <input type="hidden" value="@Model.Id" name="KurumId" />
-                        <div class="mb-1">
-                            <input class="form-control form-control-light" type="text" name="AdSoyad" id="AdSoyad" required="" placeholder="Adınız ve Soyadınızı Yazınız">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="mt-0 mb-3">Yorumlar (@ViewData["yorumSayisi"])</h4>
+                <form class="form-vertical" asp-action="KurumYorumEkle" asp-controller="Home" method="post">
+                    <input type="hidden" value="@Model.Id" name="KurumId" />
+                    <div class="mb-1">
+                        <input class="form-control form-control-light" type="text" name="AdSoyad" id="AdSoyad" required="" placeholder="Adınız ve Soyadınızı Yazınız">
+                    </div>
+                    <textarea class="form-control form-control-light mb-2" name="Yorum" required placeholder="Mesajınızı yazınız..." id="example-textarea" rows="3"></textarea>
+                    <div class="text-end">
+                        <div class="btn-group mb-2 ms-2">
+                            <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
                         </div>
-                        <textarea class="form-control form-control-light mb-2" name="Yorum" required placeholder="Mesajınızı yazınız..." id="example-textarea" rows="3"></textarea>
-                        <div class="text-end">
-                            <div class="btn-group mb-2 ms-2">
-                                <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
+                </form>
 
-                    @if (yorums != null)
+                @if (yorums != null)
+                {
+                    @if (yorums.Count > 0)
                     {
-                        @if (yorums.Count > 0)
+                        @foreach (var item in yorums)
                         {
-                            @foreach (var item in yorums)
-                            {
-                                <hr />
-                                <div class="d-flex mb-1 mt-1">
-                                    <div class="w-100 overflow-hidden">
-                                        <small class="float-end">
-                                            <div class="rateit" data-id="@item.Id" id="rateitYorum" data-rateit-mode="font" data-rateit-readonly="false" data-rateit-value="@item.BegeniAvarege"></div>
-                                        </small>
-                                        <h6 class="m-0 font-14">@item.AdSoyad</h6>
-                                        <small class="text-muted">@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString()</small>
-                                    </div>
+                            <hr />
+                            <div class="d-flex mb-1 mt-1">
+                                <div class="w-100 overflow-hidden">
+                                    <small class="float-end">
+                                        <div class="rateit" data-id="@item.Id" id="rateitYorum" data-rateit-mode="font" data-rateit-readonly="false" data-rateit-value="@item.BegeniAvarege"></div>
+                                    </small>
+                                    <h6 class="m-0 font-14">@item.AdSoyad</h6>
+                                    <small class="text-muted">@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString()</small>
                                 </div>
-                                <p>@item.Yorum</p>
-                            }
+                            </div>
+                            <p>@item.Yorum</p>
                         }
                     }
-                </div> <!-- end card-body-->
-            </div>
+                }
+            </div> <!-- end card-body-->
         </div>
+
     }
     else
     {

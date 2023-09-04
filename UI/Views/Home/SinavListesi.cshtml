@@ -1,0 +1,69 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common;
+@model IPagedList<BurslulukSinavDisplayDto>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">EĞİTİM İÇERİKLERİ / BLOG</h4>
+            <p class="text-muted font-14">Eğitim ile ilgili yazılan makalelere buradan ulaşabilirsiniz.</p>
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-6 col-md-3 col-xxl-3">
+                        <!-- project card -->
+                        <div class="card d-block">
+                            <!-- project-thumbnail -->
+                            <a href="@Url.Action("SinavDetay","Home",new {id=item.Id})">
+                                <img class="card-img-top" style="height:200px; object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            </a>
+                            <div class="card-body position-relative">
+                                <h5>@item.KurumAdi</h5>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>@item.ilAdi / @item.ilceAdi</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>@item.SinavAdi</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>Son Başvuru : @Convert.ToDateTime(item.SonBasvuruTarih).ToShortDateString()</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>Sınav Tarihi : @Convert.ToDateTime(item.SinavTarih).ToShortDateString()</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>Sınav Saati : @item.SinavSaat</b>
+                                    </span>
+                                </p>
+                                    <p>
+                                    <a href="@Url.Action("SinavDetay","Home",new {id=item.Id})" class="btn btn-sm btn-primary">Detay</a>
+                                </p>
+                            </div>
+                        </div> <!-- end card-->
+                    </div>
+                }
+            </div>
+            <div class="row">
+                @Html.PagedListPager((IPagedList)Model,page=>Url.Action("SinavListesi","Home",new {page}),
+                new PagedListRenderOptions {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+                })
+            </div>
+        </div>
+    </div>
+</div>
+

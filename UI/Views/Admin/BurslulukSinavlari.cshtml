@@ -1,0 +1,221 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<BurslulukSinav> sinavlar = ViewData["sinavlar"] as List<BurslulukSinav>;
+    Okul kurum = ViewData["Kurum"] as Okul;
+
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">@kurum.Ad</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Left sidebar -->
+                <div class="page-aside-left">
+                    @await Component.InvokeAsync("KurumMenu",new {id=kurum.Id})
+                </div>
+                <!-- End Left sidebar -->
+
+                <div class="page-aside-right">
+                    <div class="mt-2">
+                        <div class="row">
+                            <div class="mb-2">
+                                <a href="#" class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="modal" data-bs-target="#sinavekle-modal"><i class="mdi mdi-plus"></i> Bursluluk Sınavı Ekle</a>
+                            </div>
+                        </div><hr />
+                        @if (sinavlar.Count > 0)
+                        {
+                            <table id="table" class="table dt-responsive nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Sınav Adı</th>
+                                        <th>Sınav Tarihi</th>
+                                        <th>Sınav Saati</th>
+                                        <th>Son Başvuru Tarihi</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in sinavlar)
+                                    {
+                                        <tr>
+                                            <td>@item.SinavAdi</td>
+                                            <td>@Convert.ToDateTime(item.SinavTarih).ToShortDateString()</td>
+                                            <td>@item.SinavSaat</td>
+                                            <td>@Convert.ToDateTime(item.SonBasvuruTarih).ToShortDateString()</td>
+                                            <td>
+                                                @*<a htfe="#" id="btnkatalogSil" data-id="@item.Id" class="btn btn-sm btn-danger"> Sil</a>*@
+                                                <a href="#" data-id="@item.Id" id="btnsinavSil" class="btn btn-sm btn-danger"> <i class="mdi mdi-delete"></i> Sil </a>
+                                            </td>
+                                        </tr>
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="body">
+                                <div class="card-body">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong> Sınav listesi boş.
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <!-- end row-->
+                </div>
+                <!-- end inbox-rightbar-->
+            </div>
+            <!-- end card-body -->
+            <div class="clearfix"></div>
+        </div> <!-- end card-box -->
+
+    </div> <!-- end Col -->
+</div>
+
+<div id="sinavekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Katalog Ekleme Paneli</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" data-ajax="true"
+                      data-ajax-success="OnSinavEkleSuccess"
+                      data-ajax-begin="OnSinavEkleBegin"
+                      data-ajax-complete="OnSinavEkleComplete" data-ajax-method="POST" asp-action="BurslulukSinavEkle" asp-controller="Admin">
+                    <input type="hidden" name="KurumId" value="@kurum.Id" />
+                    <div class="mb-2">
+                        <label for="SinavAdi" class="form-label">Sınav Adı</label>
+                        <input type="text" name="SinavAdi" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-2">
+                                <label for="SinavTarih" class="form-label">Sınav Tarihi</label>
+                                <input type="date" name="SinavTarih" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-2">
+                                <label for="SinavSaat" class="form-label">Sınav Saati</label>
+                                <input type="time" name="SinavSaat" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label for="SonBasvuruTarih" class="form-label">Son Başvuru Tarihi</label>
+                        <input type="date" name="SonBasvuruTarih" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-sm btn-info" id="btnsinavekle"><i class="mdi mdi-plus"></i> Ekle</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnSinavEkleBegin = function () {
+            $("#btnsinavekle").prop("disabled", true);
+            $("#btnsinavekle").html('Lütfen Bekleyin...');
+            $('#loading').show();
+            $('#sinavekle-modal').modal().hide();
+        };
+        var OnSinavEkleComplete = function () {
+            $("#btnsinavekle").prop("disabled", false);
+            $("#btnsinavekle").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnSinavEkleSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("BurslulukSinavlari","Admin",new{id=kurum.Id}))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+        $(document).on("click", "#btnsinavSil", function () {
+            var id = $(this).data("id");
+            swal({
+                title: "UYARI",
+                text: "Sınavı silmek istediğinize emin misiniz?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                cancelButtonClass: 'btn-success',
+                confirmButtonText: "EVET",
+                cancelButtonText: "HAYIR",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: '/Admin/BurslulukSinavSil/' + id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.Success == true) {
+                            swal({
+                                title: "BAŞARILI!",
+                                type: "success",
+                                text: result.Message,
+                                confirmButtonClass: 'btn-success',
+                                confirmButtonText: "Tamam"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    window.location.href = '@Url.Action("BurslulukSinavlari", "Admin",new {id=kurum.Id})';
+                                }
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'HATA',
+                                text: result.Message,
+                                type: 'error',
+                                confirmButtonClass: 'btn-danger',
+                                confirmButtonText: 'Tamam',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        $(document).ajaxStart(function () {
+            $("#loading").show();
+        });
+
+        $(document).ajaxStop(function () {
+            $("#loading").hide();
+        });
+    </script>
+}
+

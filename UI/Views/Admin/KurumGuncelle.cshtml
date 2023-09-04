@@ -45,6 +45,24 @@
                         <input class="form-control" type="email" asp-for="Email" id="Email" required="" placeholder="Kurum Email Adresini Yazınız">
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="Whatsapp" class="form-label">Whatsapp</label>
+                        <input class="form-control" type="text" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" asp-for="Whatsapp" id="Telefon" placeholder="Whatsapp Telefonu Yazınız">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="Instagram" class="form-label">Instagram</label>
+                        <input class="form-control" type="text" asp-for="Instagram" id="Instagram" placeholder="Kurum Instagram hesabını Yazınız">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="Facebook" class="form-label">Facebook</label>
+                        <input class="form-control" type="text" asp-for="Facebook" id="Facebook" placeholder="Kurum Facebook hesabını Yazınız">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="Twitter" class="form-label">Twitter</label>
+                        <input class="form-control" type="text" asp-for="Twitter" id="Twitter" placeholder="Kurum Twitter hesabını Yazınız">
+                    </div>
+                </div>
                 <div class="row">
                     <img src="@ByteToImage.DecodeImage(Model.Resim)" class="img-fluid" style="max-width: 280px;" alt="Product-img">
                     <div class="mb-3">

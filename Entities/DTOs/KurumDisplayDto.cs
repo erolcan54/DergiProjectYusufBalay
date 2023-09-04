@@ -29,7 +29,11 @@ namespace Entities.DTOs
         public DateTime? UpdatedDate{ get; set; }
         public DateTime? DeletedDate { get; set; }
         public bool Status { get; set; }
-        public string TanitimVideo { get; set; }
-        public string Hakkinda { get; set; }
+        public string? TanitimVideo { get; set; }
+        public string? Hakkinda { get; set; }
+        public string? Whatsapp { get; set; }
+        public string? Instagram { get; set; }
+        public string? Facebook { get; set; }
+        public string? Twitter { get; set; }
     }
 }

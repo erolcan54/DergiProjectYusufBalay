@@ -34,7 +34,7 @@ namespace Business.Concrete
             result.Status = false;
             result.DeletedDate = DateTime.Now;
             _bransDal.Update(result);
-            return new SuccessResult("Blog silindi.");
+            return new SuccessResult("Branş silindi.");
         }
 
         public IDataResult<List<Brans>> GetAll()

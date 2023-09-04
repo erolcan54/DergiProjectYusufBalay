@@ -1,0 +1,143 @@
+﻿@model BurslulukSinavDisplayDto
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="row text-center">
+            <h4 class="header-title">@Model.KurumAdi</h4>
+        </div>
+        <hr />
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <img src="@ByteToImage.DecodeImage(Model.Resim)" class="img-fluid img-thumbnail" style="max-height:400px;max-width:%75" alt="Product-img">
+            </div>
+            <div class="col-md-6">
+                <div class="chart-widget-list mt-1">
+                    <p>
+                        Sınav Adı
+                        <span class="float-end">@Model.SinavAdi</span>
+                    </p>
+                    <p>
+                        İl
+                        <span class="float-end">@Model.ilAdi</span>
+                    </p>
+                    <p>
+                        İlçe
+                        <span class="float-end">@Model.ilceAdi</span>
+                    </p>
+                    <p>
+                        Sınav Son Başvuru
+                        <span class="float-end">@Convert.ToDateTime(Model.SonBasvuruTarih).ToLongDateString()</span>
+                    </p>
+                    <p>
+                        Sınav Tarihi
+                        <span class="float-end">@Convert.ToDateTime(Model.SinavTarih).ToLongDateString()</span>
+                    </p>
+                    <p>
+                        Sınav Saati
+                        <span class="float-end">@Model.SinavSaat</span>
+                    </p>
+                    <p class="d-grid">
+                        <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#sinavbasvur-modal">Başvuru Yap</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="sinavbasvur-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Busluluk Sınav Başvuru Paneli</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-vertical" data-ajax="true"
+                      data-ajax-success="OnSinavBasvuruSuccess"
+                      data-ajax-begin="OnSinavBasvuruBegin"
+                      data-ajax-complete="OnSinavBasvuruComplete" data-ajax-method="POST" asp-action="SinavBasvuru" asp-controller="Home">
+
+                    <div class="mb-3">
+                        <label for="VeliAdSoyad" class="form-label">Veli Adı Soyadı</label>
+                        <input class="form-control" type="text" name="VeliAdSoyad" id="VeliAdSoyad" required="" placeholder="Veli Adı Soyadı Yazınız">
+                    </div>
+                    <div class="mb-3">
+                        <label for="OgrenciAdSoyad" class="form-label">Öğrenci Adı Soyadı</label>
+                        <input class="form-control" type="text" name="OgrenciAdSoyad" id="OgrenciAdSoyad" required="" placeholder="Öğrenci Adı Soyadı Yazınız">
+                    </div>
+                    <input type="hidden" name="SinavId" value="@Model.Id" />
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Telefon" class="form-label">Telefon</label>
+                                <input type="tel" name="Telefon" class="form-control" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" name="Telefon" id="Telefon" required="" placeholder="Telefon Yazınız">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Email" class="form-label">Email</label>
+                                <input class="form-control" type="email" name="Email" id="Email" required="" placeholder="Email Yazınız">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-0 text-center">
+                        <button class="btn btn-info" id="btnaddSinavBasvuru" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnSinavBasvuruBegin = function () {
+            $("#btnaddSinavBasvuru").prop("disabled", true);
+            $("#btnaddSinavBasvuru").html('Lütfen Bekleyin...');
+            $('#loading').show();
+        };
+        var OnSinavBasvuruComplete = function () {
+            $("#btnaddSinavBasvuru").prop("disabled", false);
+            $("#btnaddSinavBasvuru").html('<i class="mdi mdi-plus"></i> Kaydet  ');
+            $('#loading').hide();
+        };
+        var OnSinavBasvuruSuccess = function (data) {
+            $('#sinavbasvur-modal').modal().hide();
+            $('#loading').hide();
+            if (data.Success) {
+
+                swal({
+                    title: 'BAŞARILI',
+                     text: "Başvurunuz ilgili kurum ile paylaşılacaktır. Kurum eğitim danışmanları en kısa sürede sizinle iletişime geçecektir. Teşekkür ederiz.",
+                    type: 'success',
+                    confirmButtonClass: 'btn-success',
+                    confirmButtonText: 'Tamam',
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = '@Url.Action("Index","Home")';
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}

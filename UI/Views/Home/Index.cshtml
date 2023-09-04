@@ -6,6 +6,7 @@
     List<OzelDersOgretmenDto> ozelDersOgretmens = ViewData["OzelDersOgretmen"] as List<OzelDersOgretmenDto>;
     List<indirimDisplayDto> indirimler = ViewData["indirimler"] as List<indirimDisplayDto>;
     List<KurumDisplayDto> enCokZiyaretEdilenler = ViewData["EnCokTiklananlar"] as List<KurumDisplayDto>;
+    List<BurslulukSinavDisplayDto> sinavlar = ViewData["Sinavlar"] as List<BurslulukSinavDisplayDto>;
 }
 
 <div class="row">
@@ -115,21 +116,23 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-            @*            @if (enCokZiyaretEdilenler.Count > 0)
+           @* @if (enCokZiyaretEdilenler.Count > 0)
             {
-            <div class="float-end"><a href="@Url.Action("KurumListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+                <div class="float-end"><a href="@Url.Action("KurumListesi","Home",new {liste=enCokZiyaretEdilenler})" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
             }*@
             <h4 class="header-title">EN ÇOK ZİYARET EDİLENLER</h4>
             <p class="text-muted font-14">En çok ziyaret edilen kurumların listesi</p>
             <div class="row">
                 @foreach (var item in enCokZiyaretEdilenler)
                 {
-                    <div class="col-md-3 col-xxl-3">
+                    <div class="col-6 col-sm-6 col-xxl-3">
                         <!-- project card -->
-                        <div class="card d-block">
+                        <div class="card">
                             <!-- project-thumbnail -->
-                            <img class="card-img-top" height="200px" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
-                            <div class="card-body position-relative">
+                            <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})">
+                                <img class="card-img-top" style="height:200px; object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            </a>
+                            <div class="card-body">
                                 <h5>@item.Ad</h5>
                                 <p class="mb-1">
                                     <span class="pe-2 text-muted">
@@ -149,6 +152,10 @@
                     </div>
                 }
             </div>
+            @if (enCokZiyaretEdilenler.Count > 0)
+            {
+                <div class="float-end"><a href="@Url.Action("KurumListesi","Home",new {liste=enCokZiyaretEdilenler})" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+            }
         </div>
 
     </div>
@@ -157,20 +164,17 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-            @if (indirimler.Count > 0)
-            {
-                <div class="float-end"><a href="@Url.Action("indirimListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
-            }
+            
             <h4 class="header-title">ÖZEL İNDİRİMLER</h4>
             <p class="text-muted font-14">Kurumların indirim fırsatlarını buradan görebilirsiniz.</p>
             <div class="row">
                 @foreach (var item in indirimler)
                 {
-                    <div class="col-md-3 col-xxl-3">
+                    <div class="col-6 col-md-3 col-xxl-3">
                         <!-- project card -->
                         <div class="card d-block">
                             <!-- project-thumbnail -->
-                            <img class="card-img-top" height="200px" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            <img class="card-img-top" height="200px" style="object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
                             <div class="card-body position-relative">
                                 <h5>@item.KurumAdi</h5>
                                 <p class="mb-1">
@@ -193,6 +197,10 @@
                     </div>
                 }
             </div>
+            @if (indirimler.Count > 0)
+            {
+                <div class="float-end"><a href="@Url.Action("indirimListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+            }
         </div>
 
     </div>
@@ -203,6 +211,61 @@
         <div class="card-body">
             <h4 class="header-title">BURSLULUK SINAVLARI</h4>
             <p class="text-muted font-14">Bursluluk sınavları ile ilgili bilgiler .</p>
+            <div class="row">
+                @foreach (var item in sinavlar)
+                {
+                    <div class="col-6 col-md-3 col-xxl-3">
+                        <!-- project card -->
+                        <div class="card d-block">
+                            <!-- project-thumbnail -->
+                            <a href="@Url.Action("SinavDetay","Home",new {id=item.Id})">
+                                <img class="card-img-top" style="height:200px; object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            </a>
+                            <div class="card-body position-relative">
+                                <h5>@item.KurumAdi</h5>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>@item.ilAdi / @item.ilceAdi</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>@item.SinavAdi</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>Son Başvuru : @Convert.ToDateTime(item.SonBasvuruTarih).ToShortDateString()</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>Sınav Tarihi : @Convert.ToDateTime(item.SinavTarih).ToShortDateString()</b>
+                                    </span>
+                                </p>
+                                <p class="mb-1">
+                                    <span class="pe-2 text-muted">
+                                        <b>Sınav Saati : @item.SinavSaat</b>
+                                    </span>
+                                </p>
+                                <p>
+                                    <a href="@Url.Action("SinavDetay","Home",new {id=item.Id})" class="btn btn-sm btn-primary">Detay</a>
+                                </p>
+                            </div>
+                        </div> <!-- end card-->
+                    </div>
+                }
+            </div>
+            @if (sinavlar.Count > 0)
+            {
+                <div class="float-end"><a href="@Url.Action("SinavListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    <strong>Uyarı - </strong> Aktif Bursluluk Sınavı duyurusu yok !
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -210,23 +273,19 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-            @if (blogs.Count > 0)
-            {
-                <div class="float-end"><a href="@Url.Action("BlogListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
-            }
+           
             <h4 class="header-title">EĞİTİM İÇERİKLERİ / BLOG</h4>
             <p class="text-muted font-14">Eğitim ile ilgili yazılan makalelere buradan ulaşabilirsiniz.</p>
             <div class="row">
                 @foreach (var item in blogs)
                 {
-                    <div class="col-md-3 col-xxl-3">
+                    <div class="col-6 col-md-3 col-xxl-3">
                         <!-- project card -->
                         <div class="card d-block">
                             <!-- project-thumbnail -->
-                            <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
-                            <div class="card-img-overlay">
-                                <div class="badge bg-secondary text-light p-1">@item.CreatedDate</div>
-                            </div>
+                            <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})">
+                                <img class="card-img-top" height="200px" style="object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            </a>
 
                             <div class="card-body position-relative">
                                 <!-- project title-->
@@ -255,6 +314,10 @@
                     </div>
                 }
             </div>
+            @if (blogs.Count > 0)
+            {
+                <div class="float-end"><a href="@Url.Action("BlogListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+            }
         </div>
     </div>
 </div>
@@ -262,20 +325,18 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-            @if (ozelDersOgretmens.Count > 0)
-            {
-                <div class="float-end"><a href="@Url.Action("OzelDersOgretmenListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
-            }
+           
             <h4 class="header-title">ÖZEL DERS VERENLER</h4>
             <p class="text-muted font-14">Özel ders veren öğretmenlerin bilgileri aşağıda listelenmiştir.</p>
             <div class="row">
                 @foreach (var item in ozelDersOgretmens)
                 {
-                    <div class="col-md-4 col-xxl-3">
+                    <div class="col-6 col-md-4 col-xxl-3">
                         <div class="card text-center">
                             <div class="card-body">
-                                <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
-
+                                <a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">
+                                    <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+                                </a>
                                 <h4 class="mb-0 mt-2"><a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">@item.AdSoyad</a></h4>
                                 <p class="text-muted font-14">@item.BransAdi</p>
                                 <p class="text-muted font-14">@item.ilAdi</p>
@@ -302,6 +363,10 @@
                     </div>
                 }
             </div>
+            @if (ozelDersOgretmens.Count > 0)
+            {
+                <div class="float-end"><a href="@Url.Action("OzelDersOgretmenListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+            }
         </div>
     </div>
 </div>

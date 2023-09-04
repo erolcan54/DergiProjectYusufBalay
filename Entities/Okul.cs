@@ -15,5 +15,10 @@
         public byte[] Resim { get; set; }
         public string? TanitimVideo { get; set; }
         public string? Hakkinda { get; set; }
+        public string? Whatsapp { get; set; }
+        public string? Instagram { get; set; }
+        public string? Facebook { get; set; }
+        public string? Twitter { get; set; }
+
     }
 }

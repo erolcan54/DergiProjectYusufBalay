@@ -86,18 +86,25 @@
                                         }
                                     </div>
                                 </div>
-                                 <div class="row mb-2">
+                                <div class="row mb-2">
                                     <div class="col-md-3 d-flex justify-content-end">Hakkında : </div>
                                     <div class="col-md-9">
-                                            @Html.Raw(Model.Hakkinda)
+                                        @Html.Raw(Model.Hakkinda)
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-3 d-flex justify-content-end">Sosyal Medya Hesapları :</div>
+                                    <div class="col-md-9">
+                                        <a href="@Model.Facebook" class="d-inline-block ms-2 text-muted" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Facebook" aria-label="Facebook"><i class="mdi mdi-facebook"></i></a>
+                                        <a href="@Model.Twitter" class="d-inline-block ms-2 text-muted" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Twitter" aria-label="Twitter"><i class="mdi mdi-twitter"></i></a>
+                                        <a href="https://wa.me/@Html.Raw(Model.Whatsapp)" target="_blank" class="d-inline-block ms-2 text-muted" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Whatsapp" aria-label="Whatsapp"><i class="mdi mdi-whatsapp"></i></a>
+                                        <a href="@Model.Instagram" class="d-inline-block ms-2 text-muted" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Instagram" aria-label="Instagram"><i class="mdi mdi-instagram w-100"></i></a>
                                     </div>
                                 </div>
                                 <div class="row mb-2">
                                     <div class="col-md-3 d-flex justify-content-end">Tanıtım Videosu : </div>
                                     <div class="col-md-9">
-                                        <div class="embed-responsive embed-responsive-16by9">
-                                            @Html.Raw(Model.TanitimVideo)
-                                        </div>
+                                        <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#videoizle-modal">Tanıtım Videosu İzle</a>
                                     </div>
                                 </div>
 
@@ -118,3 +125,20 @@
 
     </div> <!-- end Col -->
 </div>
+<div id="videoizle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Tanıtım Videosu</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        @Html.Raw(Model.TanitimVideo)
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

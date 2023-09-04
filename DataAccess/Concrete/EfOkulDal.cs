@@ -41,7 +41,11 @@ namespace DataAccess.Concrete
                                  Status= k.Status,
                                  UpdatedDate=k.UpdatedDate,
                                  Hakkinda=k.Hakkinda,
-                                 TanitimVideo=k.TanitimVideo
+                                 TanitimVideo=k.TanitimVideo,
+                                 Facebook=k.Facebook,
+                                 Instagram=k.Instagram,
+                                 Twitter=k.Twitter,
+                                 Whatsapp = k.Whatsapp
                              };
                 return result.ToList();
 
@@ -115,7 +119,11 @@ namespace DataAccess.Concrete
                                  Status = k.Status,
                                  UpdatedDate = k.UpdatedDate,
                                  Hakkinda = k.Hakkinda,
-                                 TanitimVideo = k.TanitimVideo
+                                 TanitimVideo = k.TanitimVideo,
+                                 Facebook = k.Facebook,
+                                 Instagram = k.Instagram,
+                                 Twitter = k.Twitter,
+                                 Whatsapp = k.Whatsapp
                              };
                 return result.FirstOrDefault();
             }
@@ -150,7 +158,11 @@ namespace DataAccess.Concrete
                                  Status = k.Status,
                                  UpdatedDate = k.UpdatedDate,
                                  Hakkinda = k.Hakkinda,
-                                 TanitimVideo = k.TanitimVideo
+                                 TanitimVideo = k.TanitimVideo,
+                                 Facebook = k.Facebook,
+                                 Instagram = k.Instagram,
+                                 Twitter = k.Twitter,
+                                 Whatsapp = k.Whatsapp
                              };
                 return result.ToList();
 

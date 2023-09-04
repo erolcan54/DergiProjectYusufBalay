@@ -95,6 +95,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<KurumBeniAraManager>().As<IKurumBeniAraService>().SingleInstance();
             builder.RegisterType<EfKurumBeniAraDal>().As<IKurumBeniAraDal>().SingleInstance();
 
+            builder.RegisterType<BurslulukSinavBasvuruManager>().As<IBurslulukSinavBasvuruService>().SingleInstance();
+            builder.RegisterType<EfBurslulukSinavBasvuruDal>().As<IBurslulukSinavBasvuruDal>().SingleInstance();
+
             //var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             //builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

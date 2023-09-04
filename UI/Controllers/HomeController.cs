@@ -35,9 +35,11 @@ namespace UI.Controllers
         private IKurumBeniAraService _kurumBeniAraService;
         private IKurumYorumService _kurumYorumService;
         private IKurumYorumBegeniService _kurumYorumBegeniService;
+        private IBurslulukSinavService _burslulukSinavService;
+        private IBurslulukSinavBasvuruService _burslulukSinavBasvuruService;
         private IHttpContextAccessor _contextAccessor;
 
-        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService)
+        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService)
         {
             _logger = logger;
             _ilService = ilService;
@@ -57,6 +59,8 @@ namespace UI.Controllers
             _kurumBeniAraService = kurumBeniAraService;
             _kurumYorumService = kurumYorumService;
             _kurumYorumBegeniService = kurumYorumBegeniService;
+            _burslulukSinavService = burslulukSinavService;
+            _burslulukSinavBasvuruService = burslulukSinavBasvuruService;
         }
 
         public IActionResult Index()
@@ -90,6 +94,9 @@ namespace UI.Controllers
 
             var encokgorunenler = _okulService.GetAllKurum().Data.OrderByDescending(a => a.TikSayisi).Take(4).ToList();
             ViewData["EnCokTiklananlar"] = encokgorunenler;
+
+            var sinavlar = _burslulukSinavService.GetAllDisplay4Take();
+            ViewData["Sinavlar"]=sinavlar.Data;
 
             return View();
         }
@@ -134,7 +141,7 @@ namespace UI.Controllers
 
         public IActionResult KurumListesi([FromBody] List<KurumDisplayDto> liste)
         {
-            return View(liste);
+            return View(liste.OrderByDescending(a=>a.Id).ToList());
         }
 
         public IActionResult KurumDetay(int id)
@@ -304,6 +311,26 @@ namespace UI.Controllers
                 return Json(new ErrorResult("Online veya Yüzyüze eğitimlerden biri seçilmeli."));
             var result = _ozelDersVeliBasvuruService.Add(model);
             return Json(result);
+        }
+
+        public IActionResult SinavDetay(int id)
+        {
+            var result=_burslulukSinavService.GetByIdDisplay(id);
+            return View(result.Data);
+        }
+
+        [HttpPost]
+        public IActionResult SinavBasvuru(BurslulukSinavBasvuru model)
+        {
+            var result = _burslulukSinavBasvuruService.Add(model);
+            return Json(result);
+        }
+
+        public IActionResult SinavListesi(int page=1)
+        {
+            var result = _burslulukSinavService.GetAllDisplay();
+            var data = result.Data.Where(a => a.Status).ToPagedList(page, 2);
+            return View(data);
         }
 
     }
