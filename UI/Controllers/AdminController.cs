@@ -46,7 +46,8 @@ namespace UI.Controllers
         private IKurumYorumBegeniService _kurumYorumBegeniService;
         private IindirimService _indirimService;
         private IBurslulukSinavService _burslulukSinavService;
-        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IindirimService indirimService, IBurslulukSinavService burslulukSinavService)
+        private IBurslulukSinavBasvuruService _burslulukSinavBasvuruService;
+        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IindirimService indirimService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService)
         {
             _blogService = blogService;
             _yoneticiService = yoneticiService;
@@ -75,6 +76,7 @@ namespace UI.Controllers
             _kurumYorumBegeniService = kurumYorumBegeniService;
             _indirimService = indirimService;
             _burslulukSinavService = burslulukSinavService;
+            _burslulukSinavBasvuruService = burslulukSinavBasvuruService;
         }
 
         public IActionResult Index()
@@ -649,6 +651,7 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult OgretmenGuncelle(Ogretmen model, IFormFile Resim)
         {
+            var ogr = _ogretmenService.GetById(model.Id);
             if (Resim != null)
             {
                 using (var stream = new MemoryStream())
@@ -657,6 +660,8 @@ namespace UI.Controllers
                     model.Resim = stream.ToArray();
                 }
             }
+            else
+                model.Resim = ogr.Data.Resim;
             var result = _ogretmenService.Update(model);
             return Json(result);
         }
@@ -1105,14 +1110,14 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult BurslulukSinavEkle(BurslulukSinav model) 
+        public IActionResult BurslulukSinavEkle(BurslulukSinav model)
         {
             var result = _burslulukSinavService.Add(model);
             return Json(result);
         }
 
         [HttpPost]
-        public IActionResult BurslulukSinavSil(int id) 
+        public IActionResult BurslulukSinavSil(int id)
         {
             var result = _burslulukSinavService.Delete(id);
             return Json(result);
@@ -1120,7 +1125,23 @@ namespace UI.Controllers
         #endregion
 
         #region Bursluluk Başvuru
+        public IActionResult Basvurular(int id)
+        {
+            var result = _burslulukSinavBasvuruService.GetAllBySinavId(id);
+            ViewData["Basvurular"] = result.Data;
+            var sinav = _burslulukSinavService.GetByIdDisplay(id);
+            ViewData["Sinav"] = sinav.Data;
+            var kurum = _okulService.GetById(sinav.Data.KurumId);
+            ViewData["Kurum"] = kurum.Data;
+            return View();
+        }
 
+        [HttpPost]
+        public IActionResult SinavBasvuru(BurslulukSinavBasvuru model)
+        {
+            var result = _burslulukSinavBasvuruService.Add(model);
+            return Json(result);
+        }
         #endregion
     }
 }

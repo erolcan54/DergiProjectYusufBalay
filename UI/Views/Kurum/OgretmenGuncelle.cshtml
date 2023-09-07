@@ -1,0 +1,100 @@
+﻿@model Ogretmen
+@{
+    Layout = "~/Views/Shared/_KurumLayout.cshtml";
+    List<SelectListItem> branslar = ViewData["branslar"] as List<SelectListItem>;
+}
+
+
+<div class="row mt-2">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- End Left sidebar -->
+
+                <h4 class="header-title">ÖĞRETMEN GÜNCELLEME PANELİ</h4>
+                <p class="text-muted font-14">Öğretmen bilgilerini güncellemek için aşağıdaki formu doldurunuz.</p>
+                <form class="form-vertical" data-ajax="true" enctype="multipart/form-data"
+                      data-ajax-success="OnUpdateOgretmenSuccess"
+                      data-ajax-begin="OnUpdateOgretmenBegin"
+                      data-ajax-complete="OnUpdateOgretmenComplete" data-ajax-method="POST" asp-action="OgretmenGuncelle" asp-controller="Kurum">
+                    <div class="mb-3">
+                        <label for="Ad" class="form-label">Ad</label>
+                        <input class="form-control" type="text" asp-for="Ad" id="Ad" required="" placeholder="Öğretmen Adını Yazınız">
+                    </div>
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <input type="hidden" asp-for="CreatedDate" value="@Model.CreatedDate" />
+                    <input type="hidden" asp-for="DeletedDate" value="@Model.DeletedDate" />
+                    <input type="hidden" asp-for="UpdatedDate" value="@Model.UpdatedDate" />
+                    <input type="hidden" asp-for="Status" value="@Model.Status" />
+                    <input type="hidden" asp-for="KurumId" value="@Model.KurumId" />
+                    <input type="hidden" asp-for="Resim" value="@Model.Resim" />
+                    <div class="mb-3">
+                        <label for="Soyad" class="form-label">Soyad</label>
+                        <input class="form-control" type="text" asp-for="Soyad" id="Soyad" required="" placeholder="Öğretmenin Soyadını Yazınız">
+                    </div>
+                    <div class="mb-3">
+                        <div class="mb-1">
+                            <img src="@ByteToImage.DecodeImage(Model.Resim)" class="img-fluid" style="max-width: 280px;" alt="Product-img">
+                        </div>
+                        <label for="Resim" class="form-label">Resim</label>
+                        <input class="form-control" type="file" name="Resim" id="Resim">
+                    </div>
+                    <div class="mb-3">
+                        <label for="BransId" class="form-label">Branş</label>
+                        <select id="BransId" asp-for="BransId" name="BransId" class="form-control select2" data-toggle="select2">
+                            <option value="0">Branş Seçiniz</option>
+                            @foreach (var item in branslar)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="d-grid mb-0 text-center">
+                        <button class="btn btn-primary" id="btnupdateOgretmen" type="submit"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                    </div>
+                </form>
+            </div>
+            <!-- end row-->
+        </div>
+        <!-- end inbox-rightbar-->
+    </div>
+    <!-- end card-body -->
+    <div class="clearfix"></div>
+</div> <!-- end card-box -->
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnUpdateOgretmenBegin = function () {
+            $("#btnupdateOgretmen").prop("disabled", true);
+            $("#btnupdateOgretmen").html('Lütfen Bekleyin...');
+            $('#loading').show();
+        };
+        var OnUpdateOgretmenComplete = function () {
+            $("#btnupdateOgretmen").prop("disabled", false);
+            $("#btnupdateOgretmen").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+            $('#loading').hide();
+        }
+        var OnUpdateOgretmenSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("OgretmenListesi","Kurum"))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}
+
+

@@ -1,0 +1,93 @@
+﻿@model Kullanici
+@{
+    Layout = "~/Views/Shared/_KurumLayout.cshtml";
+}
+
+<div class="row mt-1">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- End Left sidebar -->
+                <h4 class="header-title">KULLANICI GÜNCELLEME PANELİ</h4>
+                <p class="text-muted font-14">Kullanıcı bilgilerini güncellemek için aşağıdaki formu doldurunuz.</p>
+                <form class="form-vertical" data-ajax="true"
+                      data-ajax-success="OnUpdateKullaniciSuccess"
+                      data-ajax-begin="OnUpdateKullaniciBegin"
+                      data-ajax-complete="OnUpdateKullaniciComplete" data-ajax-method="POST" 
+                      asp-action="KullaniciGuncelle" asp-controller="Kurum">
+                    <div class="mb-3">
+                        <label for="Ad" class="form-label">Ad</label>
+                        <input class="form-control" type="text" asp-for="Ad" id="Ad" required="" placeholder="Kullanıcının Adını Yazınız">
+                    </div>
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <input type="hidden" asp-for="OkulId" value="@Model.OkulId" />
+                    <input type="hidden" asp-for="CreatedDate" value="@Model.CreatedDate" />
+                    <input type="hidden" asp-for="DeletedDate" value="@Model.DeletedDate" />
+                    <input type="hidden" asp-for="UpdatedDate" value="@Model.UpdatedDate" />
+                    <input type="hidden" asp-for="Status" value="@Model.Status" />
+                    <div class="mb-3">
+                        <label for="Soyad" class="form-label">Soyad</label>
+                        <input class="form-control" type="text" asp-for="Soyad" id="Soyad" required="" placeholder="Kullanıcının Soyadını Yazınız">
+                    </div>
+                    <div class="mb-3">
+                        <label for="KullaniciAdi" class="form-label">KullaniciAdi</label>
+                        <input class="form-control" type="text" asp-for="KullaniciAdi" id="KullaniciAdi" required="" placeholder="Giriş için Kullanıcı adını Yazınız">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Sifre" class="form-label">Şifre</label>
+                        <input class="form-control" type="text" asp-for="Sifre" id="Sifre" required="" placeholder="Şifre Yazınız">
+                    </div>
+                    <div class="d-grid mb-0 text-center">
+                        <button class="btn btn-primary" id="btnupdateKullanici" type="submit"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                    </div>
+                </form>
+            </div>
+            <!-- end row-->
+        </div>
+        <!-- end inbox-rightbar-->
+    </div>
+    <!-- end card-body -->
+    <div class="clearfix"></div>
+</div> <!-- end card-box -->
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+
+        var OnUpdateKullaniciBegin = function () {
+            $("#btnupdateKullanici").prop("disabled", true);
+            $("#btnupdateKullanici").html('Lütfen Bekleyin...');
+            $('#loading').show();
+
+
+        };
+        var OnUpdateKullaniciComplete = function () {
+            $("#btnupdateKullanici").prop("disabled", false);
+            $("#btnupdateKullanici").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+            $('#loading').hide();
+        }
+        var OnUpdateKullaniciSuccess = function (data) {
+            if (data.Success) {
+
+                window.location.href = '@Html.Raw(Url.Action("KullaniciListesi","Kurum"))';
+
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}
+
+

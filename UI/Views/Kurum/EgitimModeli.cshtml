@@ -1,119 +1,102 @@
 ﻿@{
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_KurumLayout.cshtml";
     KurumEgitimModeli egitimmodeli = ViewData["EgitimModeli"] as KurumEgitimModeli;
     List<KurumEgitimModeliResim> resimler = ViewData["Resimler"] as List<KurumEgitimModeliResim>;
-    Okul kurum = ViewData["Kurum"] as Okul;
 }
 <link href="~/lightbox/css/lightbox.css" rel="stylesheet" />
-<div class="row">
-    <div class="col-12">
-        <div class="page-title-box">
-            <h4 class="page-title">@kurum.Ad</h4>
-        </div>
-    </div>
-</div>
-<div class="row">
+<div class="row mt-2">
     <!-- Right Sidebar -->
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <!-- Left sidebar -->
-                <div class="page-aside-left">
-                    @await Component.InvokeAsync("KurumMenu",new {id=kurum.Id})
-                </div>
-                <!-- End Left sidebar -->
 
-                <div class="page-aside-right">
-                    <div class="mt-3">
-                        @if (egitimmodeli != null)
-                        {
-                            <div class="row">
-                                <div class="mb-2 mt-1">
-                                    <a href="#" class="btn btn-success btn-rounded" data-bs-toggle="modal" data-bs-target="#egitimmodelyaziguncelle-modal"><i class="mdi mdi-pencil"></i> Güncelle</a>
+                <div class="mt-3">
+                    @if (egitimmodeli != null)
+                    {
+                        <div class="row">
+                            <div class="mb-2 mt-1">
+                                <a href="#" class="btn btn-success btn-rounded" data-bs-toggle="modal" data-bs-target="#egitimmodelyaziguncelle-modal"><i class="mdi mdi-pencil"></i> Güncelle</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="w-100" style="white-space:nowrap;overflow: hidden; text-overflow: ellipsis;">
+                                    @Html.Raw(egitimmodeli.Icerik)
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="mb-2 mt-1">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#egitimmodelyaziekle-modal" class="btn btn-success btn-rounded"><i class="mdi mdi-plus"></i> Eğitim Modeli Yazısı Ekle</a>
+                            </div>
+                        </div>
+                    }
+
+                    <hr />
+                    <div class="row">
+                        <div class="mb-2 mt-1">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#idarecicreate-modal" class="btn btn-primary btn-rounded"><i class="mdi mdi-plus"></i> Eğitim Modeli Resim Ekle</a>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+
+                        @if (resimler.Count > 0)
+                        {
                             <div class="row">
-                                <div class="col-md-12">
-                                    <p class="w-100" style="white-space:nowrap;overflow: hidden; text-overflow: ellipsis;">
-                                        @Html.Raw(egitimmodeli.Icerik)
-                                    </p>
-                                </div>
+                                @foreach (var item in resimler)
+                                {
+                                    <div class="col-md-6 col-xxl-3">
+                                        <!-- project card -->
+                                        <div class="card">
+                                            <!-- project-thumbnail -->
+                                            <a href="@ByteToImage.DecodeImage(item.Resim)" data-lightbox="image-1" data-title="">
+                                                <img src="@ByteToImage.DecodeImage(item.Resim)" class="w-100" style="height:200px; object-fit : scale-down">
+                                            </a>
+
+                                            <div class="card-body position-relative">
+                                                <div class="mb-1">
+                                                    <button type="button" class="btn btn-sm btn-danger" id="btnresimsil" data-id="@item.Id">Sil</button>
+                                                </div>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col -->
+                                    @*<span>
+                            <a href="@ByteToImage.DecodeImage(item.Resim)" data-lightbox="image-1" data-title=""><img src="@ByteToImage.DecodeImage(item.Resim)" class="img-fluid img-thumbnail p-2 mb-2" style="width: 250px; height:250px;" alt="Product-img" /></a><br />
+                            <button type="button" class="btn btn-sm btn-danger" id="btnresimsil" data-id="@item.Id">Sil</button>
+                            </span>*@
+                                }
                             </div>
                         }
                         else
                         {
-                            <div class="row">
-                                <div class="mb-2 mt-1">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#egitimmodelyaziekle-modal" class="btn btn-success btn-rounded"><i class="mdi mdi-plus"></i> Eğitim Modeli Yazısı Ekle</a>
+                            <div class="body">
+                                <div class="card-body">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong>Eğitim Modeli resimleri listesi boş.
+                                    </div>
                                 </div>
                             </div>
                         }
-
-                        <hr />
-                        <div class="row">
-                            <div class="mb-2 mt-1">
-                                <div class="col-12">
-                                    <div class="page-title-box">
-                                        <div class="page-title">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#idarecicreate-modal" class="btn btn-primary btn-rounded"><i class="mdi mdi-plus"></i> Eğitim Modeli Resim Ekle</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            @if (resimler.Count > 0)
-                            {
-                                <div class="row">
-                                        @foreach (var item in resimler)
-                                        {
-                                            <div class="col-md-6 col-xxl-3">
-                                                <!-- project card -->
-                                                <div class="card">
-                                                    <!-- project-thumbnail -->
-                                                    <a href="@ByteToImage.DecodeImage(item.Resim)" data-lightbox="image-1" data-title="">
-                                                    <img src="@ByteToImage.DecodeImage(item.Resim)" class="w-100" style="height:200px; object-fit : scale-down">
-                                                    </a>
-
-                                                    <div class="card-body position-relative">
-                                                        <div class="mb-1">
-                                                            <button type="button" class="btn btn-sm btn-danger" id="btnresimsil" data-id="@item.Id">Sil</button>
-                                                        </div>
-                                                    </div> <!-- end card-body-->
-                                                </div> <!-- end card-->
-                                            </div> <!-- end col -->
-
-
-
-                                            @*<span>
-                                                <a href="@ByteToImage.DecodeImage(item.Resim)" data-lightbox="image-1" data-title=""><img src="@ByteToImage.DecodeImage(item.Resim)" class="img-fluid img-thumbnail p-2 mb-2" style="width: 250px; height:250px;" alt="Product-img" /></a><br />
-                                                <button type="button" class="btn btn-sm btn-danger" id="btnresimsil" data-id="@item.Id">Sil</button>
-                                            </span>*@
-                                        }
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="body">
-                                    <div class="card-body">
-                                        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-                                            <strong>Uyarı - </strong>Eğitim Modeli resimleri listesi boş.
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-
                     </div>
-                    <!-- end row-->
-                </div>
-                <!-- end inbox-rightbar-->
-            </div>
-            <!-- end card-body -->
-            <div class="clearfix"></div>
-        </div> <!-- end card-box -->
 
-    </div> <!-- end Col -->
-</div>
+                </div>
+                <!-- end row-->
+            </div>
+            <!-- end inbox-rightbar-->
+        </div>
+        <!-- end card-body -->
+        <div class="clearfix"></div>
+    </div> <!-- end card-box -->
+
+</div> <!-- end Col -->
+
 
 <div id="idarecicreate-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-xl">
@@ -127,8 +110,8 @@
                 <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
                       data-ajax-success="OnEMResimEkleSuccess"
                       data-ajax-begin="OnEMResimEkleBegin"
-                      data-ajax-complete="OnEMResimEkleComplete" data-ajax-method="POST" asp-action="EgitimModeliResimEkle" asp-controller="Admin">
-                    <input type="hidden" name="KurumId" value="@kurum.Id" />
+                      data-ajax-complete="OnEMResimEkleComplete" data-ajax-method="POST" asp-action="EgitimModeliResimEkle" asp-controller="Kurum">
+                    <input type="hidden" name="KurumId" value="@egitimmodeli.KurumId" />
                     <div class="mb-2">
                         <label for="Resim" class="form-label">Resim</label>
                         <input class="form-control" type="file" name="Resim" id="Resim">
@@ -157,8 +140,8 @@
                 <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
                       data-ajax-success="OnIcerikEkleSuccess"
                       data-ajax-begin="OnIcerikEkleBegin"
-                      data-ajax-complete="OnIcerikEkleComplete" data-ajax-method="POST" asp-action="EgitimModeliIcerikEkle" asp-controller="Admin">
-                    <input type="hidden" name="KurumId" value="@kurum.Id" />
+                      data-ajax-complete="OnIcerikEkleComplete" data-ajax-method="POST" asp-action="EgitimModeliIcerikEkle" asp-controller="Kurum">
+                    <input type="hidden" name="KurumId" value="@egitimmodeli.KurumId" />
                     <div class="mb-2">
                         <label for="Icerik" class="form-label">Eğitim Modeli</label>
                         <textarea rows="10" name="Icerik" id="Icerik" class="form-control resize-none" placeholder="İçerik yazınız." required></textarea>
@@ -186,11 +169,11 @@
                 <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
                       data-ajax-success="OnIcerikGuncelleSuccess"
                       data-ajax-begin="OnIcerikGuncelleBegin"
-                      data-ajax-complete="OnIcerikGuncelleComplete" data-ajax-method="POST" asp-action="EgitimModeliIcerikGuncelle" asp-controller="Admin">
-                    <input type="hidden" name="KurumId" value="@kurum.Id" />
+                      data-ajax-complete="OnIcerikGuncelleComplete" data-ajax-method="POST" asp-action="EgitimModeliIcerikGuncelle" asp-controller="Kurum">
+                    <input type="hidden" name="KurumId" value="@egitimmodeli.KurumId" />
                     <div class="mb-2">
                         <label for="Icerik" class="form-label">Eğitim Modeli</label>
-                        @if(egitimmodeli==null)
+                        @if (egitimmodeli == null)
                         {
                             <textarea rows="10" name="Icerik1" id="Icerik1" class="form-control resize-none" placeholder="İçerik yazınız." required></textarea>
                         }
@@ -245,7 +228,7 @@
         }
         var OnEMResimEkleSuccess = function (data) {
             if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Admin",new{id=kurum.Id}))';
+                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Kurum"))';
             }
             else {
                 swal({
@@ -271,7 +254,7 @@
         }
         var OnIcerikEkleSuccess = function (data) {
             if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Admin",new{id=kurum.Id}))';
+                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Kurum"))';
             }
             else {
                 swal({
@@ -297,7 +280,7 @@
         }
         var OnIcerikGuncelleSuccess = function (data) {
             if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Admin",new{id=kurum.Id}))';
+                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Kurum"))';
             }
             else {
                 swal({
@@ -324,7 +307,7 @@
                 closeOnConfirm: false
             }, function () {
                 $.ajax({
-                    url: '/Admin/ResimSil/' + id,
+                    url: '/Kurum/ResimSil/' + id,
                     type: 'POST',
                     success: function (result) {
                         if (result.Success == true) {
@@ -336,7 +319,7 @@
                                 confirmButtonText: "Tamam"
                             }, function (isConfirm) {
                                 if (isConfirm) {
-                                    window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Admin",new{id=kurum.Id}))';
+                                    window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Kurum"))';
                                 }
                             });
                         }
@@ -355,5 +338,6 @@
         });
     </script>
 }
+
 
 

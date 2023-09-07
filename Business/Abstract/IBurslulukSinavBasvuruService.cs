@@ -13,7 +13,7 @@ namespace Business.Abstract
         IResult Add(BurslulukSinavBasvuru entity);
         IDataResult<BurslulukSinavBasvuru> GetById(int id);
         IResult Update(BurslulukSinavBasvuru entity);
-        IDataResult<List<BurslulukSinavBasvuru>> GetAll();
+        IDataResult<List<BurslulukSinavBasvuru>> GetAllBySinavId(int id);
         IResult Delete(int id);
     }
 }

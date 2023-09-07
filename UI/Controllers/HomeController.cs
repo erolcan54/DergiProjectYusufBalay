@@ -194,13 +194,21 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult KullaniciGiris(GirisModelDto model)
+        public async Task<IActionResult> KullaniciGiris(GirisModelDto model)
         {
             var result = _kullaniciService.GirisKontrol(model);
             if (!result.Success)
                 return Json(new ErrorResult(result.Message));
+
+            var userClaims = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            userClaims.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Data.Id.ToString()));
+            userClaims.AddClaim(new Claim(ClaimTypes.Name, result.Data.KullaniciAdi));
+            var claimPrincipal = new ClaimsPrincipal(userClaims);
+            var authProperties = new AuthenticationProperties() { IsPersistent = true };
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, authProperties);
             HttpContext.Session.SetString("KullaniciId", result.Data.Id.ToString());
-            return RedirectToAction("Index", "Kurum");
+            HttpContext.Session.SetString("KurumId", result.Data.OkulId.ToString());
+            return Json(result);
         }
 
         public IActionResult YoneticiGiris()

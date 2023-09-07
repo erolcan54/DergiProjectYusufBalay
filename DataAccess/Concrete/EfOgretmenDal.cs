@@ -17,7 +17,7 @@ namespace DataAccess.Concrete
             using (var context = new EfContext())
             {
                 var result = from ogrt in context.Ogretmen
-                             where ogrt.KurumId == id
+                             where ogrt.KurumId == id && ogrt.Status
                              join brns in context.Brans on ogrt.BransId equals brns.Id
                              select new OgretmenDisplayDto
                              {

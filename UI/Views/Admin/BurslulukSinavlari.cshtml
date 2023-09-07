@@ -54,9 +54,9 @@
                                             <td>
                                                 @*<a htfe="#" id="btnkatalogSil" data-id="@item.Id" class="btn btn-sm btn-danger"> Sil</a>*@
                                                 <a href="#" data-id="@item.Id" id="btnsinavSil" class="btn btn-sm btn-danger"> <i class="mdi mdi-delete"></i> Sil </a>
+                                                <a href="@Url.Action("Basvurular","Admin",new {id=item.Id})" class="btn btn-sm btn-info"> <i class="mdi mdi-clipboard-list"></i> Başvurular </a>
                                             </td>
                                         </tr>
-
                                     }
 
                                 </tbody>
@@ -89,7 +89,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myLargeModalLabel">Katalog Ekleme Paneli</h4>
+                <h4 class="modal-title" id="myLargeModalLabel">Bursluluk Sınavı Ekleme Paneli</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">

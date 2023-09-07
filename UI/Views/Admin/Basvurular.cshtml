@@ -1,0 +1,185 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<BurslulukSinavBasvuru> basvurular = ViewData["Basvurular"] as List<BurslulukSinavBasvuru>;
+    Okul kurum = ViewData["Kurum"] as Okul;
+    BurslulukSinav sinav = ViewData["Sinav"] as BurslulukSinav;
+}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">@kurum.Ad</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Left sidebar -->
+                <div class="page-aside-left">
+                    @await Component.InvokeAsync("KurumMenu",new {id=kurum.Id})
+                </div>
+                <!-- End Left sidebar -->
+
+                <div class="page-aside-right">
+                    <div class="mt-1">
+                        <div class="row">
+                            <div class="mb-2">
+                                <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#basvuruekle-modal"><i class="mdi mdi-plus"></i> Bursluluk Sınavı Başvuru Ekle</a>
+                            </div>
+                        </div><hr />
+                        @if (basvurular.Count > 0)
+                        {
+                            <table id="datatable-buttons" name="tablecustom" class="table table-striped dt-responsive nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-center font-15 fw-bold">@sinav.SinavAdi - @Convert.ToDateTime(sinav.SinavTarih).ToShortDateString() / @sinav.SinavSaat</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Veli Adı Soyadı</th>
+                                        <th>Öğrenci Adı Soyadı</th>
+                                        <th>Sınav Saati</th>
+                                        <th>Son Başvuru Tarihi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in basvurular)
+                                    {
+                                        <tr>
+                                            <td>@item.VeliAdSoyad</td>
+                                            <td>@item.OgrenciAdSoyad</td>
+                                            <td>@item.Telefon</td>
+                                            <td>@item.Email</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="body">
+                                <div class="card-body">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong> Sınav başvuru listesi boş.
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <!-- end row-->
+                </div>
+                <!-- end inbox-rightbar-->
+            </div>
+            <!-- end card-body -->
+            <div class="clearfix"></div>
+        </div> <!-- end card-box -->
+
+    </div> <!-- end Col -->
+</div>
+
+<div id="basvuruekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Bursluluk Sınavı Başvuru Ekleme Paneli</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-vertical" data-ajax="true"
+                      data-ajax-success="OnSinavBasvuruSuccess"
+                      data-ajax-begin="OnSinavBasvuruBegin"
+                      data-ajax-complete="OnSinavBasvuruComplete" data-ajax-method="POST" asp-action="SinavBasvuru" asp-controller="Home">
+
+                    <div class="mb-3">
+                        <label for="VeliAdSoyad" class="form-label">Veli Adı Soyadı</label>
+                        <input class="form-control" type="text" name="VeliAdSoyad" id="VeliAdSoyad" required="" placeholder="Veli Adı Soyadı Yazınız">
+                    </div>
+                    <div class="mb-3">
+                        <label for="OgrenciAdSoyad" class="form-label">Öğrenci Adı Soyadı</label>
+                        <input class="form-control" type="text" name="OgrenciAdSoyad" id="OgrenciAdSoyad" required="" placeholder="Öğrenci Adı Soyadı Yazınız">
+                    </div>
+                    <input type="hidden" name="SinavId" value="@sinav.Id" />
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Telefon" class="form-label">Telefon</label>
+                                <input type="tel" name="Telefon" class="form-control" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" name="Telefon" id="Telefon" required="" placeholder="Telefon Yazınız">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Email" class="form-label">Email</label>
+                                <input class="form-control" type="email" name="Email" id="Email" required="" placeholder="Email Yazınız">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-0 text-center">
+                        <button class="btn btn-info" id="btnaddSinavBasvuru" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnSinavBasvuruBegin = function () {
+            $("#btnaddSinavBasvuru").prop("disabled", true);
+            $("#btnaddSinavBasvuru").html('Lütfen Bekleyin...');
+            $('#loading').show();
+        };
+        var OnSinavBasvuruComplete = function () {
+            $("#btnaddSinavBasvuru").prop("disabled", false);
+            $("#btnaddSinavBasvuru").html('<i class="mdi mdi-plus"></i> Kaydet  ');
+            $('#loading').hide();
+        };
+        var OnSinavBasvuruSuccess = function (data) {
+            $('#basvuruekle-modal').modal().hide();
+            $('#loading').hide();
+            if (data.Success) {
+
+                swal({
+                    title: 'BAŞARILI',
+                    text: "Sınav Başvurusu eklendi.",
+                    type: 'success',
+                    confirmButtonClass: 'btn-success',
+                    confirmButtonText: 'Tamam',
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = '@Url.Action("Basvurular","Admin",new {id=sinav.Id})';
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+        $(document).ajaxStart(function () {
+            $("#loading").show();
+        });
+
+        $(document).ajaxStop(function () {
+            $("#loading").hide();
+        });
+    </script>
+}
+
+

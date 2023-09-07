@@ -1,0 +1,141 @@
+﻿@model KurumDisplayDto
+@{
+    Layout = "~/Views/Shared/_KurumLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">@Model.Ad</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- End Left sidebar -->
+                <div class="mb-2">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title">
+                                <a href="@Url.Action("KurumGuncelle","Kurum")" class="btn btn-primary btn-sm"><i class="mdi mdi-pencil"></i> Bilgileri Güncelle</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row mb-2">
+                            <img src="@ByteToImage.DecodeImage(Model.Resim)" class="img-fluid" style="max-width: 400px;" alt="Product-img">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Ad : </div>
+                            <div class="col-md-9">@Model.Ad.ToUpper()</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">İl : </div>
+                            <div class="col-md-9">@Model.ilAdi.ToUpper()</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">İlçe : </div>
+                            <div class="col-md-9">@Model.ilceAdi.ToUpper()</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Adres : </div>
+                            <div class="col-md-9">@Model.Adres</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Telefon : </div>
+                            <div class="col-md-9">@Model.Telefon</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Web : </div>
+                            <div class="col-md-9">@Model.Web</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Email : </div>
+                            <div class="col-md-9">@Model.Email</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Eklenme Tarihi : </div>
+                            <div class="col-md-9">@Convert.ToDateTime(Model.CeratedDate).ToShortDateString() - @Convert.ToDateTime(Model.CeratedDate).ToShortTimeString()</div>
+                        </div>
+                        @if (Model.EgitimTurId == 1)
+                        {
+                            <div class="row mb-2">
+                                <div class="col-md-3 d-flex justify-content-end">Okul Türü : </div>
+                                <div class="col-md-9">@Model.OkulTurAdi</div>
+                            </div>
+                        }
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Durum : </div>
+                            <div class="col-md-9">
+                                @if (Model.Status)
+                                {
+                                    <span class="badge badge-success-lighten">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger-lighten">Pasif</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Hakkında : </div>
+                            <div class="col-md-9">
+                                @Html.Raw(Model.Hakkinda)
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Sosyal Medya Hesapları :</div>
+                            <div class="col-md-9">
+                                <a href="@Model.Facebook" class="d-inline-block ms-2 text-muted" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Facebook" aria-label="Facebook"><i class="mdi mdi-facebook"></i></a>
+                                <a href="@Model.Twitter" class="d-inline-block ms-2 text-muted" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Twitter" aria-label="Twitter"><i class="mdi mdi-twitter"></i></a>
+                                <a href="https://wa.me/@Html.Raw(Model.Whatsapp)" target="_blank" class="d-inline-block ms-2 text-muted" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Whatsapp" aria-label="Whatsapp"><i class="mdi mdi-whatsapp"></i></a>
+                                <a href="@Model.Instagram" class="d-inline-block ms-2 text-muted" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" href="" title="" data-bs-original-title="Instagram" aria-label="Instagram"><i class="mdi mdi-instagram w-100"></i></a>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Tanıtım Videosu : </div>
+                            <div class="col-md-9">
+                                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#videoizle-modal">Tanıtım Videosu İzle</a>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-3 d-flex justify-content-end">Görüntülenme Sayısı : </div>
+                            <div class="col-md-9">@Model.TikSayisi</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row-->
+        </div>
+        <!-- end inbox-rightbar-->
+    </div>
+    <!-- end card-body -->
+    <div class="clearfix"></div>
+</div> <!-- end card-box -->
+<div id="videoizle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Tanıtım Videosu</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        @Html.Raw(Model.TanitimVideo)
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -51,6 +51,12 @@ namespace Business.Concrete
             return new SuccessDataResult<Ogretmen>(_ogretmenDal.Get(a => a.Id == id), "Öğretmen bilgisi getirildi.");
         }
 
+        public IDataResult<int> GetByKurumIdOgretmenCount(int id)
+        {
+            var result=_ogretmenDal.GetAll(a=>a.KurumId==id).Count();
+            return new SuccessDataResult<int>(result, "Öğretmen sayısı getirildi.");
+        }
+
         public IResult Update(Ogretmen entity)
         {
             _ogretmenDal.Update(entity);

@@ -1,0 +1,213 @@
+﻿@model List<OgretmenDisplayDto>
+@{
+    Layout = "~/Views/Shared/_KurumLayout.cshtml";
+    List<SelectListItem> branslar = ViewData["branslar"] as List<SelectListItem>;
+}
+
+<div class="row mt-2">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-2 mt-1">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#ogretmenekle-modal" class="btn btn-success btn-sm mb-3"><i class="mdi mdi-plus"></i> Öğretmen Ekle</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @if (Model.Count > 0)
+                    {
+                        <table id="alternative-page-datatable" class="table dt-responsive nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th>Ad</th>
+                                    <th>Soyad</th>
+                                    <th>Branş Adı</th>
+                                    <th>Eklenme Tarihi</th>
+                                    <th>Durum</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="table-user">
+                                            <img src="@ByteToImage.DecodeImage(item.Resim)" alt="table-user" class="me-2 rounded-circle">
+                                            @item.Ad
+                                        </td>
+                                        <td>
+                                            @item.Soyad
+                                        </td>
+                                        <td>
+                                            @item.BransAdi
+                                        </td>
+                                        <td>
+                                            @Convert.ToDateTime(item.CreatedDate).ToShortDateString()
+                                        </td>
+                                        <td>
+                                            @if (item.Status)
+                                            {
+                                                <span class="badge badge-success-lighten">Aktif</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger-lighten">Pasif</span>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            <a href="@Url.Action("OgretmenGuncelle","Kurum",new {ogretmenId=item.Id})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                            <a href="#" data-id="@item.Id" id="btnogretmensil" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="body">
+                            <div class="card-body">
+                                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                    <strong>Uyarı - </strong>Öğretmen listesi boş.
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+            <!-- end row-->
+        </div>
+        <!-- end inbox-rightbar-->
+    </div>
+    <!-- end card-body -->
+    <div class="clearfix"></div>
+</div> <!-- end card-box -->
+
+<div id="ogretmenekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Öğretmen Ekleme Paneli</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-vertical" data-ajax="true" enctype="multipart/form-data"
+                      data-ajax-success="OnAddOgretmenSuccess"
+                      data-ajax-begin="OnAddOgretmenBegin"
+                      data-ajax-complete="OnAddOgretmenComplete" data-ajax-method="POST" asp-action="OgretmenEkle" asp-controller="Kurum">
+                    <div class="mb-3">
+                        <label for="Ad" class="form-label">Ad</label>
+                        <input class="form-control" type="text" name="Ad" id="Ad" required="" placeholder="Öğretmen Adını Yazınız">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Soyad" class="form-label">Soyad</label>
+                        <input class="form-control" type="text" name="Soyad" id="Soyad" required="" placeholder="Öğretmenin Soyadını Yazınız">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Resim" class="form-label">Resim</label>
+                        <input class="form-control" type="file" name="Resim" required="" id="Resim">
+                    </div><div class="mb-3">
+                        <label for="BransId" class="form-label">Branş</label>
+                        <select id="BransId" name="BransId" name="BransId" class="form-control">
+                            <option value="0">Branş Seçiniz</option>
+                            @foreach (var item in branslar)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="d-grid mb-0 text-center">
+                        <button class="btn btn-primary" id="btnaddOgretmen" type="submit"><i class="mdi mdi-plus"></i> Ekle </button>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section Scripts{
+    <script>
+        $(document).on("click", "#btnogretmensil", function () {
+            var id = $(this).data("id");
+            swal({
+                title: "UYARI",
+                text: "Öğretmen bilgilerini silmek istediğinize emin misiniz?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                cancelButtonClass: 'btn-success',
+                confirmButtonText: "EVET",
+                cancelButtonText: "HAYIR",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: '/Kurum/OgretmenSil/' + id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.Success == true) {
+                            swal({
+                                title: "BAŞARILI!",
+                                type: "success",
+                                text: result.Message,
+                                confirmButtonClass: 'btn-success',
+                                confirmButtonText: "Tamam"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    window.location.href = '@Url.Action("OgretmenListesi", "Kurum")';
+                                }
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'HATA',
+                                text: result.Message,
+                                type: 'error',
+                                confirmButtonClass: 'btn-danger',
+                                confirmButtonText: 'Tamam',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        var OnAddOgretmenBegin = function () {
+            $("#btnaddOgretmen").prop("disabled", true);
+            $("#btnaddOgretmen").html('Lütfen Bekleyin...');
+            $('#loading').show();
+            $('#ogretmenekle-modal').modal().hide();
+
+        };
+        var OnAddOgretmenComplete = function () {
+            $("#btnaddOgretmen").prop("disabled", false);
+            $("#btnaddOgretmen").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnAddOgretmenSuccess = function (data) {
+            if (data.Success) {
+
+                window.location.href = '@Html.Raw(Url.Action("OgretmenListesi","Kurum"))';
+
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}

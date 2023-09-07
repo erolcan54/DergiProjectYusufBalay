@@ -130,22 +130,12 @@
         }
         var OnUserLoginSuccess = function (data) {
             if (data.Success) {
-                //swal({
-                //    title: 'BAŞARILI',
-                //    text: "Tebrikler. Okul bilgileriniz eklendi. Hesabınız onaylandıktan sonra sistemi kullanmaya başlayabilirsiniz. Onaylama işlemi sonrasında belirtmiş olduğunuz e-posta adresine bilgilendirme postası otomatik olarak gönderilecektir.",
-                //    type: 'success',
-                //    confirmButtonClass: 'btn-info',
-                //    confirmButtonText: 'Tamam',
-                //}, function (isConfirm) {
-                //    if (isConfirm) {
-                //        window.location.href = '@Html.Raw(Url.Action("Index","Home"))';
-                //    }
-                //});
+                window.location.href = '@Html.Raw(Url.Action("Index","Kurum"))';
             }
             else {
                 swal({
                     title: 'UYARI',
-                    text: data.message,
+                    text: data.Message,
                     type: 'error',
                     confirmButtonClass: 'btn-danger',
                     confirmButtonText: 'Tamam',

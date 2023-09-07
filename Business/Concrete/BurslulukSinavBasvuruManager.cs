@@ -37,9 +37,9 @@ namespace Business.Concrete
             return new SuccessResult("Basvuru silindi.");
         }
 
-        public IDataResult<List<BurslulukSinavBasvuru>> GetAll()
+        public IDataResult<List<BurslulukSinavBasvuru>> GetAllBySinavId(int id)
         {
-            return new SuccessDataResult<List<BurslulukSinavBasvuru>>(_burslulukSinavBasvuruDal.GetAll(a=>a.Status), "Başvuru Listesi getirildi.");
+            return new SuccessDataResult<List<BurslulukSinavBasvuru>>(_burslulukSinavBasvuruDal.GetAll(a=>a.SinavId==id && a.Status), "Başvuru Listesi getirildi.");
         }
 
         public IDataResult<BurslulukSinavBasvuru> GetById(int id)
