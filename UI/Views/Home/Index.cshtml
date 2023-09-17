@@ -38,8 +38,14 @@
                             <strong>Uyarı - </strong> @TempData["OkulAraUyari"]
                         </div>
                     }
-                    <form class="form-vertical" method="post" asp-action="OkulAra" asp-controller="Home">
+                   @* <form class="form-vertical" data-ajax="true"
+                          data-ajax-success="OnKurumAraSuccess"
+                          data-ajax-begin="OnKurumAraBegin"
+                          data-ajax-complete="OnKurumAraComplete" data-ajax-method="POST" asp-action="KurumAra" asp-controller="Home">*@
+                    <form class="form-vertical" method="post" asp-action="KurumAra" asp-controller="Home">
                         <div class="row">
+                            <input type="hidden" name="OkulArama" value="true" />
+                            <input type="hidden" name="KursArama" value="false" />
                             <div class="col-lg-3">
                                 <div class="mb-2">
                                     <select id="il1" name="il1" class="form-control select2" data-toggle="select2">
@@ -50,7 +56,6 @@
                                         }
                                     </select>
                                 </div>
-
                             </div> <!-- end col -->
                             <div class="col-lg-3">
                                 <div class="mb-2">
@@ -86,8 +91,14 @@
                             <strong>Uyarı - </strong> @TempData["KursAraUyari"]
                         </div>
                     }
-                    <form class="form-vertical method="post" asp-action="KursAra" asp-controller="Home">
+                    @*<form class="form-vertical" data-ajax="true"
+                          data-ajax-success="OnKurumAraSuccess"
+                          data-ajax-begin="OnKurumAraBegin"
+                          data-ajax-complete="OnKurumAraComplete" data-ajax-method="POST" asp-action="KurumAra" asp-controller="Home">*@
+                    <form class="form-vertical" method="post" asp-action="KurumAra" asp-controller="Home">
                         <div class="row">
+                            <input type="hidden" name="OkulArama" value="false" />
+                            <input type="hidden" name="KursArama" value="true" />
                             <div class="col-lg-4 mb-2">
                                 <select id="il2" name="il2" class="form-control select2" data-toggle="select2">
                                     <option value="0">İl Seçiniz</option>
@@ -154,7 +165,7 @@
             </div>
             @if (enCokZiyaretEdilenler.Count > 0)
             {
-                <div class="float-end"><a href="@Url.Action("KurumListesi","Home",new {liste=enCokZiyaretEdilenler})" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+                <div class="float-end"><a href="@Url.Action("KurumListesi","Home")" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
             }
         </div>
 
@@ -380,68 +391,72 @@
                 $('#loading').hide();
 
             });
+        //var OnKurumAraBegin = function () {
+        //    $("#btnOkulAra").prop("disabled", true);
+        //    $("#btnOkulAra").html('Lütfen Bekleyin...');
+        //    $("#btnKursAra").prop("disabled", true);
+        //};
+        //var OnKurumAraComplete = function () {
+        //    $("#btnOkulAra").prop("disabled", false);
+        //    $("#btnOkulAra").html('Okul Ara');
+        //    $("#btnKursAra").prop("disabled", false);
+        //}
+        //var OnKurumAraSuccess = function (data) {
+        //    if (data.Success) {
+        //        toastr.success(data.Data.length + " adet kayıt bulundu.");
+        //        console.log(data.Data);
+        //        //window.location.href = "/Home/KurumListesi/" + JSON.stringify(data.Data);
 
-        var OnOkulAraBegin = function () {
-            $("#btnOkulAra").prop("disabled", true);
-            $("#btnOkulAra").html('Lütfen Bekleyin...');
-            $("#btnKursAra").prop("disabled", true);
-        };
-        var OnOkulAraComplete = function () {
-            $("#btnOkulAra").prop("disabled", false);
-            $("#btnOkulAra").html('Okul Ara');
-            $("#btnKursAra").prop("disabled", false);
-        }
-        var OnOkulAraSuccess = function (data) {
-            if (data.Success) {
-                toastr.success(data.Data.length + " adet kayıt bulundu.");
-                console.log(data.Data);
-                window.location.href = "/Home/KurumListesi/" + JSON.stringify(data.Data);
-            }
-            else {
-                swal({
-                    title: 'UYARI',
-                    text: data.Message,
-                    type: 'error',
-                    confirmButtonClass: 'btn-danger',
-                    confirmButtonText: 'Tamam',
-                });
-            }
-        };
+        //        var link = '@Url.Action("KurumAraListe", "Home", new { liste = "-1" })';
+        //        link = link.replace("-1", JSON.stringify(data.Data));
 
-        var OnKursAraBegin = function () {
-            $("#btnKursAra").prop("disabled", true);
-            $("#btnKursAra").html('Lütfen Bekleyin...');
-            $("#btnOkulAra").prop("disabled", true);
-        };
-        var OnKursAraComplete = function () {
-            $("#btnKursAra").prop("disabled", false);
-            $("#btnKursAra").html('Kurs Ara');
-            $("#btnOkulAra").prop("disabled", false);
-        }
-        var OnKursAraSuccess = function (data) {
-            if (data.Success) {
-                //swal({
-                //    title: 'BAŞARILI',
-                //    text: "Tebrikler. Okul bilgileriniz eklendi. Hesabınız onaylandıktan sonra sistemi kullanmaya başlayabilirsiniz. Onaylama işlemi sonrasında belirtmiş olduğunuz e-posta adresine bilgilendirme postası otomatik olarak gönderilecektir.",
-                //    type: 'success',
-                //    confirmButtonClass: 'btn-info',
-                //    confirmButtonText: 'Tamam',
-                //}, function (isConfirm) {
-                //    if (isConfirm) {
-                //        window.location.href = '@Html.Raw(Url.Action("Index","Home"))';
-                //    }
-                //});
-            }
-            else {
-                swal({
-                    title: 'UYARI',
-                    text: data.Message,
-                    type: 'error',
-                    confirmButtonClass: 'btn-danger',
-                    confirmButtonText: 'Tamam',
-                });
-            }
-        };
+        //        window.location.href = link;
+        //    }
+        //    else {
+        //        swal({
+        //            title: 'UYARI',
+        //            text: data.Message,
+        //            type: 'error',
+        //            confirmButtonClass: 'btn-danger',
+        //            confirmButtonText: 'Tamam',
+        //        });
+        //    }
+        //};
+
+        //var OnKursAraBegin = function () {
+        //    $("#btnKursAra").prop("disabled", true);
+        //    $("#btnKursAra").html('Lütfen Bekleyin...');
+        //    $("#btnOkulAra").prop("disabled", true);
+        //};
+        //var OnKursAraComplete = function () {
+        //    $("#btnKursAra").prop("disabled", false);
+        //    $("#btnKursAra").html('Kurs Ara');
+        //    $("#btnOkulAra").prop("disabled", false);
+        //}
+        //var OnKursAraSuccess = function (data) {
+        //    if (data.Success) {
+        //        //swal({
+        //        //    title: 'BAŞARILI',
+        //        //    text: "Tebrikler. Okul bilgileriniz eklendi. Hesabınız onaylandıktan sonra sistemi kullanmaya başlayabilirsiniz. Onaylama işlemi sonrasında belirtmiş olduğunuz e-posta adresine bilgilendirme postası otomatik olarak gönderilecektir.",
+        //        //    type: 'success',
+        //        //    confirmButtonClass: 'btn-info',
+        //        //    confirmButtonText: 'Tamam',
+        //        //}, function (isConfirm) {
+        //        //    if (isConfirm) {
+        //        //        window.location.href = '@Html.Raw(Url.Action("Index","Home"))';
+        //        //    }
+        //        //});
+        //    }
+        //    else {
+        //        swal({
+        //            title: 'UYARI',
+        //            text: data.Message,
+        //            type: 'error',
+        //            confirmButtonClass: 'btn-danger',
+        //            confirmButtonText: 'Tamam',
+        //        });
+        //    }
+        //};
 
         $(document).ready(function () {
             $('#il1').on('change', function () {

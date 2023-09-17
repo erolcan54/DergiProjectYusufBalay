@@ -39,7 +39,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Etkinlik>> GetAllByKurumId(int id)
         {
-            var result = _etkinlikDal.GetAll(a => a.KurumId == id == a.Status).OrderByDescending(a=>a.Id).ToList();
+            var result = _etkinlikDal.GetAll(a => a.KurumId == id && a.Status).OrderByDescending(a=>a.Id).ToList();
             return new SuccessDataResult<List<Etkinlik>>(result, "Etkinlikler getirildi.");
         }
 

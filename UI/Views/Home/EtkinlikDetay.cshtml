@@ -1,0 +1,93 @@
+﻿@model Etkinlik
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<EtkinlikResim> resimler = ViewData["Resimler"] as List<EtkinlikResim>;
+}
+<div class="row mb-2">
+    <div class="col-sm-4">
+        <a href="@Url.Action("Etkinlikler","Home")" class="btn btn-info mb-2"> Etkinlikler Sayfası</a>
+    </div>
+</div>
+
+
+<link href="~/lightbox/css/lightbox.css" rel="stylesheet" />
+<div class="row mt-1">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="mt-1">
+                    @if (Model != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="w-100">
+                                    <b>
+                                        @Html.Raw(Model.Baslik)
+                                    </b>
+                                </p>
+                                <hr />
+                                <p class="w-100 text-muted" style="white-space:nowrap;overflow: hidden; text-overflow: ellipsis;">
+                                    @Html.Raw(Model.Aciklama)
+                                </p>
+                            </div>
+                        </div>
+                    }
+
+                    <hr />
+                    <div class="row">
+
+                        @if (resimler.Count > 0)
+                        {
+                            <div class="row">
+                                @foreach (var item in resimler)
+                                {
+                                    <div class="col-md-6 col-xxl-3">
+                                        <!-- project card -->
+                                        <div class="card">
+                                            <!-- project-thumbnail -->
+                                            <a href="@ByteToImage.DecodeImage(item.Resim)" data-lightbox="image-1" data-title="">
+                                                <img src="@ByteToImage.DecodeImage(item.Resim)" class="w-100" style="height:200px; object-fit : scale-down">
+                                            </a>
+
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col -->
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="body">
+                                <div class="card-body">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong>Etkinlik resimleri listesi boş.
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+                <!-- end row-->
+            </div>
+            <!-- end inbox-rightbar-->
+        </div>
+        <!-- end card-body -->
+        <div class="clearfix"></div>
+    </div> <!-- end card-box -->
+
+</div> <!-- end Col -->
+@section Scripts{
+    <script src="~/lightbox/js/lightbox.js"></script>
+    <script>
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true
+        });
+
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+    </script>
+}

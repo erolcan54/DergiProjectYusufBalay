@@ -1,0 +1,51 @@
+﻿@model List<OgretmenDisplayDto>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var kurumId = HttpContextAccessor.HttpContext.Session.GetString("HomeKurumId");
+}
+
+@*<div class="row mt-1">
+    <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-info btn-sm">Kurum Detay Sayfası</a>
+</div>*@
+<div class="row mb-2">
+    <div class="col-sm-4">
+        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-danger mb-2"> Kurum Detay Sayfası</a>
+    </div>
+</div>
+<div class="row">
+    <h4 class="header-title">ÖĞRETMEN LİSTESİ</h4>
+    <p class="text-muted font-14">Kurumda görev yapan öğretmenlerin listesi aşağıda gösterilmiştir.</p>
+    <div class="row">
+        @if (Model.Count > 0)
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-sm-6 col-xxl-3">
+                    <div class="card text-center" style="height:200px;">
+                        <div class="card-body">
+                            <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+
+                            <h4 class="mb-0 mt-2">@item.Ad @item.Soyad</h4>
+                            <p class="text-muted font-14">@item.BransAdi</p>
+
+                        </div> <!-- end card-body -->
+                    </div> <!-- end card -->
+                    <!-- Messages-->
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                <strong>Uyarı - </strong> Öğretmen Kadrosu alanına henüz veri eklenmemiş.
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+

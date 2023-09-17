@@ -1,0 +1,91 @@
+﻿@{
+    Layout = "~/Views/Shared/_KurumLayout.cshtml";
+    Kulup kulup = ViewData["Kulup"] as Kulup;
+}
+
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="mt-2">
+                    <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
+                          data-ajax-success="OnKulupGuncelleSuccess"
+                          data-ajax-begin="OnKulupGuncelleBegin"
+                          data-ajax-complete="OnKulupGuncelleComplete" data-ajax-method="POST" asp-action="KulupGuncelle" asp-controller="Kurum">
+                        <input type="hidden" name="KurumId" value="@kulup.KurumId" />
+                        <input type="hidden" name="Id" value="@kulup.Id" />
+
+                        <div class="mb-2">
+                            <label for="Ad" class="form-label">Ad</label>
+                            <input class="form-control" type="text" name="Ad" id="Ad" value="@kulup.Ad">
+                        </div>
+                        <div class="mb-2">
+                            <label for="Icerik" class="form-label">İçerik</label>
+                            <textarea rows="10" name="Icerik" id="Icerik" class="form-control resize-none" placeholder="İçerik yazınız." required>@kulup.Icerik</textarea>
+                        </div>
+                        <div class="mb-2">
+                            <div class="mb-1">
+                                <img src="@ByteToImage.DecodeImage(kulup.Resim)" class="img-fluid" style="max-width: 400px;" alt="Product-img">
+                            </div>
+                            <label for="Resim" class="form-label">Resim</label>
+                            <input class="form-control" type="file" name="Resim" id="Resim">
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-sm btn-info" id="btnkulupguncelle"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- end row-->
+            </div>
+            <!-- end inbox-rightbar-->
+        </div>
+        <!-- end card-body -->
+        <div class="clearfix"></div>
+    </div> <!-- end card-box -->
+
+</div> <!-- end Col -->
+@section Scripts{
+
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("Icerik");
+    </script>
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnKulupGuncelleBegin = function () {
+            $("#btnkulupguncelle").prop("disabled", true);
+            $("#btnkulupguncelle").html('Lütfen Bekleyin...');
+            $('#loading').show();
+        };
+        var OnKulupGuncelleComplete = function () {
+            $("#btnkulupguncelle").prop("disabled", false);
+            $("#btnkulupguncelle").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+            $('#loading').hide();
+        }
+        var OnKulupGuncelleSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("Kulupler","Kurum"))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+    </script>
+}
+
+

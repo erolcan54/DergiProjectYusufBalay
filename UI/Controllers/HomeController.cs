@@ -12,6 +12,7 @@ using UI.Filters;
 using X.PagedList;
 using X.PagedList.Mvc.Core;
 using UI.Utilities;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace UI.Controllers
 {
@@ -37,9 +38,20 @@ namespace UI.Controllers
         private IKurumYorumBegeniService _kurumYorumBegeniService;
         private IBurslulukSinavService _burslulukSinavService;
         private IBurslulukSinavBasvuruService _burslulukSinavBasvuruService;
+        private IEgitimModeliService _egitimModeliService;
+        private IEgitimModeliResimService _egitimModeliResimService;
+        private IBasariService _basariService;
+        private IKatalogService _katalogService;
+        private IIcGorselService _icGorselService;
+        private IDisGorselService _disGorselService;
+        private IEtkinlikService _etkinlikService;
+        private IEtkinlikResimService _etkinlikResimService;
+        private IKulupService _kulupService;
+        private IBransService _bransService;
+        private IisBasvuruService _basvuruService;
         private IHttpContextAccessor _contextAccessor;
 
-        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService)
+        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IEgitimModeliResimService egitimModeliResimService, IEgitimModeliService egitimModeliService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IBransService bransService, IisBasvuruService basvuruService)
         {
             _logger = logger;
             _ilService = ilService;
@@ -61,10 +73,23 @@ namespace UI.Controllers
             _kurumYorumBegeniService = kurumYorumBegeniService;
             _burslulukSinavService = burslulukSinavService;
             _burslulukSinavBasvuruService = burslulukSinavBasvuruService;
+            _egitimModeliResimService = egitimModeliResimService;
+            _egitimModeliService = egitimModeliService;
+            _basariService = basariService;
+            _katalogService = katalogService;
+            _icGorselService = icGorselService;
+            _disGorselService = disGorselService;
+            _etkinlikService = etkinlikService;
+            _etkinlikResimService = etkinlikResimService;
+            _kulupService = kulupService;
+            _bransService = bransService;
+            _basvuruService = basvuruService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync();
             var ilListe = _ilService.GetAll();
             var ilSelectList = (from i in ilListe.Data
                                 select new SelectListItem
@@ -96,63 +121,84 @@ namespace UI.Controllers
             ViewData["EnCokTiklananlar"] = encokgorunenler;
 
             var sinavlar = _burslulukSinavService.GetAllDisplay4Take();
-            ViewData["Sinavlar"]=sinavlar.Data;
+            ViewData["Sinavlar"] = sinavlar.Data;
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult OkulAra(OkulAraDto model)
+        public IActionResult KurumAra(KurumAraDto model)
         {
-            //if (model.il1 == 0)
-            //    return Json(new ErrorResult("Lütfen il seçiniz."));
-            //if (model.ilce1 == 0)
-            //    return Json(new ErrorResult("Lütfen ilçe seçiniz."));
-            //if (model.okulTurId == 0)
-            //    return Json(new ErrorResult("Lütfen okul türü seçiniz."));
-            var result = _okulService.GetOkulListFilter(model);
-            if (result.Success && result.Data.Count != 0)
-                return View("KurumListesi", result.Data);
-            //return RedirectToAction("KurumListesi", "Home", result.Data);
-            else
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
+
+            var okulTurleri = _okulTurService.GetAll();
+            var okulTurSelectList = (from i in okulTurleri.Data
+                                     select new SelectListItem
+                                     {
+                                         Text = i.Tip.ToUpper(),
+                                         Value = i.Id.ToString()
+                                     }).ToList();
+            ViewData["okulTurleri"] = okulTurSelectList;
+            List<KurumDisplayDto>? liste = new List<KurumDisplayDto>();
+            if (model.OkulArama && !model.KursArama)
             {
-                TempData["OkulAraUyari"] = "Aranan kriterlerde okul listesi bulunamadı.";
-                return RedirectToAction("Index", "Home");
+                if (model.il1 == 0)
+                    TempData["Uyari"] = "İl seçmediniz.";
+                if (model.ilce1 == 0)
+                    TempData["Uyari"] = "İlçe seçmediniz.";
+                if (model.okulTurId == 0)
+                    TempData["Uyari"] = "Okul türü seçmediniz.";
+                OkulAraDto okara = new OkulAraDto();
+                okara.okulTurId = model.okulTurId;
+                okara.il1 = model.il1;
+                okara.ilce1 = model.ilce1;
+                liste = _okulService.GetOkulListFilter(okara).Data;
             }
+            else if (!model.OkulArama && model.KursArama)
+            {
+                if (model.il2 == 0)
+                    TempData["Uyari"] = "İl seçmediniz.";
+                if (model.ilce2 == 0)
+                    TempData["Uyari"] = "İlçe seçmediniz.";
+                KursAraDto kursAraDto = new KursAraDto();
+                kursAraDto.il2 = model.il2;
+                kursAraDto.ilce2 = model.ilce2;
+                liste = _okulService.GetKursListFilter(kursAraDto).Data;
+            }
+            ViewData["Liste"] = liste.OrderBy(a => a.Ad).ToList();
+            return View();
+            //return RedirectToAction("KurumListesi", "Home", new { liste = liste });
         }
 
-        [HttpPost]
-        public IActionResult KursAra(KursAraDto model)
+        public IActionResult KurumListesi()
         {
-            //if (model.il2 == 0)
-            //    return Json(new ErrorResult("Lütfen il seçiniz."));
-            //if (model.ilce2 == 0)
-            //    return Json(new ErrorResult("Lütfen ilçe seçiniz."));
-            var result = _okulService.GetKursListFilter(model);
-            if (result.Success && result.Data.Count != 0)
-                return View("KurumListesi", result.Data);
-
-            else
-            {
-                TempData["KursAraUyari"] = "Aranan kriterlerde kurs listesi bulunamadı.";
-                return RedirectToAction("Index", "Home");
-            }
-        }
-
-        public IActionResult KurumListesi([FromBody] List<KurumDisplayDto> liste)
-        {
-            return View(liste.OrderByDescending(a=>a.Id).ToList());
+            var result = _okulService.GetAllKurum().Data.OrderByDescending(a => a.TikSayisi).ToList();
+            return View(result);
         }
 
         public IActionResult KurumDetay(int id)
         {
             var result = _okulService.GetByIdDisplay(id);
-            var kurum = _okulService.GetById(id);
-            kurum.Data.TikSayisi++;
-            var resultupt = _okulService.Update(kurum.Data);
+           
             var kurumYorum = _kurumYorumService.GetAllByKurumId(id);
-            ViewData["Yorumlar"] = kurumYorum.Data.OrderByDescending(a=>a.Id).ToList();
+            ViewData["Yorumlar"] = kurumYorum.Data.OrderByDescending(a => a.Id).ToList();
             ViewData["yorumSayisi"] = _kurumYorumService.GetCountByKurumId(id).Data;
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if(kurumId == null)
+            {
+                var kurum = _okulService.GetById(id);
+                kurum.Data.TikSayisi++;
+                var resultupt = _okulService.Update(kurum.Data);
+                HttpContext.Session.SetString("HomeKurumId", result.Data.Id.ToString());
+            }
+                
             return View(result.Data);
         }
 
@@ -182,11 +228,11 @@ namespace UI.Controllers
             return Json(result);
         }
 
-        public IActionResult OgretmenKadrosu(int id)
-        {
-            var result = _ogretmenService.GetAllGetByKurumId(id);
-            return View(result.Data);
-        }
+        //public IActionResult OgretmenKadrosu(int id)
+        //{
+        //    var result = _ogretmenService.GetAllGetByKurumId(id);
+        //    return View(result.Data);
+        //}
 
         public IActionResult KullaniciGiris()
         {
@@ -323,7 +369,7 @@ namespace UI.Controllers
 
         public IActionResult SinavDetay(int id)
         {
-            var result=_burslulukSinavService.GetByIdDisplay(id);
+            var result = _burslulukSinavService.GetByIdDisplay(id);
             return View(result.Data);
         }
 
@@ -334,12 +380,142 @@ namespace UI.Controllers
             return Json(result);
         }
 
-        public IActionResult SinavListesi(int page=1)
+        public IActionResult SinavListesi(int page = 1)
         {
             var result = _burslulukSinavService.GetAllDisplay();
             var data = result.Data.Where(a => a.Status).ToPagedList(page, 2);
             return View(data);
         }
 
+        public IActionResult OgretmenKadrosu()
+        {
+            var kurumId= HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+
+            var ogretmenKadrosu = _ogretmenService.GetAllGetByKurumId(int.Parse(kurumId));
+            return View(ogretmenKadrosu.Data.OrderBy(a=>a.Ad).ToList());
+
+        }
+
+        public IActionResult EgitimModeli()
+        {
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+
+            var model = _egitimModeliService.GetByKurumId(int.Parse(kurumId));
+            var resimler = _egitimModeliResimService.GetAllByKurumId(int.Parse(kurumId));
+            ViewData["Model"] = model.Data;
+            ViewData["ModelResimler"] = resimler.Data;
+
+            return View();
+        }
+
+        public IActionResult Basarilar()
+        {
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+
+            var model = _basariService.GetAllByKurumId(int.Parse(kurumId));
+            return View(model.Data);
+        }
+
+        public IActionResult Kataloglar()
+        {
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+
+            var katalogliste = _katalogService.GetAllByKurumId(int.Parse(kurumId));
+            return View(katalogliste.Data);
+        }
+
+        public IActionResult KatalogIndir(Guid seriNo)
+        {
+            var result = _katalogService.GetBySeriNo(seriNo);
+            return File(result.Data.KatalogPDF, "application/pdf", result.Data.KatalogAdi + ".pdf");
+        }
+
+        public IActionResult IcGorseller()
+        {
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+
+            var liste = _icGorselService.GetAllByKurumId(int.Parse(kurumId));
+            return View(liste.Data);
+        }
+
+        public IActionResult DisGorseller()
+        {
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+
+            var liste = _disGorselService.GetAllByKurumId(int.Parse(kurumId));
+            return View(liste.Data);
+        }
+
+        public IActionResult Etkinlikler()
+        {
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+
+            var etkinlikler = _etkinlikService.GetAllByKurumId(int.Parse(kurumId));
+            return View(etkinlikler.Data);
+        }
+
+        public IActionResult EtkinlikDetay(int id)
+        {
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+            var etkinlik=_etkinlikService.GetById(id);
+            var resimler = _etkinlikResimService.GetAllByEtkinlikId(id);
+            ViewData["Resimler"] = resimler.Data;
+            return View(etkinlik.Data);
+        }
+
+        public IActionResult Kulupler()
+        {
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
+            if (String.IsNullOrEmpty(kurumId))
+                return RedirectToAction("Index");
+
+            var kulupler = _kulupService.GetAllByKurumId(int.Parse(kurumId));
+            return View(kulupler.Data);
+        }
+
+        public IActionResult isBasvuru()
+        {
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
+
+            var bransListe = _bransService.GetAll();
+            var bransSelectList = (from i in bransListe.Data
+                                   select new SelectListItem
+                                   {
+                                       Text = i.Ad.ToUpper(),
+                                       Value = i.Id.ToString()
+                                   }).ToList();
+            ViewData["branslar"] = bransSelectList;
+            isBasvuru model=new isBasvuru();
+            return View(model);
+        }
+
+        public IActionResult AddisBasvuru(isBasvuru model)
+        {
+            var result = _basvuruService.Add(model);
+            return Json(result);
+        }
     }
 }

@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(opts=>opts.JsonSerializerOptions.PropertyNamingPolicy=null);
-builder.Services.AddSession(opt=>opt.IdleTimeout= TimeSpan.FromSeconds(60));
+builder.Services.AddSession(opt=>opt.IdleTimeout= TimeSpan.FromMinutes(10));
 builder.Services.AddMvcCore();
 builder.Services.AddHttpContextAccessor();
 

@@ -1,0 +1,79 @@
+﻿@model List<IcGorsel>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var kurumId = HttpContextAccessor.HttpContext.Session.GetString("HomeKurumId");
+}
+
+<div class="row mb-2">
+    <div class="col-sm-4">
+        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-danger mb-2"> Kurum Detay Sayfası</a>
+    </div>
+</div>
+
+<link href="~/lightbox/css/lightbox.css" rel="stylesheet" />
+<div class="row mt-1">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="mt-1">
+                    <div class="row">
+                        @if (Model.Count > 0)
+                        {
+                            <div class="row">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="col-md-6 col-xxl-3">
+                                        <!-- project card -->
+                                        <div class="card">
+                                            <!-- project-thumbnail -->
+                                            <a href="@ByteToImage.DecodeImage(item.Resim)" data-lightbox="image-1" data-title="@item.Aciklama">
+                                                <img src="@ByteToImage.DecodeImage(item.Resim)" class="w-100" style="height:200px; object-fit : scale-down">
+                                            </a>
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col -->
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="body">
+                                <div class="card-body">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong>İç görsel resim listesi boş.
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+                <!-- end row-->
+            </div>
+            <!-- end inbox-rightbar-->
+        </div>
+        <!-- end card-body -->
+        <div class="clearfix"></div>
+    </div> <!-- end card-box -->
+
+</div> <!-- end Col -->
+@section Scripts{
+    <script src="~/lightbox/js/lightbox.js"></script>
+    <script>
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true
+        })
+    </script>
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+    </script>
+}
+
+

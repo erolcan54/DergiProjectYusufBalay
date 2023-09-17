@@ -1,50 +1,55 @@
 ﻿@{
     Layout = "~/Views/Shared/_KurumLayout.cshtml";
-    List<Basari> basarilar = ViewData["Basarilar"] as List<Basari>;
+    List<Etkinlik> etkinlikler = ViewData["Etkinlikler"] as List<Etkinlik>;
 }
 
-<div class="row mt-2">
+<div class="row mt-1">
     <!-- Right Sidebar -->
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
                 <div class="mt-1">
-                    <div class="row">
-                        <div class="mb-2">
-                            <a href="#" class="btn btn-sm btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#basariekle-modal"><i class="mdi mdi-plus"></i> Başarı Ekle</a>
+                    <div class="mb-2 mt-1">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#etkinlikekle-modal" class="btn btn-primary btn-sm"><i class="mdi mdi-plus"></i> Etkinlik Ekle</a>
+                                </div>
+                            </div>
                         </div>
-                    </div><hr />
-                    @if (basarilar.Count > 0)
+                    </div>
+                    @if (etkinlikler.Count > 0)
                     {
                         <div class="row">
-                            @foreach (var item in basarilar)
+                            @foreach (var item in etkinlikler)
                             {
                                 <div class="col-md-6 col-xxl-3">
                                     <!-- project card -->
                                     <div class="card d-block">
                                         <!-- project-thumbnail -->
-                                        <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" style="height:200px; object-fit : scale-down">
-                                        <div class="card-img-overlay">
-                                            <div class="badge bg-secondary text-light p-1">@item.CreatedDate</div>
-                                        </div>
+                                        @*<img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                                <div class="card-img-overlay">
+                                <div class="badge bg-secondary text-light p-1">@item.CreatedDate</div>
+                                </div>*@
 
                                         <div class="card-body position-relative">
                                             <!-- project title-->
                                             <h4 class="mt-0">
-                                                @Html.Raw(item.Baslik)
+                                                <a href="/Admin/EtkinlikDetay/@item.Id" class="text-title">@item.Baslik</a>
                                             </h4>
 
-                                            <!-- project detail-->
-                                            <p class="mb-1">
-                                                @*<span class="text-nowrap">
-                                        <i class="mdi mdi-comment-multiple-outline"></i>
-                                        <b>104</b> Comments
-                                        </span>*@
-                                            </p>
+                                            @if (item.UpdatedDate != null)
+                                            {
+                                                <p class="mb-3">
+                                                    <span class="pe-2 text-nowrap">
+                                                        <i class="mdi mdi-update"></i>
+                                                        <b>@item.UpdatedDate</b>
+                                                    </span>
+                                                </p>
+                                            }
                                             <div class="mb-1">
-                                                <a href="#" id="btnbasariSil" data-id="@item.Id" class="btn btn-danger btn-sm ">Sil</a>
-                                                <a href="@Url.Action("BasariGuncelle","Kurum",new {id=item.Id })" class="btn btn-success btn-sm ">Güncelle</a>
+                                                <a href="#" id="btnetkinlikSil" data-id="@item.Id" class="btn btn-danger btn-sm ">Sil</a>
+                                                <a href="@Url.Action("EtkinlikDetay","Kurum",new {id=item.Id })" class="btn btn-info btn-sm ">Detay</a>
                                             </div>
                                         </div> <!-- end card-body-->
                                     </div> <!-- end card-->
@@ -57,12 +62,11 @@
                         <div class="body">
                             <div class="card-body">
                                 <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-                                    <strong>Uyarı - </strong> Başarı listesi boş.
+                                    <strong>Uyarı - </strong> Etkinlik listesi boş.
                                 </div>
                             </div>
                         </div>
                     }
-
                 </div>
                 <!-- end row-->
             </div>
@@ -74,34 +78,30 @@
 
 </div> <!-- end Col -->
 
-
-<div id="basariekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+<div id="etkinlikekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myLargeModalLabel">Başarı Ekleme Paneli</h4>
+                <h4 class="modal-title" id="myLargeModalLabel">Etkinlik Ekleme Paneli</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
-                      data-ajax-success="OnBasariEkleSuccess"
-                      data-ajax-begin="OnBasariEkleBegin"
-                      data-ajax-complete="OnBasariEkleComplete" data-ajax-method="POST" asp-action="BasariEkle" asp-controller="Kurum">
+
+                <form class="form-horizontal" data-ajax="true"
+                      data-ajax-success="OnEtkinlikEkleSuccess"
+                      data-ajax-begin="OnEtkinlikEkleBegin"
+                      data-ajax-complete="OnEtkinlikEkleComplete" data-ajax-method="POST" asp-action="EtkinlikEkle" asp-controller="Kurum">
                     <div class="mb-2">
                         <label for="Baslik" class="form-label">Başlık</label>
-                        <textarea rows="1" name="Baslik" id="Baslik" class="form-control resize-none" placeholder="Başlık yazınız." required></textarea>
+                        <input class="form-control" type="text" name="Baslik" id="Baslik">
                     </div>
-                    <div class="mb-2">
-                        <label for="Icerik" class="form-label">İçerik</label>
-                        <textarea rows="10" name="Icerik" id="Icerik" class="form-control resize-none" placeholder="İçerik yazınız." required></textarea>
-                    </div>
-                    <div class="mb-2">
-                        <label for="Resim" class="form-label">Resim</label>
-                        <input class="form-control" type="file" name="Resim" required id="Resim">
+                    <div class="mb-3">
+                        <label for="Aciklama" class="form-label">Açıklama</label>
+                        <textarea rows="10" name="Aciklama" id="Aciklama" class="form-control resize-none" placeholder="Etkinlik açıklamasını yazınız."></textarea>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-sm btn-info" id="btnbasariekle"><i class="mdi mdi-plus"></i> Ekle</button>
+                            <button type="submit" class="btn btn-sm btn-info" id="btnetkinlikekle"><i class="mdi mdi-plus"></i> Ekle</button>
                         </div>
                     </div>
                 </form>
@@ -112,11 +112,9 @@
 </div><!-- /.modal -->
 @section Scripts{
 
-
     <script src="~/ckeditor/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace("Icerik");
-        CKEDITOR.replace("Baslik");
+        CKEDITOR.replace("Aciklama");
     </script>
 
     <script>
@@ -125,20 +123,21 @@
                 $('#loading').hide();
             });
 
-        var OnBasariEkleBegin = function () {
-            $("#btnbasariekle").prop("disabled", true);
-            $("#btnbasariekle").html('Lütfen Bekleyin...');
+        var OnEtkinlikEkleBegin = function () {
+            $("#btnetkinlikekle").prop("disabled", true);
+            $("#btnetkinlikekle").html('Lütfen Bekleyin...');
             $('#loading').show();
-            $('#basariekle-modal').modal().hide();
+            $('#etkinlikekle-modal').modal().hide();
         };
-        var OnBasariEkleComplete = function () {
-            $("#btnbasariekle").prop("disabled", false);
-            $("#btnbasariekle").html('<i class="mdi mdi-plus"></i> Ekle ');
+        var OnEtkinlikEkleComplete = function () {
+            $("#btnetkinlikekle").prop("disabled", false);
+            $("#btnetkinlikekle").html('<i class="mdi mdi-plus"></i> Ekle ');
             $('#loading').hide();
         }
-        var OnBasariEkleSuccess = function (data) {
+        var OnEtkinlikEkleSuccess = function (data) {
             if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("Basarilar","Kurum"))';
+                var id = data.Data.Id;
+                window.location.href = '/Kurum/EtkinlikDetay/' + id;
             }
             else {
                 swal({
@@ -151,11 +150,11 @@
             }
         };
 
-        $(document).on("click", "#btnbasariSil", function () {
+        $(document).on("click", "#btnetkinlikSil", function () {
             var id = $(this).data("id");
             swal({
                 title: "UYARI",
-                text: "Başarı bilgilerini silmek istediğinize emin misiniz?",
+                text: "Etkinlik bilgilerini silmek istediğinize emin misiniz?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: 'btn-danger',
@@ -165,7 +164,7 @@
                 closeOnConfirm: false
             }, function () {
                 $.ajax({
-                    url: '/Kurum/BasariSil/' + id,
+                    url: '/Kurum/EtkinlikSil/' + id,
                     type: 'POST',
                     success: function (result) {
                         if (result.Success == true) {
@@ -177,7 +176,7 @@
                                 confirmButtonText: "Tamam"
                             }, function (isConfirm) {
                                 if (isConfirm) {
-                                    window.location.href = '@Html.Raw(Url.Action("Basarilar","Kurum"))';
+                                    window.location.href = '@Url.Action("Etkinlikler", "Kurum")';
                                 }
                             });
                         }
@@ -196,4 +195,8 @@
         });
     </script>
 }
+
+
+
+
 

@@ -25,7 +25,7 @@ namespace Entities.DTOs
         public string EgitimTurAdi { get; set; }
         public int TikSayisi { get; set; }
         public byte[] Resim { get; set; }
-        public DateTime? CeratedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate{ get; set; }
         public DateTime? DeletedDate { get; set; }
         public bool Status { get; set; }

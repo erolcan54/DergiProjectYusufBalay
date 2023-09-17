@@ -1,47 +1,43 @@
 ﻿@{
     Layout = "~/Views/Shared/_KurumLayout.cshtml";
-    KurumEgitimModeli egitimmodeli = ViewData["EgitimModeli"] as KurumEgitimModeli;
-    List<KurumEgitimModeliResim> resimler = ViewData["Resimler"] as List<KurumEgitimModeliResim>;
+    Etkinlik etkinlik = ViewData["Etkinlik"] as Etkinlik;
+    List<EtkinlikResim> resimler = ViewData["Resimler"] as List<EtkinlikResim>;
 }
+
+
 <link href="~/lightbox/css/lightbox.css" rel="stylesheet" />
 <div class="row mt-1">
     <!-- Right Sidebar -->
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
                 <div class="mt-1">
-                    @if (egitimmodeli != null)
+                    @if (etkinlik != null)
                     {
                         <div class="row">
-                            <div class="mb-2 mt-1">
-                                <a href="#" class="btn btn-success btn-rounded" data-bs-toggle="modal" data-bs-target="#egitimmodelyaziguncelle-modal"><i class="mdi mdi-pencil"></i> Güncelle</a>
+                            <div class="mb-1">
+                                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#etkinlikguncelle-modal"><i class="mdi mdi-pencil"></i> Güncelle</a>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <p class="w-100" style="white-space:nowrap;overflow: hidden; text-overflow: ellipsis;">
-                                    @Html.Raw(egitimmodeli.Icerik)
+                                <p class="w-100">
+                                    @Html.Raw(etkinlik.Baslik)
                                 </p>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="row">
-                            <div class="mb-2 mt-1">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#egitimmodelyaziekle-modal" class="btn btn-success btn-rounded"><i class="mdi mdi-plus"></i> Eğitim Modeli Yazısı Ekle</a>
+                                <p class="w-100 text-muted" style="white-space:nowrap;overflow: hidden; text-overflow: ellipsis;">
+                                    @Html.Raw(etkinlik.Aciklama)
+                                </p>
                             </div>
                         </div>
                     }
 
                     <hr />
                     <div class="row">
-                        <div class="mb-2 mt-1">
+                        <div class="mb-1">
                             <div class="col-12">
                                 <div class="page-title-box">
                                     <div class="page-title">
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#idarecicreate-modal" class="btn btn-primary btn-rounded"><i class="mdi mdi-plus"></i> Eğitim Modeli Resim Ekle</a>
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#resimekle-modal" class="btn btn-primary btn-sm"><i class="mdi mdi-plus"></i> Etkinlik Resim Ekle</a>
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +75,7 @@
                             <div class="body">
                                 <div class="card-body">
                                     <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-                                        <strong>Uyarı - </strong>Eğitim Modeli resimleri listesi boş.
+                                        <strong>Uyarı - </strong>Etkinlik resimleri listesi boş.
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +94,7 @@
 </div> <!-- end Col -->
 
 
-<div id="idarecicreate-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+<div id="resimekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -110,8 +106,8 @@
                 <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
                       data-ajax-success="OnEMResimEkleSuccess"
                       data-ajax-begin="OnEMResimEkleBegin"
-                      data-ajax-complete="OnEMResimEkleComplete" data-ajax-method="POST" asp-action="EgitimModeliResimEkle" asp-controller="Kurum">
-                    <input type="hidden" name="KurumId" value="@egitimmodeli.KurumId" />
+                      data-ajax-complete="OnEMResimEkleComplete" data-ajax-method="POST" asp-action="EtkinlikResimEkle" asp-controller="Kurum">
+                    <input type="hidden" name="EtkinlikId" value="@etkinlik.Id" />
                     <div class="mb-2">
                         <label for="Resim" class="form-label">Resim</label>
                         <input class="form-control" type="file" name="Resim" id="Resim">
@@ -128,64 +124,34 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div id="egitimmodelyaziekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+<div id="etkinlikguncelle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myLargeModalLabel">İçerik Ekleme Paneli</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-
-                <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
-                      data-ajax-success="OnIcerikEkleSuccess"
-                      data-ajax-begin="OnIcerikEkleBegin"
-                      data-ajax-complete="OnIcerikEkleComplete" data-ajax-method="POST" asp-action="EgitimModeliIcerikEkle" asp-controller="Kurum">
-                    <input type="hidden" name="KurumId" value="@egitimmodeli.KurumId" />
-                    <div class="mb-2">
-                        <label for="Icerik" class="form-label">Eğitim Modeli</label>
-                        <textarea rows="10" name="Icerik" id="Icerik" class="form-control resize-none" placeholder="İçerik yazınız." required></textarea>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-sm btn-primary" id="btnicerikekle"><i class="mdi mdi-plus"></i> Ekle</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div id="egitimmodelyaziguncelle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myLargeModalLabel">İçerik Güncelleme Paneli</h4>
+                <h4 class="modal-title" id="myLargeModalLabel">Etkinlik Güncelleme Paneli</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
-                      data-ajax-success="OnIcerikGuncelleSuccess"
-                      data-ajax-begin="OnIcerikGuncelleBegin"
-                      data-ajax-complete="OnIcerikGuncelleComplete" data-ajax-method="POST" asp-action="EgitimModeliIcerikGuncelle" asp-controller="Kurum">
-                    <input type="hidden" name="KurumId" value="@egitimmodeli.KurumId" />
+                      data-ajax-success="OnEtkinlikGuncelleSuccess"
+                      data-ajax-begin="OnEtkinlikGuncelleBegin"
+                      data-ajax-complete="OnEtkinlikGuncelleComplete" data-ajax-method="POST" asp-action="EtkinlikGuncelle" asp-controller="Kurum">
+                    <input type="hidden" name="Id" value="@etkinlik.Id" />
+                    <input type="hidden" name="Status" value="@etkinlik.Status" />
+                    <input type="hidden" name="DeletedDate" value="@etkinlik.DeletedDate" />
+                    <input type="hidden" name="UpdatedDate" value="@etkinlik.UpdatedDate" />
+                    <input type="hidden" name="CreatedDate" value="@etkinlik.CreatedDate" />
                     <div class="mb-2">
-                        <label for="Icerik" class="form-label">Eğitim Modeli</label>
-                        @if (egitimmodeli == null)
-                        {
-                            <textarea rows="10" name="Icerik1" id="Icerik1" class="form-control resize-none" placeholder="İçerik yazınız." required></textarea>
-                        }
-                        else
-                        {
-                            <textarea rows="10" name="Icerik1" id="Icerik1" class="form-control resize-none" placeholder="İçerik yazınız." required>@Html.Raw(egitimmodeli.Icerik)</textarea>
-                        }
-
+                        <label for="Baslik" class="form-label">Başlık</label>
+                        <input class="form-control" type="text" value="@etkinlik.Baslik" name="Baslik" id="Baslik">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Aciklama" class="form-label">Açıklama</label>
+                        <textarea rows="10" name="Aciklama" id="Aciklama" class="form-control resize-none" placeholder="Etkinlik açıklamasını yazınız.">@etkinlik.Aciklama</textarea>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-sm btn-primary" id="btnicerikguncelle"><i class="mdi mdi-pencil"></i> Güncelle</button>
+                            <button type="submit" class="btn btn-sm btn-primary" id="btnetkinlikguncelle"><i class="mdi mdi-pencil"></i> Güncelle</button>
                         </div>
                     </div>
                 </form>
@@ -205,8 +171,7 @@
 
     <script src="~/ckeditor/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace("Icerik");
-        CKEDITOR.replace("Icerik1");
+        CKEDITOR.replace("Aciklama");
     </script>
 
     <script>
@@ -219,7 +184,7 @@
             $("#btnresimekle").prop("disabled", true);
             $("#btnresimekle").html('Lütfen Bekleyin...');
             $('#loading').show();
-            $('#idarecicreate-modal').modal().hide();
+            $('#resimekle-modal').modal().hide();
         };
         var OnEMResimEkleComplete = function () {
             $("#btnresimekle").prop("disabled", false);
@@ -228,7 +193,7 @@
         }
         var OnEMResimEkleSuccess = function (data) {
             if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Kurum"))';
+                window.location.href = '@Html.Raw(Url.Action("EtkinlikDetay","Kurum",new{id=etkinlik.Id}))';
             }
             else {
                 swal({
@@ -241,51 +206,25 @@
             }
         };
 
-        var OnIcerikEkleBegin = function () {
-            $("#btnicerikekle").prop("disabled", true);
-            $("#btnicerikekle").html('Lütfen Bekleyin...');
+        var OnEtkinlikGuncelleBegin = function () {
+            $("#btnetkinlikguncelle").prop("disabled", true);
+            $("#btnetkinlikguncelle").html('Lütfen Bekleyin...');
             $('#loading').show();
-            $('#egitimmodelyaziekle-modal').modal().hide();
+            $('#etkinlikguncelle-modal').modal().hide();
         };
-        var OnIcerikEkleComplete = function () {
-            $("#btnicerikekle").prop("disabled", false);
-            $("#btnicerikekle").html('<i class="mdi mdi-plus"></i> Ekle ');
+        var OnEtkinlikGuncelleComplete = function () {
+            $("#btnetkinlikguncelle").prop("disabled", false);
+            $("#btnetkinlikguncelle").html('<i class="mdi mdi-pencil"></i> Güncelle ');
             $('#loading').hide();
         }
-        var OnIcerikEkleSuccess = function (data) {
+        var OnEtkinlikGuncelleSuccess = function (data) {
             if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Kurum"))';
+                window.location.href = '@Html.Raw(Url.Action("EtkinlikDetay","Kurum",new{id=etkinlik.Id}))';
             }
             else {
                 swal({
                     title: 'UYARI',
-                    text: data.message,
-                    type: 'error',
-                    confirmButtonClass: 'btn-danger',
-                    confirmButtonText: 'Tamam',
-                });
-            }
-        };
-
-        var OnIcerikGuncelleBegin = function () {
-            $("#btnicerikguncelle").prop("disabled", true);
-            $("#btnicerikguncelle").html('Lütfen Bekleyin...');
-            $('#loading').show();
-            $('#egitimmodelyaziguncelle-modal').modal().hide();
-        };
-        var OnIcerikGuncelleComplete = function () {
-            $("#btnicerikguncelle").prop("disabled", false);
-            $("#btnicerikguncelle").html('<i class="mdi mdi-pencil"></i> Güncelle ');
-            $('#loading').hide();
-        }
-        var OnIcerikGuncelleSuccess = function (data) {
-            if (data.Success) {
-                window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Kurum"))';
-            }
-            else {
-                swal({
-                    title: 'UYARI',
-                    text: data.message,
+                    text: data.Message,
                     type: 'error',
                     confirmButtonClass: 'btn-danger',
                     confirmButtonText: 'Tamam',
@@ -307,7 +246,7 @@
                 closeOnConfirm: false
             }, function () {
                 $.ajax({
-                    url: '/Kurum/ResimSil/' + id,
+                    url: '/Kurum/EtkinlikResimSil/' + id,
                     type: 'POST',
                     success: function (result) {
                         if (result.Success == true) {
@@ -319,7 +258,7 @@
                                 confirmButtonText: "Tamam"
                             }, function (isConfirm) {
                                 if (isConfirm) {
-                                    window.location.href = '@Html.Raw(Url.Action("EgitimModeli","Kurum"))';
+                                    window.location.href = '@Html.Raw(Url.Action("EtkinlikDetay","Kurum",new{id=etkinlik.Id}))';
                                 }
                             });
                         }
@@ -338,6 +277,3 @@
         });
     </script>
 }
-
-
-

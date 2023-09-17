@@ -72,7 +72,7 @@ namespace Business.Concrete
 
         public IDataResult<List<KurumDisplayDto>> GetOkulListFilter(OkulAraDto model)
         {
-            return new SuccessDataResult<List<KurumDisplayDto>>(_okulDal.GetOkulListFilter(model), "Aranan okul listesi getirildi.");
+            return new SuccessDataResult<List<KurumDisplayDto>>(_okulDal.GetOkulListFilter(model).OrderByDescending(a=>a.TikSayisi).ToList(), "Aranan okul listesi getirildi.");
         }
 
         public IResult Update(Okul entity)

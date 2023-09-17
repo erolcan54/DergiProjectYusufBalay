@@ -1,0 +1,188 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_KurumLayout.cshtml";
+    List<Katalog> kataloglar = ViewData["Kataloglar"] as List<Katalog>;
+}
+
+<div class="row mt-1">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                    <div class="mt-1">
+                        <div class="row">
+                            <div class="mb-2">
+                                <a href="#" class="btn btn-sm btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#katalogekle-modal"><i class="mdi mdi-plus"></i> Katalog Ekle</a>
+                            </div>
+                        </div><hr />
+                        @if (kataloglar.Count > 0)
+                        {
+                            <table id="alternative-page-datatable" class="table dt-responsive nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Katalog Adı</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in kataloglar)
+                                    {
+                                        <tr>
+                                            <td>@item.KatalogAdi</td>
+                                            <td>
+                                                @*<a htfe="#" id="btnkatalogSil" data-id="@item.Id" class="btn btn-sm btn-danger"> Sil</a>*@
+                                                <a href="#" data-id="@item.Id" id="btnkatalogSil" class="btn btn-sm btn-danger"> <i class="mdi mdi-delete"></i> Sil </a>
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("KatalogIndir","Kurum",new {seriNo=item.SeriNo})" id="btnkatalogdownload" class="btn btn-sm btn-primary"> İndir</a>
+                                            </td>
+                                        </tr>
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="body">
+                                <div class="card-body">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong> Katalog listesi boş.
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <!-- end row-->
+                </div>
+                <!-- end inbox-rightbar-->
+            </div>
+            <!-- end card-body -->
+            <div class="clearfix"></div>
+        </div> <!-- end card-box -->
+
+    </div> <!-- end Col -->
+
+<div id="katalogekle-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Katalog Ekleme Paneli</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
+                      data-ajax-success="OnKatalogEkleSuccess"
+                      data-ajax-begin="OnKatalogEkleBegin"
+                      data-ajax-complete="OnKatalogEkleComplete" data-ajax-method="POST" asp-action="KatalogEkle" asp-controller="Kurum">
+                    <div class="mb-2">
+                        <label for="KatalogAdi" class="form-label">KatalogAdi</label>
+                        <input type="text" name="KatalogAdi" class="form-control" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="katalogpdf" class="form-label">Katalog</label>
+                        <input class="form-control" type="file" name="katalogpdf" accept="application/pdf" required id="katalogpdf">
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-sm btn-info" id="btnkatalogekle"><i class="mdi mdi-plus"></i> Ekle</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnKatalogEkleBegin = function () {
+            $("#btnkatalogekle").prop("disabled", true);
+            $("#btnkatalogekle").html('Lütfen Bekleyin...');
+            $('#loading').show();
+            $('#katalogekle-modal').modal().hide();
+        };
+        var OnKatalogEkleComplete = function () {
+            $("#btnkatalogekle").prop("disabled", false);
+            $("#btnkatalogekle").html('<i class="mdi mdi-plus"></i> Ekle ');
+            $('#loading').hide();
+        }
+        var OnKatalogEkleSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("Kataloglar","Kurum"))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+        $(document).on("click", "#btnkatalogSil", function () {
+            var id = $(this).data("id");
+            swal({
+                title: "UYARI",
+                text: "Kataloğu silmek istediğinize emin misiniz?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                cancelButtonClass: 'btn-success',
+                confirmButtonText: "EVET",
+                cancelButtonText: "HAYIR",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: '/Kurum/KatalogSil/' + id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.Success == true) {
+                            swal({
+                                title: "BAŞARILI!",
+                                type: "success",
+                                text: result.Message,
+                                confirmButtonClass: 'btn-success',
+                                confirmButtonText: "Tamam"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    window.location.href = '@Url.Action("Kataloglar", "Kurum")';
+                                }
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'HATA',
+                                text: result.Message,
+                                type: 'error',
+                                confirmButtonClass: 'btn-danger',
+                                confirmButtonText: 'Tamam',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        $(document).ajaxStart(function () {
+            $("#loading").show();
+        });
+
+        $(document).ajaxStop(function () {
+            $("#loading").hide();
+        });
+    </script>
+}
+
+

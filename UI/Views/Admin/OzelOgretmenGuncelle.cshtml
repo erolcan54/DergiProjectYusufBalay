@@ -18,12 +18,12 @@
                     <label for="AdSoyad" class="form-label">Ad Soyad</label>
                     <input class="form-control" type="text" asp-for="AdSoyad" id="AdSoyad" required="" placeholder="Ad Soyad Yazınız">
                 </div>
-                <input type="hidden" asp-for="Id"/>
+                <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="CreatedDate" />
-                <input type="hidden" asp-for="DeletedDate"/>
+                <input type="hidden" asp-for="DeletedDate" />
                 <input type="hidden" asp-for="UpdatedDate" />
-                <input type="hidden" asp-for="Status"/>
-                <input type="hidden" asp-for="Resim"/>
+                <input type="hidden" asp-for="Status" />
+                <input type="hidden" asp-for="Resim" />
                 <div class="mb-3">
                     <div class="col-md-2">
                         <img src="@ByteToImage.DecodeImage(Model.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
@@ -32,7 +32,7 @@
                         <label for="Resim" class="form-label">Resim</label>
                         <input class="form-control" type="file" asp-for="Resim" id="Resim">
                     </div>
-                   
+
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
@@ -136,10 +136,10 @@
         };
     </script>
 
-    @*    <script src="~/ckeditor/ckeditor.js"></script>
+    <script src="~/ckeditor/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace("Konu");
-    </script>*@
+        CKEDITOR.replace("Hakkinda");
+    </script>
 }
 
 

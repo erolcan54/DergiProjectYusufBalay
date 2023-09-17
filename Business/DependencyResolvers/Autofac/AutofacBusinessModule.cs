@@ -98,6 +98,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<BurslulukSinavBasvuruManager>().As<IBurslulukSinavBasvuruService>().SingleInstance();
             builder.RegisterType<EfBurslulukSinavBasvuruDal>().As<IBurslulukSinavBasvuruDal>().SingleInstance();
 
+            builder.RegisterType<isBasvuruManager>().As<IisBasvuruService>().SingleInstance();
+            builder.RegisterType<EfisBasvuruDal>().As<IisBasvuruDal>().SingleInstance();
+
             //var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             //builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

@@ -1,0 +1,99 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    KurumEgitimModeli egitimmodeli = ViewData["Model"] as KurumEgitimModeli;
+    List<KurumEgitimModeliResim> resimler = ViewData["ModelResimler"] as List<KurumEgitimModeliResim>;
+    var kurumId = HttpContextAccessor.HttpContext.Session.GetString("HomeKurumId");
+}
+<div class="row mb-2">
+    <div class="col-sm-4">
+        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-danger mb-2"> Kurum Detay Sayfası</a>
+    </div>
+</div>
+<div class="row">
+    <!-- Right Sidebar -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title">KURUM EĞİTİM MODELİ</h4>
+                <p class="text-muted font-14">Kurumun uygulamış olduğu eğitim modeli</p>
+                <div class="mt-1">
+                    @if (egitimmodeli != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="w-100" style="white-space:nowrap;overflow: hidden; text-overflow: ellipsis;">
+                                    @Html.Raw(egitimmodeli.Icerik)
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                            <strong>Uyarı - </strong>Eğitim Modeli içeriği henüz eklenmemiş.
+                        </div>
+                    }
+
+                    <hr />
+                    <div class="row">
+
+                        @if (resimler.Count > 0)
+                        {
+                            <div class="row">
+                                @foreach (var item in resimler)
+                                {
+                                    <div class="col-md-6 col-xxl-3">
+                                        <!-- project card -->
+                                        <div class="card">
+                                            <!-- project-thumbnail -->
+                                            <a href="@ByteToImage.DecodeImage(item.Resim)" data-lightbox="image-1" data-title="">
+                                                <img src="@ByteToImage.DecodeImage(item.Resim)" class="w-100" style="height:200px; object-fit : scale-down">
+                                            </a>
+
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col -->
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="body">
+                                <div class="card-body">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                                        <strong>Uyarı - </strong>Eğitim Modeli resimleri listesi boş.
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+                <!-- end row-->
+            </div>
+            <!-- end inbox-rightbar-->
+        </div>
+        <!-- end card-body -->
+        <div class="clearfix"></div>
+    </div> <!-- end card-box -->
+
+</div> <!-- end Col -->
+@section Scripts{
+    <script src="~/lightbox/js/lightbox.js"></script>
+    <script>
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true
+        })
+    </script>
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+    </script>
+}
+
+

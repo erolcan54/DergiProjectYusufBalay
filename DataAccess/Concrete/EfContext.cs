@@ -45,6 +45,7 @@ namespace DataAccess.Concrete
         public DbSet<KurumYorumBegeni> KurumYorumBegeni { get; set; }
         public DbSet<KurumBeniAra> KurumBeniAra { get; set; }
         public DbSet<BurslulukSinavBasvuru> BurslulukSinavBasvuru { get; set; }
+        public DbSet<isBasvuru> isBasvuru { get; set; }
 
     }
 }

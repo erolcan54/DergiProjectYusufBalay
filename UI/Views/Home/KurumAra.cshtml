@@ -1,0 +1,210 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<KurumDisplayDto> liste = ViewData["Liste"] as List<KurumDisplayDto>;
+    List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
+    List<SelectListItem> okulTurleri = ViewData["okulTurleri"] as List<SelectListItem>;
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">ARAMA PANELİ</h4>
+            <p class="text-muted font-14">Arama yapmak için aşağıdaki formu doldurunuz.</p>
+            <ul class="nav nav-tabs nav-bordered mb-3">
+                <li class="nav-item">
+                    <a href="#home-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                        @* <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                        <span class="d-none d-md-block">Okul Ara</span>*@
+                        <span class="d-md-block">Okul Ara</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#profile-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                        @* <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                        <span class="d-none d-md-block">Kurs Ara</span>*@
+                        <span class="d-md-block">Kurs Ara</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane show active" id="home-b1">
+                    <form class="form-vertical" method="post" asp-action="KurumAra" asp-controller="Home">
+                        <div class="row">
+                            <input type="hidden" name="OkulArama" value="true" />
+                            <input type="hidden" name="KursArama" value="false" />
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="il1" name="il1" class="form-control select2" data-toggle="select2">
+                                        <option value="0">İl Seçiniz</option>
+                                        @foreach (var item in iller)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div> <!-- end col -->
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="ilce1" name="ilce1" class="form-control select2" data-toggle="select2">
+                                        <option value="0">İlçe Seçiniz</option>
+                                    </select>
+                                </div>
+
+                            </div> <!-- end col -->
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="okulTurId" name="okulTurId" class="form-control select2" data-toggle="select2">
+                                        <option value="0">Okul Türü Seçiniz</option>
+                                        @foreach (var item in okulTurleri)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+
+                            </div> <!-- end col -->
+                            <div class="col-lg-3 d-grid mb-2">
+                                <button id="btnOkulAra" type="submit" class="btn btn-outline-warning">Okul Ara</button>
+
+                            </div> <!-- end col -->
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane show" id="profile-b1">
+                    <form class="form-vertical" method="post" asp-action="KurumAra" asp-controller="Home">
+                        <div class="row">
+                            <input type="hidden" name="OkulArama" value="false" />
+                            <input type="hidden" name="KursArama" value="true" />
+                            <div class="col-lg-4 mb-2">
+                                <select id="il2" name="il2" class="form-control select2" data-toggle="select2">
+                                    <option value="0">İl Seçiniz</option>
+                                    @foreach (var item in iller)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div> <!-- end col -->
+                            <div class="col-lg-4 mb-2">
+                                <select id="ilce2" name="ilce2" class="form-control select2" data-toggle="select2">
+                                    <option>İlçe Seçiniz</option>
+                                </select>
+                            </div> <!-- end col -->
+                            <div class="col-lg-4 d-grid mb-2">
+                                <button id="btnKursAra" type="submit" class="btn btn-outline-dark">Kurs Ara</button>
+                            </div> <!-- end col -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @if (TempData["Uyari"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+            <strong>Uyarı - </strong> @TempData["Uyari"]
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body">
+                @if (liste.Count > 0)
+                {
+                    <h4 class="header-title">KURUM LİSTESİ</h4>
+                    <p class="text-muted font-14">Arama kriterlerinize göre bulunan kurumların listesi</p>
+                    <div class="row">
+                        @foreach (var item in liste)
+                        {
+                            <div class="col-6 col-sm-6 col-xxl-3">
+                                <!-- project card -->
+                                <div class="card">
+                                    <!-- project-thumbnail -->
+                                    <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})">
+                                        <img class="card-img-top" style="height:200px; object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                                    </a>
+                                    <div class="card-body">
+                                        <h5>@item.Ad</h5>
+                                        <p class="mb-1">
+                                            <span class="pe-2 text-muted">
+                                                <b>@item.ilAdi / @item.ilceAdi</b>
+                                            </span>
+                                        </p>
+                                        <p class="mb-1">
+                                            <span class="pe-2 text-muted">
+                                                <b>Görüntülenme  : @item.TikSayisi</b>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark">Detay</a>
+                                        </p>
+                                    </div>
+                                </div> <!-- end card-->
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                        <strong>Uyarı - </strong> Aradığınız kriterlerde kurum bulunamadı.
+                    </div>
+                }
+            </div>
+
+        </div>
+    }
+</div>
+
+@section Scripts{
+
+    <script>
+
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+
+            });
+
+        $(document).ready(function () {
+            $('#il1').on('change', function () {
+                var id = $(this).val();
+                var ilceListe = $("#ilce1");
+                ilceListe.empty();
+                $.ajax({
+                    url: '../Home/GetSelectListilce/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'ilId': id },
+                    success: function (data) {
+                        $.each(data, function (index, option) {
+                            ilceListe.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function () {
+            $('#il2').on('change', function () {
+                var id = $(this).val();
+                var ilceListe = $("#ilce2");
+                ilceListe.empty();
+                $.ajax({
+                    url: '../Home/GetSelectListilce/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'ilId': id },
+                    success: function (data) {
+                        $.each(data, function (index, option) {
+                            ilceListe.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
