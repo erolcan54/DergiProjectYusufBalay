@@ -15,10 +15,12 @@ namespace Business.Concrete
     {
         private IOkulDal _okulDal;
         private IOkulTurService _okulTurService;
-        public OkulManager(IOkulDal okulDal, IOkulTurService okulTurService)
+        private IKurumYorumService _kurumYorumService;
+        public OkulManager(IOkulDal okulDal, IOkulTurService okulTurService, IKurumYorumService kurumYorumService)
         {
             _okulDal = okulDal;
             _okulTurService = okulTurService;
+            _kurumYorumService = kurumYorumService;
         }
 
         public IResult Add(Okul entity)
@@ -67,12 +69,36 @@ namespace Business.Concrete
 
         public IDataResult<List<KurumDisplayDto>> GetKursListFilter(KursAraDto model)
         {
-            return new SuccessDataResult<List<KurumDisplayDto>>(_okulDal.GetKursListFilter(model),"Aranan kurs listesi getirildi.");
+            var result = _okulDal.GetKursListFilter(model);
+            List<KurumDisplayDto> liste=new List<KurumDisplayDto>();
+            if (model.KurumYorumSecenekKurs)
+            {
+                foreach (var item in result)
+                {
+                    var yorums = _kurumYorumService.GetCountByKurumId(item.Id);
+                    if (yorums.Data > 100)
+                        liste.Add(item);
+                }
+                return new SuccessDataResult<List<KurumDisplayDto>>(liste.OrderByDescending(a=>a.TikSayisi).ToList(), "Aranan kurs listesi getirildi.");
+            }
+            return new SuccessDataResult<List<KurumDisplayDto>>(result.OrderByDescending(a => a.TikSayisi).ToList(), "Aranan kurs listesi getirildi.");
         }
 
         public IDataResult<List<KurumDisplayDto>> GetOkulListFilter(OkulAraDto model)
         {
-            return new SuccessDataResult<List<KurumDisplayDto>>(_okulDal.GetOkulListFilter(model).OrderByDescending(a=>a.TikSayisi).ToList(), "Aranan okul listesi getirildi.");
+            var result = _okulDal.GetOkulListFilter(model);
+            List<KurumDisplayDto> liste = new List<KurumDisplayDto>();
+            if (model.KurumYorumSecenekOkul)
+            {
+                foreach (var item in result)
+                {
+                    var yorums = _kurumYorumService.GetCountByKurumId(item.Id);
+                    if (yorums.Data > 100)
+                        liste.Add(item);
+                }
+                return new SuccessDataResult<List<KurumDisplayDto>>(liste.OrderByDescending(a => a.TikSayisi).ToList(), "Aranan okul listesi getirildi.");
+            }
+            return new SuccessDataResult<List<KurumDisplayDto>>(result.OrderByDescending(a => a.TikSayisi).ToList(), "Aranan okul listesi getirildi.");
         }
 
         public IResult Update(Okul entity)

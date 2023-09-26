@@ -4,6 +4,7 @@ using DataAccess.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20230923094502_BlogUpdate")]
+    partial class BlogUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,9 +199,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("KVKK")
-                        .HasColumnType("bit");
 
                     b.Property<string>("OgrenciAdSoyad")
                         .IsRequired()
@@ -484,9 +483,6 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("KVKK")
-                        .HasColumnType("bit");
-
                     b.Property<byte[]>("Resim")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -653,9 +649,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("KVKK")
-                        .HasColumnType("bit");
 
                     b.Property<int>("KurumId")
                         .HasColumnType("int");
@@ -895,9 +888,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("Instagram")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("KVKK")
-                        .HasColumnType("bit");
-
                     b.Property<int>("OkulTurId")
                         .HasColumnType("int");
 
@@ -1037,9 +1027,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("KVKK")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("Online")
                         .HasColumnType("bit");

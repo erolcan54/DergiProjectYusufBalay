@@ -31,27 +31,16 @@
                         <h4 class="mt-0">
                             <a href="@Url.Action("BlogDetail","Admin",new {id=item.Id})" target="_blank" class="text-title">@item.Baslik</a>
                         </h4>
-
+                        <p class="text-muted font-13">
+                            @item.Aciklama
+                        </p>
                         <!-- project detail-->
                         <p class="mb-1">
                             <span class="pe-2 text-nowrap">
                                 <i class="mdi mdi-eye"></i>
                                 <b>@item.Hit</b>
                             </span>
-                            @*<span class="text-nowrap">
-                    <i class="mdi mdi-comment-multiple-outline"></i>
-                    <b>104</b> Comments
-                    </span>*@
                         </p>
-                        @if (item.UpdatedDate != null)
-                        {
-                            <p class="mb-3">
-                                <span class="pe-2 text-nowrap">
-                                    <i class="mdi mdi-update"></i>
-                                    <b>@item.UpdatedDate</b>
-                                </span>
-                            </p>
-                        }
                         <div class="mb-1">
                             <a href="#" id="btnblogSil" data-id="@item.Id" class="btn btn-danger btn-small ">Sil</a>
                             <a href="@Url.Action("BlogGuncelle","Admin",new {id=item.Id })" class="btn btn-success btn-small ">Güncelle</a>

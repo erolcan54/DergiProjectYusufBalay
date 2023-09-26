@@ -10,5 +10,6 @@ namespace Entities.DTOs
     {
         public int il2 { get; set; }
         public int ilce2 { get; set; }
+        public bool KurumYorumSecenekKurs { get; set; }
     }
 }

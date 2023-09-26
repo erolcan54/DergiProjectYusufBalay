@@ -6,6 +6,7 @@
     List<KurumEgitimModeliResim> resimler = ViewData["ModelResimler"] as List<KurumEgitimModeliResim>;
     var kurumId = HttpContextAccessor.HttpContext.Session.GetString("HomeKurumId");
 }
+<link href="~/lightbox/css/lightbox.css" rel="stylesheet" />
 <div class="row mb-2">
     <div class="col-sm-4">
         <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-danger mb-2"> Kurum Detay Sayfası</a>

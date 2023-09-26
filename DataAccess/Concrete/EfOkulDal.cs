@@ -45,7 +45,8 @@ namespace DataAccess.Concrete
                                  Facebook=k.Facebook,
                                  Instagram=k.Instagram,
                                  Twitter=k.Twitter,
-                                 Whatsapp = k.Whatsapp
+                                 Whatsapp = k.Whatsapp,
+                                 KVKK=k.KVKK,
                              };
                 return result.ToList();
 
@@ -123,7 +124,8 @@ namespace DataAccess.Concrete
                                  Facebook = k.Facebook,
                                  Instagram = k.Instagram,
                                  Twitter = k.Twitter,
-                                 Whatsapp = k.Whatsapp
+                                 Whatsapp = k.Whatsapp,
+                                 KVKK = k.KVKK,
                              };
                 return result.FirstOrDefault();
             }
@@ -162,7 +164,8 @@ namespace DataAccess.Concrete
                                  Facebook = k.Facebook,
                                  Instagram = k.Instagram,
                                  Twitter = k.Twitter,
-                                 Whatsapp = k.Whatsapp
+                                 Whatsapp = k.Whatsapp,
+                                 KVKK = k.KVKK,
                              };
                 return result.ToList();
 
@@ -201,7 +204,8 @@ namespace DataAccess.Concrete
                                  Status = k.Status,
                                  UpdatedDate = k.UpdatedDate,
                                  Hakkinda = k.Hakkinda,
-                                 TanitimVideo = k.TanitimVideo
+                                 TanitimVideo = k.TanitimVideo,
+                                 KVKK = k.KVKK,
                              };
                 return result.ToList();
             }

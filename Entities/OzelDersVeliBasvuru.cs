@@ -15,6 +15,6 @@ namespace Entities
         public bool Online { get; set; }
         public bool Yuzyuze { get; set; }
         public int OzelDersOgretmenId { get; set; }
-
+        public bool KVKK { get; set; }
     }
 }

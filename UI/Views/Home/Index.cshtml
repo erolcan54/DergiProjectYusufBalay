@@ -1,4 +1,5 @@
-﻿@{
+﻿@model KurumAraDto
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
     List<SelectListItem> okulTurleri = ViewData["okulTurleri"] as List<SelectListItem>;
@@ -38,17 +39,17 @@
                             <strong>Uyarı - </strong> @TempData["OkulAraUyari"]
                         </div>
                     }
-                   @* <form class="form-vertical" data-ajax="true"
-                          data-ajax-success="OnKurumAraSuccess"
-                          data-ajax-begin="OnKurumAraBegin"
-                          data-ajax-complete="OnKurumAraComplete" data-ajax-method="POST" asp-action="KurumAra" asp-controller="Home">*@
+                    @* <form class="form-vertical" data-ajax="true"
+                    data-ajax-success="OnKurumAraSuccess"
+                    data-ajax-begin="OnKurumAraBegin"
+                    data-ajax-complete="OnKurumAraComplete" data-ajax-method="POST" asp-action="KurumAra" asp-controller="Home">*@
                     <form class="form-vertical" method="post" asp-action="KurumAra" asp-controller="Home">
                         <div class="row">
-                            <input type="hidden" name="OkulArama" value="true" />
-                            <input type="hidden" name="KursArama" value="false" />
+                            <input type="hidden" asp-for="OkulArama" value="true" />
+                            <input type="hidden" asp-for="KursArama" value="false" />
                             <div class="col-lg-3">
                                 <div class="mb-2">
-                                    <select id="il1" name="il1" class="form-control select2" data-toggle="select2">
+                                    <select id="il1" asp-for="il1" class="form-control select2" data-toggle="select2">
                                         <option value="0">İl Seçiniz</option>
                                         @foreach (var item in iller)
                                         {
@@ -59,7 +60,7 @@
                             </div> <!-- end col -->
                             <div class="col-lg-3">
                                 <div class="mb-2">
-                                    <select id="ilce1" name="ilce1" class="form-control select2" data-toggle="select2">
+                                    <select id="ilce1" asp-for="ilce1" class="form-control select2" data-toggle="select2">
                                         <option value="0">İlçe Seçiniz</option>
                                     </select>
                                 </div>
@@ -67,7 +68,7 @@
                             </div> <!-- end col -->
                             <div class="col-lg-3">
                                 <div class="mb-2">
-                                    <select id="okulTurId" name="okulTurId" class="form-control select2" data-toggle="select2">
+                                    <select id="okulTurId" asp-for="okulTurId" class="form-control select2" data-toggle="select2">
                                         <option value="0">Okul Türü Seçiniz</option>
                                         @foreach (var item in okulTurleri)
                                         {
@@ -77,7 +78,16 @@
                                 </div>
 
                             </div> <!-- end col -->
-                            <div class="col-lg-3 d-grid mb-2">
+                            <div class="col-lg-2">
+                                <div class="mb-2">
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" asp-for="KurumYorumSecenekOkul" class="form-check-input" id="KurumYorumSecenekOkul">
+                                        <label class="form-check-label" for="KurumYorumSecenekOkul">En az 100 yorum olan kurumları listele</label>
+                                    </div>
+                                </div>
+
+                            </div> <!-- end col -->
+                            <div class="col-lg-1 d-grid mb-2">
                                 <button id="btnOkulAra" type="submit" class="btn btn-outline-warning">Okul Ara</button>
 
                             </div> <!-- end col -->
@@ -92,15 +102,15 @@
                         </div>
                     }
                     @*<form class="form-vertical" data-ajax="true"
-                          data-ajax-success="OnKurumAraSuccess"
-                          data-ajax-begin="OnKurumAraBegin"
-                          data-ajax-complete="OnKurumAraComplete" data-ajax-method="POST" asp-action="KurumAra" asp-controller="Home">*@
+                    data-ajax-success="OnKurumAraSuccess"
+                    data-ajax-begin="OnKurumAraBegin"
+                    data-ajax-complete="OnKurumAraComplete" data-ajax-method="POST" asp-action="KurumAra" asp-controller="Home">*@
                     <form class="form-vertical" method="post" asp-action="KurumAra" asp-controller="Home">
                         <div class="row">
-                            <input type="hidden" name="OkulArama" value="false" />
-                            <input type="hidden" name="KursArama" value="true" />
+                            <input type="hidden" asp-for="OkulArama" value="false" />
+                            <input type="hidden" asp-for="KursArama" value="true" />
                             <div class="col-lg-4 mb-2">
-                                <select id="il2" name="il2" class="form-control select2" data-toggle="select2">
+                                <select id="il2" asp-for="il2" class="form-control select2" data-toggle="select2">
                                     <option value="0">İl Seçiniz</option>
                                     @foreach (var item in iller)
                                     {
@@ -109,11 +119,20 @@
                                 </select>
                             </div> <!-- end col -->
                             <div class="col-lg-4 mb-2">
-                                <select id="ilce2" name="ilce2" class="form-control select2" data-toggle="select2">
+                                <select id="ilce2" asp-for="ilce2" class="form-control select2" data-toggle="select2">
                                     <option>İlçe Seçiniz</option>
                                 </select>
                             </div> <!-- end col -->
-                            <div class="col-lg-4 d-grid mb-2">
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" asp-for="KurumYorumSecenekKurs" class="form-check-input" id="KurumYorumSecenekKurs">
+                                        <label class="form-check-label" for="KurumYorumSecenekKurs">En az 100 yorum olan kurumları listele</label>
+                                    </div>
+                                </div>
+
+                            </div> <!-- end col -->
+                            <div class="col-lg-1 d-grid mb-2">
                                 <button id="btnKursAra" type="submit" class="btn btn-outline-dark">Kurs Ara</button>
                             </div> <!-- end col -->
                         </div>
@@ -127,9 +146,9 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-           @* @if (enCokZiyaretEdilenler.Count > 0)
+            @* @if (enCokZiyaretEdilenler.Count > 0)
             {
-                <div class="float-end"><a href="@Url.Action("KurumListesi","Home",new {liste=enCokZiyaretEdilenler})" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
+            <div class="float-end"><a href="@Url.Action("KurumListesi","Home",new {liste=enCokZiyaretEdilenler})" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
             }*@
             <h4 class="header-title">EN ÇOK ZİYARET EDİLENLER</h4>
             <p class="text-muted font-14">En çok ziyaret edilen kurumların listesi</p>
@@ -141,22 +160,25 @@
                         <div class="card">
                             <!-- project-thumbnail -->
                             <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})">
-                                <img class="card-img-top" style="height:200px; object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                                <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
                             </a>
                             <div class="card-body">
-                                <h5>@item.Ad</h5>
-                                <p class="mb-1">
-                                    <span class="pe-2 text-muted">
-                                        <b>@item.ilAdi / @item.ilceAdi</b>
+                                <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})">
+                                    <h5 class="bg-warning-lighten p-2 text-dark">@item.Ad</h5>
+                                </a>
+                                <span class="pe-2 mb-1 text-muted">
+                                    <span class="badge badge-info">@item.ilAdi.ToUpper()</span>
+                                </span><br />
+                                <span class="pe-2 mb-1 text-muted">
+                                    <span class="badge badge-info">@item.ilceAdi</span>
+                                </span><br />
+                                <span class="pe-2 mb-1 text-muted">
+                                    <span class="badge badge-warning">
+                                        <i class="mdi mdi-eye"></i> @item.TikSayisi
                                     </span>
-                                </p>
-                                <p class="mb-1">
-                                    <span class="pe-2 text-muted">
-                                        <b>Görüntülenme  : @item.TikSayisi</b>
-                                    </span>
-                                </p>
+                                </span><br /><br>
                                 <p>
-                                    <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark">Detay</a>
+                                    <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark">İncele</a>
                                 </p>
                             </div>
                         </div> <!-- end card-->
@@ -175,7 +197,7 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-            
+
             <h4 class="header-title">ÖZEL İNDİRİMLER</h4>
             <p class="text-muted font-14">Kurumların indirim fırsatlarını buradan görebilirsiniz.</p>
             <div class="row">
@@ -185,22 +207,25 @@
                         <!-- project card -->
                         <div class="card d-block">
                             <!-- project-thumbnail -->
-                            <img class="card-img-top" height="200px" style="object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
                             <div class="card-body position-relative">
                                 <h5>@item.KurumAdi</h5>
                                 <p class="mb-1">
+                                    <span class="pe-2 mb-1 text-muted">
+                                        <span class="badge badge-info">@item.ilAdi.ToUpper()</span>
+                                    </span><br />
+                                    <span class="pe-2 mb-1 text-muted">
+                                        <span class="badge badge-info">@item.ilceAdi</span>
+                                    </span><br />
+                                </p>
+                                <p class="mb-1">
                                     <span class="pe-2 text-muted">
-                                        <b>@item.ilAdi / @item.ilceAdi</b>
+                                        <span class="badge badge-success">Oran : % @item.indirimOrani</span>
                                     </span>
                                 </p>
                                 <p class="mb-1">
                                     <span class="pe-2 text-muted">
-                                        <b>Oran : % @item.indirimOrani</b>
-                                    </span>
-                                </p>
-                                <p class="mb-1">
-                                    <span class="pe-2 text-muted">
-                                        <b>@Convert.ToDateTime(item.SonTarih).ToLongDateString()</b>
+                                        <span class="badge badge-primary">Son Başvuru : @Convert.ToDateTime(item.SonTarih).ToShortDateString()</span>
                                     </span>
                                 </p>
                             </div>
@@ -221,7 +246,7 @@
     <div class="card">
         <div class="card-body">
             <h4 class="header-title">BURSLULUK SINAVLARI</h4>
-            <p class="text-muted font-14">Bursluluk sınavları ile ilgili bilgiler .</p>
+            <p class="text-muted font-14">Bursluluk sınavları olan okul ve kursları inceleyebilirsiniz.</p>
             <div class="row">
                 @foreach (var item in sinavlar)
                 {
@@ -230,37 +255,48 @@
                         <div class="card d-block">
                             <!-- project-thumbnail -->
                             <a href="@Url.Action("SinavDetay","Home",new {id=item.Id})">
-                                <img class="card-img-top" style="height:200px; object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                                <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
                             </a>
                             <div class="card-body position-relative">
                                 <h5>@item.KurumAdi</h5>
                                 <p class="mb-1">
+                                    <span class="pe-2 mb-1 text-muted">
+                                        <span class="badge badge-info">@item.ilAdi.ToUpper()</span>
+                                    </span><br />
+                                    <span class="pe-2 mb-1 text-muted">
+                                        <span class="badge badge-info">@item.ilceAdi</span>
+                                    </span><br />
+                                </p>
+                                <p class="mb-1">
                                     <span class="pe-2 text-muted">
-                                        <b>@item.ilAdi / @item.ilceAdi</b>
+                                        <span class="badge badge-success-lighten">
+                                            @item.SinavAdi
+                                        </span>
                                     </span>
                                 </p>
                                 <p class="mb-1">
                                     <span class="pe-2 text-muted">
-                                        <b>@item.SinavAdi</b>
+                                        <span class="badge badge-secondary-lighten">
+                                            Son Başvuru : @Convert.ToDateTime(item.SonBasvuruTarih).ToShortDateString()
+                                        </span>
                                     </span>
                                 </p>
                                 <p class="mb-1">
                                     <span class="pe-2 text-muted">
-                                        <b>Son Başvuru : @Convert.ToDateTime(item.SonBasvuruTarih).ToShortDateString()</b>
+                                        <span class="badge badge-dark-lighten">
+                                            Sınav Tarihi : @Convert.ToDateTime(item.SinavTarih).ToShortDateString()
+                                        </span>
                                     </span>
                                 </p>
                                 <p class="mb-1">
                                     <span class="pe-2 text-muted">
-                                        <b>Sınav Tarihi : @Convert.ToDateTime(item.SinavTarih).ToShortDateString()</b>
+                                        <span class="badge badge-primary-lighten">
+                                            Sınav Saati : @item.SinavSaat
+                                        </span>
                                     </span>
-                                </p>
-                                <p class="mb-1">
-                                    <span class="pe-2 text-muted">
-                                        <b>Sınav Saati : @item.SinavSaat</b>
-                                    </span>
-                                </p>
+                                </p><br>
                                 <p>
-                                    <a href="@Url.Action("SinavDetay","Home",new {id=item.Id})" class="btn btn-sm btn-primary">Detay</a>
+                                    <a href="@Url.Action("SinavDetay","Home",new {id=item.Id})" class="btn btn-sm btn-primary">İNCELE</a>
                                 </p>
                             </div>
                         </div> <!-- end card-->
@@ -284,7 +320,7 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-           
+
             <h4 class="header-title">EĞİTİM İÇERİKLERİ / BLOG</h4>
             <p class="text-muted font-14">Eğitim ile ilgili yazılan makalelere buradan ulaşabilirsiniz.</p>
             <div class="row">
@@ -295,7 +331,7 @@
                         <div class="card d-block">
                             <!-- project-thumbnail -->
                             <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})">
-                                <img class="card-img-top" height="200px" style="object-fit : scale-down" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                                <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
                             </a>
 
                             <div class="card-body position-relative">
@@ -303,23 +339,23 @@
                                 <h4 class="mt-0">
                                     <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})" class="text-title">@item.Baslik</a>
                                 </h4>
-
-                                <!-- project detail-->
                                 <p class="mb-1">
-                                    <span class="pe-2 text-nowrap">
-                                        <i class="mdi mdi-eye"></i>
-                                        <b>@item.Hit kez görüntülendi.</b>
-                                    </span>
-                                </p>
-                                @if (item.UpdatedDate != null)
-                                {
-                                    <span class="mb-3">
-                                        <span class="pe-2">
-                                            <i class="mdi mdi-update"></i>
-                                            <b>@Convert.ToDateTime(item.UpdatedDate).ToShortDateString() güncellendi.</b>
+                                    <span class="pe-2 text-muted">
+                                        <span class="badge badge-primary-lighten">
+                                            @item.AdSoyad
                                         </span>
                                     </span>
-                                }
+                                </p>
+                                <p class="mb-1 text-muted font-13">
+                                    @item.Aciklama
+                                </p>
+                                <!-- project detail-->
+                                <p class="mb-1">
+                                    <span class="badge badge-success-lighten">
+                                        <i class="mdi mdi-eye"></i>
+                                        @item.Hit kez görüntülendi.
+                                    </span>
+                                </p>
                             </div> <!-- end card-body-->
                         </div> <!-- end card-->
                     </div>
@@ -336,7 +372,7 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-           
+
             <h4 class="header-title">ÖZEL DERS VERENLER</h4>
             <p class="text-muted font-14">Özel ders veren öğretmenlerin bilgileri aşağıda listelenmiştir.</p>
             <div class="row">
@@ -348,7 +384,7 @@
                                 <a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">
                                     <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
                                 </a>
-                                <h4 class="mb-0 mt-2"><a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">@item.AdSoyad</a></h4>
+                                <h4 class="mb-0 mt-2" style="height:50px;"><a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">@item.AdSoyad</a></h4>
                                 <p class="text-muted font-14">@item.BransAdi</p>
                                 <p class="text-muted font-14">@item.ilAdi</p>
 

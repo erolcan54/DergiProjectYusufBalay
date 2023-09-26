@@ -11,5 +11,6 @@ namespace Entities.DTOs
         public int il1 { get; set; }
         public int ilce1 { get; set; }
         public int okulTurId { get; set; }
+        public bool KurumYorumSecenekOkul { get; set; }
     }
 }

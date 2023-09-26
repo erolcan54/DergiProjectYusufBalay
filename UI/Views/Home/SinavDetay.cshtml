@@ -1,43 +1,44 @@
-﻿@model BurslulukSinavDisplayDto
+﻿@model BurslulukSinavBasvuru
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    BurslulukSinavDisplayDto result = ViewData["SinavDetay"] as BurslulukSinavDisplayDto;
 }
 
 <div class="card">
     <div class="card-body">
         <div class="row text-center">
-            <h4 class="header-title">@Model.KurumAdi</h4>
+            <h4 class="header-title">@result.KurumAdi</h4>
         </div>
         <hr />
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <img src="@ByteToImage.DecodeImage(Model.Resim)" class="img-fluid img-thumbnail" style="max-height:400px;max-width:%75" alt="Product-img">
+                <img src="@ByteToImage.DecodeImage(result.Resim)" class="img-fluid img-thumbnail" style="max-height:400px;max-width:%75" alt="Product-img">
             </div>
             <div class="col-md-6">
                 <div class="chart-widget-list mt-1">
                     <p>
                         Sınav Adı
-                        <span class="float-end">@Model.SinavAdi</span>
+                        <span class="float-end">@result.SinavAdi</span>
                     </p>
                     <p>
                         İl
-                        <span class="float-end">@Model.ilAdi</span>
+                        <span class="float-end">@result.ilAdi</span>
                     </p>
                     <p>
                         İlçe
-                        <span class="float-end">@Model.ilceAdi</span>
+                        <span class="float-end">@result.ilceAdi</span>
                     </p>
                     <p>
                         Sınav Son Başvuru
-                        <span class="float-end">@Convert.ToDateTime(Model.SonBasvuruTarih).ToLongDateString()</span>
+                        <span class="float-end">@Convert.ToDateTime(result.SonBasvuruTarih).ToLongDateString()</span>
                     </p>
                     <p>
                         Sınav Tarihi
-                        <span class="float-end">@Convert.ToDateTime(Model.SinavTarih).ToLongDateString()</span>
+                        <span class="float-end">@Convert.ToDateTime(result.SinavTarih).ToLongDateString()</span>
                     </p>
                     <p>
                         Sınav Saati
-                        <span class="float-end">@Model.SinavSaat</span>
+                        <span class="float-end">@result.SinavSaat</span>
                     </p>
                     <p class="d-grid">
                         <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#sinavbasvur-modal">Başvuru Yap</a>
@@ -62,35 +63,99 @@
                       data-ajax-success="OnSinavBasvuruSuccess"
                       data-ajax-begin="OnSinavBasvuruBegin"
                       data-ajax-complete="OnSinavBasvuruComplete" data-ajax-method="POST" asp-action="SinavBasvuru" asp-controller="Home">
-
+                      
                     <div class="mb-3">
                         <label for="VeliAdSoyad" class="form-label">Veli Adı Soyadı</label>
-                        <input class="form-control" type="text" name="VeliAdSoyad" id="VeliAdSoyad" required="" placeholder="Veli Adı Soyadı Yazınız">
+                        <input class="form-control" type="text" asp-for="VeliAdSoyad" id="VeliAdSoyad" required="" placeholder="Veli Adı Soyadı Yazınız">
                     </div>
                     <div class="mb-3">
                         <label for="OgrenciAdSoyad" class="form-label">Öğrenci Adı Soyadı</label>
-                        <input class="form-control" type="text" name="OgrenciAdSoyad" id="OgrenciAdSoyad" required="" placeholder="Öğrenci Adı Soyadı Yazınız">
+                        <input class="form-control" type="text" asp-for="OgrenciAdSoyad" id="OgrenciAdSoyad" required="" placeholder="Öğrenci Adı Soyadı Yazınız">
                     </div>
-                    <input type="hidden" name="SinavId" value="@Model.Id" />
+                    <input type="hidden" asp-for="SinavId" value="@result.Id" />
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label for="Telefon" class="form-label">Telefon</label>
-                                <input type="tel" name="Telefon" class="form-control" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" name="Telefon" id="Telefon" required="" placeholder="Telefon Yazınız">
+                                <input type="tel" asp-for="Telefon" class="form-control" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" name="Telefon" id="Telefon" required="" placeholder="Telefon Yazınız">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label for="Email" class="form-label">Email</label>
-                                <input class="form-control" type="email" name="Email" id="Email" required="" placeholder="Email Yazınız">
+                                <input class="form-control" type="email" asp-for="Email" id="Email" required="" placeholder="Email Yazınız">
                             </div>
                         </div>
                     </div>
-
+                    <div class="form-check form-switch mb-1">
+                        <input type="checkbox" asp-for="KVKK" class="form-check-input" id="KVKK">
+                        <label class="form-check-label" for="KVKK">
+                            <a href="" data-bs-toggle="modal" data-bs-target="#Kvkk-modal">KVKK Aydınlatma Metnini Okudum, Kabul Ediyorum</a>
+                        </label>
+                    </div>
                     <div class="d-grid mb-0 text-center">
                         <button class="btn btn-info" id="btnaddSinavBasvuru" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
                     </div>
                 </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="Kvkk-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">KVKK Aydınlatma Metni</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="">
+                        <p class="text-muted font-11">
+                            <b>KVKK AYDINLATMA METNİ</b><br /><br />
+                            6698 SAYILI KİŞİSEL VERİLERİN KORUNMASI KANUNU (“KVKK”) USUL VE ESASLARI UYARINCA KİŞİSEL VERİLERİNİZİN KORUNMASI HAKKINDA AYDINLATMA METNİ<br />
+
+                            Veri sorumlusu sıfatı ile sitemiz; hangi kişisel verilerinizi hangi amaçlarla işleyeceğimiz konusunda işbu metin hazırlanmış olup, 6698 sayılı Kişisel Verilerin Korunmasına İlişkin Kanun’a (“KVKK”) uygun olarak kişisel verilerinizin korunması hususunda gerekli önlemlerin alındığını bildiririz.
+
+                            Aşağıda belirttiğimiz kişisel verilerinizi her koşulda hukuka ve dürüstlük kurallarına uygun, doğruluğunu ve en güncel halini koruyarak, belirli, açık ve hukuka uygun amaçlar için, işlenecekleri amaçla bağlantılı, sınırlı ve ölçülü olacak şekilde, ilgili mevzuatta öngörülen veya işlendikleri amaç için gerekli olan süre kadar saklayarak işleyeceğimizi bildiririz.
+
+                            Kişisel verileriniz elektronik ve/veya fiziksel ortamlarda saklanacaktır. Vakfımız tarafından temin edilen ve saklanan kişisel verilerinizin saklandıkları ortamlarda yetkisiz erişime maruz kalmamaları, kaybolmamaları ve zarar görmemeleri amacıyla gerekli teknik tedbirler uygulanarak korunmaktadır.
+
+                            Kişisel verileriniz, size bildirilen amaçlar ve kapsam dışında kullanılmamak kaydı ile gerekli tüm bilgi güvenliği tedbirleri de alınarak işlenecek ve yasal saklama süresince veya böyle bir süre öngörülmemişse işleme amacının gerekli kıldığı süre boyunca saklanacak ve işlenecektir. Bu süre sona erdiğinde, kişisel verileriniz silinme, yok edilme ya da anonimleştirme yöntemleri ile Vakfımızın veri akışlarından çıkarılacaktır.
+                            <br />
+                            <b>HANGİ KİŞİSEL VERİLERİNİZİ İŞLİYORUZ?</b>
+
+                            Sitemize girerek ilgili formları doldurduktan sonra kişisel veri olan ad-soyad, adres, telefon numarası ve e-posta adresinizi bizlerle paylaşmaktasınız. Bununla birlikte site güvenliğinin sağlanması amacıyla IP adresiniz bizlerle paylaşılabilir.
+                            <br />
+                            <b>KİŞİSEL VERİLERİNİZİ HANGİ AMAÇLARLA İŞLİYORUZ?</b><br />
+
+                            Yukarıda belirttiğimiz kişisel verileriniz Vakfımızın kuruluş amaçları doğrultusunda yürütülen iş ve işlemlerimizde kullanılmak üzere faaliyetlerimizin yerine getirilmesi, sürdürülebilmesi, geliştirilmesi, istatistiksel verilerin tutulması, her türlü bildirimde bulunulması, projeler hakkında bilgilendirme yapılabilmesi, bültenlerin sizlere gönderilebilmesi, güvenliğin sağlanması, kullanıcıların ve ziyaretçilerin genel anlamda tanımlanması ve kapsamlı şekilde demografik veri toplanabilmesi, gerektiğinde tarafınızla iletişime geçilebilmesi ve tarafınıza daha iyi ve daha güvenilir bilgi verilebilmesi için KVKK’nın 5. ve 6. maddelerinde belirlenen şartlar ve amaçlar dâhilinde işlenmektedir.
+
+                            Veriler yasal sürelere tabi olarak kendi veri tabanlarımızda tamamen ya da kısmen otomatik olan ya da herhangi bir kayıt sisteminin parçası olmak kaydıyla otomatik olmayan yollarla elde edilip kaydedilmekte, bulut ortamında ya da fiziki olarak muhafaza edilmektedir.
+                            <br />
+                            <b>HAKLARINIZ</b><br />
+
+                            KVKK uyarınca kişisel verilerinizin;<br />
+
+                            İşlenip işlenmediğini öğrenme,<br />
+                            İşlenmişse bilgi talep etme,<br />
+                            İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,<br />
+                            Yurt içinde veya yurt dışında aktarıldığı 3. kişileri bilme,<br />
+                            Eksik veya yanlış işlenmişse düzeltilmesini isteme,<br />
+                            Kişisel verilerin silinmesini, yok edilmesini veya anonim hale getirilmesini isteme,<br />
+                            Aktarıldığı 3. Kişilere eksik veya yanlış işlenme durumunda düzeltilmesini isteme ve kişisel verilerin silinmesi, yok edilmesi veya anonim hale getirilmesini isteme,<br />
+                            Otomatik sistemler ile analiz edilmesi nedeniyle ilgili kişinin aleyhine bir sonucun ortaya çıkması durumunda itiraz etme,<br />
+                            KVKK’ya aykırı olarak işlenmesi sebebiyle zarar oluşması durumlarında zararın giderilmesini<br />
+                            talep etme hakkına sahip olduğunuzu hatırlatırız.<br />
+
+                            Başvurunuzda yer alan talepleriniz, talebin niteliğine göre en geç otuz gün içinde ücretsiz olarak sonuçlandırılacaktır. Ancak, işlemin Vakıf için ayrıca bir maliyeti gerektirmesi hâlinde, Kişisel Verileri Koruma Kurulu tarafından belirlenen tarifedeki ücret alınabilir.
+
+                            @*Yukarıda belirtilen haklarınızı kullanmak için kimliğinizi tespit edici gerekli belgeler ile KVKK’nın 11. maddesinde belirtilen haklardan kullanmayı talep ettiğiniz haklarınıza yönelik açıklamalarınızı içeren talebinizi “Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğe” göre Armada İş Merkezi Eskişehir Yolu Dumlupınar Blv. No:6 A Blok Kat:12 Ofis:1229 Söğütözü – Yenimahalle/Ankara adresine yazılı olarak bizzat elden, noter kanalıyla veya vekil aracılığı ile gönderebilir veya elektronik posta üzerinden iletisim@temev.org.tr e-posta adresine iletebilirsiniz.*@
+
+                            Vakıf sınırlı hallerde işbu Aydınlatma metni hükümleri dışında kullanıcılara ait bilgileri üçüncü kişilere açıklayabilir. Bu durumlar, Kanun, Kanun Hükmünde Kararname, Yönetmelik v.b. yetkili hukuki otorite tarafından çıkarılan ve yürürlükte olan hukuk kurallarının getirdiği zorunluluklara uyulmasının gerektirdiği haller, yetkili idari ve adli otorite tarafından usulüne göre yürütülen bir araştırma veya soruşturmanın yürütümü amacıyla kullanıcılarla ilgili bilgi talep edilmesi halleri ve kullanıcıların haklarını veya güvenliklerini koruma amacıyla bilgi verilmesinin gerekli olduğu halleridir.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -113,10 +178,10 @@
             $('#loading').hide();
         };
         var OnSinavBasvuruSuccess = function (data) {
-            $('#sinavbasvur-modal').modal().hide();
-            $('#loading').hide();
+            
             if (data.Success) {
-
+                $('#sinavbasvur-modal').modal().hide();
+                $('#loading').hide();
                 swal({
                     title: 'BAŞARILI',
                      text: "Başvurunuz ilgili kurum ile paylaşılacaktır. Kurum eğitim danışmanları en kısa sürede sizinle iletişime geçecektir. Teşekkür ederiz.",
@@ -137,6 +202,7 @@
                     confirmButtonClass: 'btn-danger',
                     confirmButtonText: 'Tamam',
                 });
+                //toastr.error(data.Message);
             }
         };
     </script>

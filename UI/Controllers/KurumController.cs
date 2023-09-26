@@ -66,6 +66,10 @@ namespace UI.Controllers
 
         public IActionResult Index()
         {
+            var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetById(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             return View();
         }
 
@@ -74,6 +78,28 @@ namespace UI.Controllers
             HttpContext.Session.Clear();
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public IActionResult KvkkOnay(bool KVKK)
+        {
+            if (!KVKK)
+                return Json(new ErrorResult("KVKK Aydınlatma Metnini onaylamanız gerekmektedir."));
+            var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetById(int.Parse(kurumId));
+            kurum.Data.KVKK = true;
+            var uptkurum = _okulService.Update(kurum.Data);
+            return Json(new SuccessResult("KVKK onayı tanımlanmıştır. Sistemi kullanmaya başlayabilirsiniz."));
+
+        }
+
+        public IActionResult KVKKAydınlatmaMetni()
+        {
+            var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
+            return View(kurum.Data);
         }
 
         public async Task<List<SelectListItem>> GetSelectListilce(int ilId)
@@ -92,6 +118,8 @@ namespace UI.Controllers
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
             var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             return View(kurum.Data);
         }
         public IActionResult KurumGuncelle()
@@ -150,7 +178,10 @@ namespace UI.Controllers
         public IActionResult KullaniciListesi()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
-            var result = _kullaniciService.GetAllByIdKurum(int.Parse(kurumId));
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            var result=_kullaniciService.GetAllByIdKurum(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             return View(result.Data);
         }
 
@@ -186,6 +217,9 @@ namespace UI.Controllers
         public IActionResult OgretmenListesi()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var result = _ogretmenService.GetAllGetByKurumId(int.Parse(kurumId));
             List<SelectListItem> branss = (from i in _bransService.GetAll().Data
                                            select new SelectListItem
@@ -254,6 +288,9 @@ namespace UI.Controllers
         public IActionResult EgitimModeli()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var egitimModel = _egitimModeliService.GetByKurumId(int.Parse(kurumId));
             ViewData["EgitimModeli"] = egitimModel.Data;
             var resimler = _egitimModeliResimService.GetAllByKurumId(int.Parse(kurumId));
@@ -308,6 +345,9 @@ namespace UI.Controllers
         public IActionResult Basarilar()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var basariListe = _basariService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["Basarilar"] = basariListe.Data;
             return View();
@@ -364,6 +404,9 @@ namespace UI.Controllers
         public IActionResult Kataloglar()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var katalogliste = _katalogService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["Kataloglar"] = katalogliste.Data;
             return View();
@@ -406,6 +449,9 @@ namespace UI.Controllers
         public IActionResult IcGorseller()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var gorseller = _icGorselService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["Resimler"] = gorseller.Data;
             return View();
@@ -442,6 +488,9 @@ namespace UI.Controllers
         public IActionResult DisGorseller(int id)
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var gorseller = _disGorselService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["Resimler"] = gorseller.Data;
             return View();
@@ -478,6 +527,9 @@ namespace UI.Controllers
         public IActionResult Etkinlikler()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var etkinlikler = _etkinlikService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["Etkinlikler"] = etkinlikler.Data;
             return View();
@@ -503,6 +555,10 @@ namespace UI.Controllers
 
         public IActionResult EtkinlikDetay(int id)
         {
+            var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var result = _etkinlikService.GetById(id);
             ViewData["Etkinlik"] = result.Data;
             var resimler = _etkinlikResimService.GetAllByEtkinlikId(result.Data.Id);
@@ -555,6 +611,9 @@ namespace UI.Controllers
         public IActionResult Kulupler()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var kulupler = _kulupService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["Kulupler"] = kulupler.Data.OrderByDescending(a=>a.Id).ToList();
             return View();
@@ -612,6 +671,9 @@ namespace UI.Controllers
         public IActionResult Yorumlar()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var yorums = _kurumYorumService.GetAllByKurumId(int.Parse(kurumId)); 
             ViewData["yorumlar"] = yorums.Data.OrderByDescending(a => a.Id).ToList();
             ViewData["yorumSayisi"] = _kurumYorumService.GetCountByKurumId(int.Parse(kurumId)).Data;
@@ -631,6 +693,9 @@ namespace UI.Controllers
         public IActionResult indirimler()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var indirims = _indirimService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["indirimler"] = indirims.Data;
             return View();
@@ -657,6 +722,9 @@ namespace UI.Controllers
         public IActionResult BurslulukSinavlari()
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var sinavlar = _burslulukSinavService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["sinavlar"] = sinavlar.Data;
             return View();
@@ -682,6 +750,10 @@ namespace UI.Controllers
         #region Bursluluk Başvuru
         public IActionResult Basvurular(int id)
         {
+            var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            if (!kurum.Data.KVKK)
+                return View("KVKKAydınlatmaMetni");
             var result = _burslulukSinavBasvuruService.GetAllBySinavId(id);
             ViewData["Basvurular"] = result.Data;
             var sinav = _burslulukSinavService.GetByIdDisplay(id);

@@ -12,5 +12,6 @@ namespace Entities.DTOs
         public string ilceAdi { get; set; }
         public string KurumAdi { get; set; }
         public byte[] Resim { get; set; }
+
     }
 }

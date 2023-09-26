@@ -35,5 +35,6 @@ namespace Entities.DTOs
         public string? Instagram { get; set; }
         public string? Facebook { get; set; }
         public string? Twitter { get; set; }
+        public bool KVKK { get; set; }
     }
 }

@@ -13,27 +13,28 @@
                 <div class="row">
                     @foreach (var item in Model)
                     {
-                        <div class="col-md-3 col-xxl-3">
+                        <div class="col-6 col-sm-6 col-xxl-3">
                             <!-- project card -->
-                            <div class="card d-block">
+                            <div class="card">
                                 <!-- project-thumbnail -->
                                 <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})">
-                                    <img class="card-img-top" height="200px" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                                    <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
                                 </a>
-                                <div class="card-body position-relative">
-                                    <h5>@item.Ad</h5>
-                                    <p class="mb-1">
-                                        <span class="pe-2 text-muted">
-                                            <b>@item.ilAdi / @item.ilceAdi</b>
+                                <div class="card-body">
+                                    <h5 class="bg-warning-lighten p-2 text-dark">@item.Ad</h5>
+                                    <span class="pe-2 mb-1 text-muted font-13">
+                                        <span class="badge badge-info">@item.ilAdi.ToUpper()</span>
+                                    </span><br />
+                                    <span class="pe-2 mb-1 text-muted">
+                                        <span class="badge badge-info">@item.ilceAdi</span>
+                                    </span><br />
+                                    <span class="pe-2 mb-1 text-muted">
+                                        <span class="badge badge-warning">
+                                            <i class="mdi mdi-eye"></i> @item.TikSayisi
                                         </span>
-                                    </p>
-                                    <p class="mb-1">
-                                        <span class="pe-2 text-muted">
-                                            <b>Görüntülenme  : @item.TikSayisi</b>
-                                        </span>
-                                    </p>
+                                    </span><br /><br>
                                     <p>
-                                        <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark">Detay</a>
+                                        <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark">İncele</a>
                                     </p>
                                 </div>
                             </div> <!-- end card-->

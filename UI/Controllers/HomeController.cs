@@ -123,7 +123,8 @@ namespace UI.Controllers
             var sinavlar = _burslulukSinavService.GetAllDisplay4Take();
             ViewData["Sinavlar"] = sinavlar.Data;
 
-            return View();
+            KurumAraDto model = new KurumAraDto();
+            return View(model);
         }
 
         [HttpPost]
@@ -159,6 +160,7 @@ namespace UI.Controllers
                 okara.okulTurId = model.okulTurId;
                 okara.il1 = model.il1;
                 okara.ilce1 = model.ilce1;
+                okara.KurumYorumSecenekOkul = model.KurumYorumSecenekOkul;
                 liste = _okulService.GetOkulListFilter(okara).Data;
             }
             else if (!model.OkulArama && model.KursArama)
@@ -170,10 +172,11 @@ namespace UI.Controllers
                 KursAraDto kursAraDto = new KursAraDto();
                 kursAraDto.il2 = model.il2;
                 kursAraDto.ilce2 = model.ilce2;
+                kursAraDto.KurumYorumSecenekKurs = model.KurumYorumSecenekKurs;
                 liste = _okulService.GetKursListFilter(kursAraDto).Data;
             }
             ViewData["Liste"] = liste.OrderBy(a => a.Ad).ToList();
-            return View();
+            return View(model);
             //return RedirectToAction("KurumListesi", "Home", new { liste = liste });
         }
 
@@ -198,8 +201,9 @@ namespace UI.Controllers
                 var resultupt = _okulService.Update(kurum.Data);
                 HttpContext.Session.SetString("HomeKurumId", result.Data.Id.ToString());
             }
-                
-            return View(result.Data);
+            ViewData["KurumDetay"] = result.Data;
+            KurumBeniAra model = new KurumBeniAra();
+            return View(model);
         }
 
         [HttpPost]
@@ -224,6 +228,8 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult KurumBeniArasin(KurumBeniAra model)
         {
+            if (!model.KVKK)
+                return Json("KVKK metnini onaylamanız gerekmektedir.");
             var result = _kurumBeniAraService.Add(model);
             return Json(result);
         }
@@ -359,6 +365,8 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult AddOzelBasvuru(OzelDersVeliBasvuru model)
         {
+            if(!model.KVKK)
+                return Json(new ErrorResult("KVKK Aydunlatma Metni işaretlenmek zorundadır."));
             if (model.Sinif == "0" || model.Sinif == null)
                 return Json(new ErrorResult("Sınıf seçimi yapılmadı."));
             if (!model.Online && !model.Yuzyuze)
@@ -370,12 +378,16 @@ namespace UI.Controllers
         public IActionResult SinavDetay(int id)
         {
             var result = _burslulukSinavService.GetByIdDisplay(id);
-            return View(result.Data);
+            ViewData["SinavDetay"]=result.Data;
+            BurslulukSinavBasvuru model = new BurslulukSinavBasvuru();
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult SinavBasvuru(BurslulukSinavBasvuru model)
         {
+            if (!model.KVKK)
+                return Json(new ErrorResult("KVKK Aydınlatma Metni işaretlenmek zorundadır."));
             var result = _burslulukSinavBasvuruService.Add(model);
             return Json(result);
         }
@@ -514,6 +526,8 @@ namespace UI.Controllers
 
         public IActionResult AddisBasvuru(isBasvuru model)
         {
+            if (!model.KVKK)
+                return Json(new ErrorResult("KVKK Metni işaretlenmek zorundadır."));
             var result = _basvuruService.Add(model);
             return Json(result);
         }

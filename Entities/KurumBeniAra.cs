@@ -13,5 +13,6 @@ namespace Entities
         public string Telefon { get; set; }
         public string Email { get; set; }
         public string Sinif { get; set; }
+        public bool KVKK { get; set; }
     }
 }

@@ -15,5 +15,6 @@ namespace Entities
         public string Email { get; set; }
         public byte[] Resim { get; set; }
         public string Hakkinda { get; set; }
+        public bool KVKK { get; set; }
     }
 }

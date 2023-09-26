@@ -8,6 +8,7 @@ namespace UI.Filters
     public class UserKurumControlFilter: ActionFilterAttribute
     {
         private IKullaniciService _kullaniciService;
+        private IOkulService _okulService;
 
         public UserKurumControlFilter(IKullaniciService kullaniciService)
         {

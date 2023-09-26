@@ -7,7 +7,7 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-            <h4 class="header-title">BLOG EKLEME PANELİ</h4>
+            <h4 class="header-title">BLOG GÜNCELLEME PANELİ</h4>
             <p class="text-muted font-14">Blog yazısı eklemek için aşağıdaki formu doldurunuz.</p>
             <form class="form-vertical" data-ajax="true" enctype="multipart/form-data"
                   data-ajax-success="OnUpdateBlogSuccess"
@@ -17,6 +17,14 @@
                 <div class="mb-3">
                     <label for="Baslik" class="form-label">Başlık</label>
                     <input value="@Model.Baslik" class="form-control" type="text" name="Baslik" id="Baslik" placeholder="Blog Başlığını Yazınız">
+                </div>
+                 <div class="mb-3">
+                    <label for="AdSoyad" class="form-label">Yazar Adı Soyadı</label>
+                    <input class="form-control" type="text" value="@Model.AdSoyad" name="AdSoyad" id="AdSoyad" required="" placeholder="Yazar Ad Soyad Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Aciklama" class="form-label">Açıklama</label>
+                    <input class="form-control" type="text" value="@Model.Aciklama" name="Aciklama" id="Aciklama" maxlength="250" data-toggle="maxlength" data-placement="top" required="" placeholder="Blog için kısa açıklama Yazınız">
                 </div>
                 <div class="mb-3">
                     <img class="card-img-top" style="height:150px;width:150px" src="@ByteToImage.DecodeImage(Model.Resim)" alt="blog image cap"><br />

@@ -17,6 +17,14 @@
                     <input class="form-control" type="text" asp-for="Baslik" id="Baslik" required="" placeholder="Blog Başlığını Yazınız">
                 </div>
                 <div class="mb-3">
+                    <label for="AdSoyad" class="form-label">Yazar Adı Soyadı</label>
+                    <input class="form-control" type="text" asp-for="AdSoyad" id="AdSoyad" required="" placeholder="Yazar Ad Soyad Yazınız">
+                </div>
+                <div class="mb-3">
+                    <label for="Aciklama" class="form-label">Açıklama</label>
+                    <input class="form-control" type="text" asp-for="Aciklama" id="Aciklama" maxlength="250" data-toggle="maxlength" data-placement="top" required="" placeholder="Blog için kısa açıklama Yazınız">
+                </div>
+                <div class="mb-3">
                     <label for="Resim" class="form-label">Resim</label>
                     <input class="form-control" type="file" asp-for="Resim" required="" id="Resim">
                 </div>

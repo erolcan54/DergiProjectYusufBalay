@@ -15,5 +15,7 @@ namespace Entities.DTOs
         public int ilce2 { get; set; }
         public bool OkulArama { get; set; }
         public bool KursArama { get; set; }
+        public bool KurumYorumSecenekOkul { get; set; }
+        public bool KurumYorumSecenekKurs { get; set; }
     }
 }
