@@ -189,12 +189,12 @@ namespace UI.Controllers
         public IActionResult KurumDetay(int id)
         {
             var result = _okulService.GetByIdDisplay(id);
-           
+
             var kurumYorum = _kurumYorumService.GetAllByKurumId(id);
             ViewData["Yorumlar"] = kurumYorum.Data.OrderByDescending(a => a.Id).ToList();
             ViewData["yorumSayisi"] = _kurumYorumService.GetCountByKurumId(id).Data;
             var kurumId = HttpContext.Session.GetString("HomeKurumId");
-            if(kurumId == null)
+            if (kurumId == null)
             {
                 var kurum = _okulService.GetById(id);
                 kurum.Data.TikSayisi++;
@@ -365,7 +365,7 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult AddOzelBasvuru(OzelDersVeliBasvuru model)
         {
-            if(!model.KVKK)
+            if (!model.KVKK)
                 return Json(new ErrorResult("KVKK Aydunlatma Metni işaretlenmek zorundadır."));
             if (model.Sinif == "0" || model.Sinif == null)
                 return Json(new ErrorResult("Sınıf seçimi yapılmadı."));
@@ -378,7 +378,7 @@ namespace UI.Controllers
         public IActionResult SinavDetay(int id)
         {
             var result = _burslulukSinavService.GetByIdDisplay(id);
-            ViewData["SinavDetay"]=result.Data;
+            ViewData["SinavDetay"] = result.Data;
             BurslulukSinavBasvuru model = new BurslulukSinavBasvuru();
             return View(model);
         }
@@ -401,12 +401,12 @@ namespace UI.Controllers
 
         public IActionResult OgretmenKadrosu()
         {
-            var kurumId= HttpContext.Session.GetString("HomeKurumId");
+            var kurumId = HttpContext.Session.GetString("HomeKurumId");
             if (String.IsNullOrEmpty(kurumId))
                 return RedirectToAction("Index");
 
             var ogretmenKadrosu = _ogretmenService.GetAllGetByKurumId(int.Parse(kurumId));
-            return View(ogretmenKadrosu.Data.OrderBy(a=>a.Ad).ToList());
+            return View(ogretmenKadrosu.Data.OrderBy(a => a.Ad).ToList());
 
         }
 
@@ -485,7 +485,7 @@ namespace UI.Controllers
             var kurumId = HttpContext.Session.GetString("HomeKurumId");
             if (String.IsNullOrEmpty(kurumId))
                 return RedirectToAction("Index");
-            var etkinlik=_etkinlikService.GetById(id);
+            var etkinlik = _etkinlikService.GetById(id);
             var resimler = _etkinlikResimService.GetAllByEtkinlikId(id);
             ViewData["Resimler"] = resimler.Data;
             return View(etkinlik.Data);
@@ -520,15 +520,27 @@ namespace UI.Controllers
                                        Value = i.Id.ToString()
                                    }).ToList();
             ViewData["branslar"] = bransSelectList;
-            isBasvuru model=new isBasvuru();
+            isBasvuru model = new isBasvuru();
             return View(model);
         }
 
-        public IActionResult AddisBasvuru(isBasvuru model)
+        public IActionResult AddisBasvuru(isBasvuru model, IFormFile Resim)
         {
             if (!model.KVKK)
                 return Json(new ErrorResult("KVKK Metni işaretlenmek zorundadır."));
+
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    model.Resim = stream.ToArray();
+                }
+            }
+            else
+                return Json(new ErrorResult("Resim alanı boş bırakılamaz."));
             var result = _basvuruService.Add(model);
+
             return Json(result);
         }
     }

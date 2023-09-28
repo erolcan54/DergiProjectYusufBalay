@@ -49,6 +49,12 @@ namespace Business.Concrete
             return new SuccessDataResult<Katalog>(_katalogDal.Get(a => a.Id == id), "Katalog getirildi.");
         }
 
+        public IDataResult<int> GetByKurumIdKatalogCount(int id)
+        {
+            var result = _katalogDal.GetAll(a => a.KurumId == id && a.Status).Count();
+            return new SuccessDataResult<int>(result, "Katalog sayısı getirildi.");
+        }
+
         public IDataResult<Katalog> GetBySeriNo(Guid seriNo)
         {
             return new SuccessDataResult<Katalog>(_katalogDal.Get(a => a.SeriNo == seriNo), "Katalog getirildi.");

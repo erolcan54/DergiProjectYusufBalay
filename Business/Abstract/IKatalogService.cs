@@ -16,5 +16,6 @@ namespace Business.Abstract
         IResult Update(Katalog entity);
         IDataResult<List<Katalog>> GetAllByKurumId(int id);
         IResult Delete(int id);
+        IDataResult<int> GetByKurumIdKatalogCount(int id);
     }
 }

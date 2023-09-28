@@ -35,9 +35,10 @@ namespace UI.Controllers
         private IindirimService _indirimService;
         private IBurslulukSinavBasvuruService _burslulukSinavBasvuruService;
         private IBurslulukSinavService _burslulukSinavService;
+        private IisBasvuruService _isBasvuruService;
         private IHttpContextAccessor _contextAccessor;
 
-        public KurumController(IOgretmenService ogretmenService, IHttpContextAccessor contextAccessor, IOkulService okulService, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IKullaniciService kullaniciService, IBransService bransService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikResimService etkinlikResimService, IEtkinlikService etkinlikService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IKurumBeniAraService kurumBeniAraService, IindirimService indirimService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IBurslulukSinavService burslulukSinavService)
+        public KurumController(IOgretmenService ogretmenService, IHttpContextAccessor contextAccessor, IOkulService okulService, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IKullaniciService kullaniciService, IBransService bransService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikResimService etkinlikResimService, IEtkinlikService etkinlikService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IKurumBeniAraService kurumBeniAraService, IindirimService indirimService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IBurslulukSinavService burslulukSinavService, IisBasvuruService isBasvuruService)
         {
             _ogretmenService = ogretmenService;
             _contextAccessor = contextAccessor;
@@ -62,6 +63,7 @@ namespace UI.Controllers
             _indirimService = indirimService;
             _burslulukSinavBasvuruService = burslulukSinavBasvuruService;
             _burslulukSinavService = burslulukSinavService;
+            _isBasvuruService = isBasvuruService;
         }
 
         public IActionResult Index()
@@ -70,6 +72,16 @@ namespace UI.Controllers
             var kurum = _okulService.GetById(int.Parse(kurumId));
             if (!kurum.Data.KVKK)
                 return View("KVKKAydınlatmaMetni");
+
+            var ogretmenSayisi = _ogretmenService.GetByKurumIdOgretmenCount(int.Parse(kurumId));
+            ViewData["OgretmenSayisi"] = ogretmenSayisi.Data;
+            var etkinlikSayisi= _etkinlikService.GetByKurumIdEtkinlikCount(int.Parse(kurumId));
+            ViewData["EtkinlikSayisi"]=etkinlikSayisi.Data;
+            var kullaniciSayisi=_kullaniciService.GetByKurumIdKullaniciCount(int.Parse(kurumId));
+            ViewData["KullaniciSayisi"]=kullaniciSayisi.Data;
+            var katalogSayisi=_katalogService.GetByKurumIdKatalogCount(int.Parse(kurumId));
+            ViewData["KatalogSayisi"]=katalogSayisi.Data;
+            ViewData["Kurum"] = kurum.Data;
             return View();
         }
 
@@ -768,6 +780,20 @@ namespace UI.Controllers
             return Json(result);
         }
         #endregion
+        #region İşBaşvuruları
+        public IActionResult IsBasvuru()
+        {
+            var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+            var isbavurulari=_isBasvuruService.GetAllByilId(kurum.Data.ilId);
+            return View(isbavurulari.Data);
+        }
 
+        public IActionResult OgretmenDetay(int id)
+        {
+            var result = _isBasvuruService.GetByIdDisplay(id);
+            return View(result.Data);
+        }
+        #endregion
     }
 }

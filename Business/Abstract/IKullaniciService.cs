@@ -19,5 +19,6 @@ namespace Business.Abstract
         IResult Delete(int id);
         IDataResult<Kullanici> GirisKontrol(GirisModelDto model);
         IDataResult<List<Kullanici>> GetAllByIdKurum(int id);
+        IDataResult<int> GetByKurumIdKullaniciCount(int id);
     }
 }

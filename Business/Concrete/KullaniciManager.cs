@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete;
 using Entities;
 using Entities.DTOs;
 
@@ -79,6 +80,12 @@ namespace Business.Concrete
         {
             var result = _kullaniciDal.GetAll(a => a.OkulId == id);
             return new SuccessDataResult<List<Kullanici>>(result, "Kurum kullanıcıları listelendi.");
+        }
+
+        public IDataResult<int> GetByKurumIdKullaniciCount(int id)
+        {
+            var result = _kullaniciDal.GetAll(a => a.OkulId == id && a.Status).Count();
+            return new SuccessDataResult<int>(result, "Kullanıcı sayısı getirildi.");
         }
     }
 }

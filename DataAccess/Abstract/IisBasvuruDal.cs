@@ -1,5 +1,6 @@
 ﻿using Core.DataAccess;
 using Entities;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace DataAccess.Abstract
 {
     public interface IisBasvuruDal: IEntityRepository<isBasvuru>
     {
+        List<isBasvuruDisplayDto> GetAllByilId(int id);
+        isBasvuruDisplayDto GetByIdDisplay(int id);
     }
 }

@@ -1,0 +1,42 @@
+﻿@model isBasvuruDisplayDto 
+@{
+    Layout = "~/Views/Shared/_KurumLayout.cshtml";
+}
+
+<div class="row mt-1">
+    <div class="card text-center">
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="text-xxl-start">
+                        <a href="@Url.Action("IsBasvuru","Kurum")" class="btn btn-danger mb-2"> Geri Dön</a>
+                    </div>
+                </div><!-- end col-->
+            </div>
+            <img src="@ByteToImage.DecodeImage(Model.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+
+            <h4 class="mb-0 mt-2">@Model.AdSoyad</h4>
+            <p class="text-muted font-14">@Model.BransAdi</p>
+
+            <div class="text-start mt-3">
+                <h4 class="font-13 text-uppercase">Hakkında :</h4>
+                <p class="text-muted font-13 mb-3">
+                    @Html.Raw(Model.Hakkinda)
+                </p>
+
+                <p class="text-muted mb-2 font-13">
+                    <strong>Telefon :</strong><span class="ms-2">
+                        <a href="tel:@Model.Telefon">@Model.Telefon</a>
+                    </span>
+                </p>
+                <p class="text-muted mb-2 font-13">
+                    <strong>Branş :</strong><span class="ms-2">
+                        @Model.BransAdi
+                    </span>
+                </p>
+                <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ms-2 "><a href="mailto:@Model.Email">@Model.Email</a></span></p>
+                <p class="text-muted mb-1 font-13"><strong>İl Adı :</strong> <span class="ms-2">@Model.ilAdi</span></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -53,7 +53,7 @@ namespace Business.Concrete
 
         public IDataResult<int> GetByKurumIdOgretmenCount(int id)
         {
-            var result=_ogretmenDal.GetAll(a=>a.KurumId==id).Count();
+            var result=_ogretmenDal.GetAll(a=>a.KurumId==id&& a.Status).Count();
             return new SuccessDataResult<int>(result, "Öğretmen sayısı getirildi.");
         }
 

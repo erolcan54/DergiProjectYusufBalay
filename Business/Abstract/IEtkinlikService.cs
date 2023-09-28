@@ -15,5 +15,6 @@ namespace Business.Abstract
         IResult Update(Etkinlik entity);
         IDataResult<List<Etkinlik>> GetAllByKurumId(int id);
         IResult Delete(int id);
+        IDataResult<int> GetByKurumIdEtkinlikCount(int id);
     }
 }

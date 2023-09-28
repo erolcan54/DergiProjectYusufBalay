@@ -48,6 +48,12 @@ namespace Business.Concrete
             return new SuccessDataResult<Etkinlik>(_etkinlikDal.Get(a => a.Id == id), "Etkinlik getirildi.");
         }
 
+        public IDataResult<int> GetByKurumIdEtkinlikCount(int id)
+        {
+            var result = _etkinlikDal.GetAll(a => a.KurumId == id && a.Status).Count();
+            return new SuccessDataResult<int>(result, "Etkinlik sayısı getirildi.");
+        }
+
         public IResult Update(Etkinlik entity)
         {
             entity.UpdatedDate = DateTime.Now;

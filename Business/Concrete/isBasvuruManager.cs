@@ -3,6 +3,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using Entities;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,10 +68,16 @@ namespace Business.Concrete
             return new SuccessResult("Başvuru güncellendi.");
         }
 
-        public IDataResult<List<isBasvuru>> GetAllByilId(int id)
+        public IDataResult<List<isBasvuruDisplayDto>> GetAllByilId(int id)
         {
-            var result = _isBasvuruDal.GetAll(a => a.Status && a.ilId==id).OrderByDescending(a => a.Id).ToList();
-            return new SuccessDataResult<List<isBasvuru>>(result, "Başvuru listesi getirildi.");
+            var result = _isBasvuruDal.GetAllByilId(id).OrderByDescending(a => a.Id).ToList();
+            return new SuccessDataResult<List<isBasvuruDisplayDto>>(result, "Başvuru listesi getirildi.");
+        }
+
+        public IDataResult<isBasvuruDisplayDto> GetByIdDisplay(int id)
+        {
+            var result = _isBasvuruDal.GetByIdDisplay(id);
+            return new SuccessDataResult<isBasvuruDisplayDto>(result, "Başvuru getirildi.");
         }
     }
 }
