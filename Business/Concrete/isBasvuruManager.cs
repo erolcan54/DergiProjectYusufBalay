@@ -79,5 +79,11 @@ namespace Business.Concrete
             var result = _isBasvuruDal.GetByIdDisplay(id);
             return new SuccessDataResult<isBasvuruDisplayDto>(result, "Başvuru getirildi.");
         }
+
+        public IDataResult<List<isBasvuruDisplayDto>> GetAllDisplay()
+        {
+            var result = _isBasvuruDal.GetAllDisplay();
+            return new SuccessDataResult<List<isBasvuruDisplayDto>>(result, "Başvuru listesi getirildi.");
+        }
     }
 }

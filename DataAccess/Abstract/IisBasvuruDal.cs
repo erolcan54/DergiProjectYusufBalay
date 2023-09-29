@@ -13,5 +13,6 @@ namespace DataAccess.Abstract
     {
         List<isBasvuruDisplayDto> GetAllByilId(int id);
         isBasvuruDisplayDto GetByIdDisplay(int id);
+        List<isBasvuruDisplayDto> GetAllDisplay();
     }
 }

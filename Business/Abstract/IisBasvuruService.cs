@@ -18,5 +18,6 @@ namespace Business.Abstract
         IDataResult<List<isBasvuru>> GetAll();
         IResult Delete(int id);
         IDataResult<List<isBasvuruDisplayDto>> GetAllByilId(int id);
+        IDataResult<List<isBasvuruDisplayDto>> GetAllDisplay();
     }
 }

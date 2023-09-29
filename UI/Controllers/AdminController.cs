@@ -47,7 +47,8 @@ namespace UI.Controllers
         private IindirimService _indirimService;
         private IBurslulukSinavService _burslulukSinavService;
         private IBurslulukSinavBasvuruService _burslulukSinavBasvuruService;
-        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IindirimService indirimService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService)
+        private IisBasvuruService _isBasvuruService;
+        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IindirimService indirimService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IisBasvuruService isBasvuruService)
         {
             _blogService = blogService;
             _yoneticiService = yoneticiService;
@@ -77,6 +78,7 @@ namespace UI.Controllers
             _indirimService = indirimService;
             _burslulukSinavService = burslulukSinavService;
             _burslulukSinavBasvuruService = burslulukSinavBasvuruService;
+            _isBasvuruService = isBasvuruService;
         }
 
         public IActionResult Index()
@@ -1141,6 +1143,70 @@ namespace UI.Controllers
         {
             var result = _burslulukSinavBasvuruService.Add(model);
             return Json(result);
+        }
+        #endregion
+
+        #region İş Başvuru
+        public IActionResult isBasvuru()
+        {
+            var result = _isBasvuruService.GetAllDisplay();
+            return View(result.Data);
+        }
+
+        [HttpPost]
+        public IActionResult isBasvuruSil(int id)
+        {
+            var result=_isBasvuruService.Delete(id);
+            return Json(result);
+        }
+
+        public IActionResult isBasvuruGuncelle(int id)
+        {
+            var result=_isBasvuruService.GetById(id);
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
+
+            var bransListe = _bransService.GetAll();
+            var bransSelectList = (from i in bransListe.Data
+                                   select new SelectListItem
+                                   {
+                                       Text = i.Ad.ToUpper(),
+                                       Value = i.Id.ToString()
+                                   }).ToList();
+            ViewData["branslar"] = bransSelectList;
+            return View(result.Data);
+        }
+
+        [HttpPost]
+        public IActionResult isBasvuruGuncelle(isBasvuru model,IFormFile Resim)
+        {
+            var isb = _isBasvuruService.GetById(model.Id);
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    model.Resim = stream.ToArray();
+                }
+            }
+            else
+            {
+                model.Resim = isb.Data.Resim;
+            }
+            var result = _isBasvuruService.Update(model);
+
+            return Json(result);
+        }
+        public IActionResult OgretmenDetay(int id)
+        {
+            var result = _isBasvuruService.GetByIdDisplay(id);
+            return View(result.Data);
         }
         #endregion
     }
