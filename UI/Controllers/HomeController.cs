@@ -175,7 +175,7 @@ namespace UI.Controllers
                 kursAraDto.KurumYorumSecenekKurs = model.KurumYorumSecenekKurs;
                 liste = _okulService.GetKursListFilter(kursAraDto).Data;
             }
-            ViewData["Liste"] = liste.OrderBy(a => a.Ad).ToList();
+            ViewData["Liste"] = liste.OrderBy(a => a.TikSayisi).ToList();
             return View(model);
             //return RedirectToAction("KurumListesi", "Home", new { liste = liste });
         }
@@ -321,10 +321,52 @@ namespace UI.Controllers
 
         public IActionResult OzelDersOgretmenListesi(int page = 1)
         {
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
+
+            var bransListe=_bransService.GetAll();
+            var bransSelectList = (from i in bransListe.Data
+                                   select new SelectListItem
+                                   {
+                                       Text = i.Ad.ToUpper(),
+                                       Value = i.Id.ToString()
+                                   }).ToList();
+            ViewData["BransListe"] = bransSelectList;
             var result = _ozelDersOgretmenService.GetAllDisplay();
             var data = result.Data.Where(a => a.Status).OrderByDescending(a => a.Id).ToPagedList(page, 12);
             return View(data);
         }
+
+        [HttpPost]
+        public IActionResult OzelOgretmenFiltre(OzelOgretmenFiltreDto filtre)
+        {
+            var result = _ozelDersOgretmenService.GetAllOzelOgretmenFiltre(filtre);
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
+
+            var bransListe = _bransService.GetAll();
+            var bransSelectList = (from i in bransListe.Data
+                                   select new SelectListItem
+                                   {
+                                       Text = i.Ad.ToUpper(),
+                                       Value = i.Id.ToString()
+                                   }).ToList();
+            ViewData["BransListe"] = bransSelectList;
+            return View(result.Data);
+        }
+
 
         public IActionResult ProfileDetail(int id)
         {

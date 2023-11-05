@@ -14,5 +14,6 @@ namespace DataAccess.Abstract
         List<OzelDersOgretmenDto> GetAllDisplay4Take();
         List<OzelDersOgretmenDto> GetAllDisplay();
         OzelDersOgretmenDto GetByIdDisplay(int id);
+        List<OzelDersOgretmenDto> GetAllOzelOgretmenFiltre(OzelOgretmenFiltreDto filtre);
     }
 }

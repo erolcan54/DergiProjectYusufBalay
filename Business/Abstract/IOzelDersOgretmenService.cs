@@ -20,5 +20,6 @@ namespace Business.Abstract
         IDataResult<List<OzelDersOgretmenDto>> GetAllDisplay4Take();
         IDataResult<List<OzelDersOgretmenDto>> GetAllDisplay();
         IDataResult<OzelDersOgretmenDto> GetByIdDisplay(int id);
+        IDataResult<List<OzelDersOgretmenDto>> GetAllOzelOgretmenFiltre(OzelOgretmenFiltreDto filtre);
     }
 }

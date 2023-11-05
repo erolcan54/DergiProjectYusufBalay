@@ -39,7 +39,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Brans>> GetAll()
         {
-            return new SuccessDataResult<List<Brans>>(_bransDal.GetAll(), "Brans Listesi getirildi.");
+            return new SuccessDataResult<List<Brans>>(_bransDal.GetAll(a=>a.Status), "Brans Listesi getirildi.");
         }
 
         public IDataResult<Brans> GetById(int id)

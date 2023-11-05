@@ -59,6 +59,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<OzelDersOgretmenDto>>(_ozelDersOretmenDal.GetAllDisplay4Take(), "Özel ders öğretmen display listesi getirildi.");
         }
 
+        public IDataResult<List<OzelDersOgretmenDto>> GetAllOzelOgretmenFiltre(OzelOgretmenFiltreDto filtre)
+        {
+            return new SuccessDataResult<List<OzelDersOgretmenDto>>(_ozelDersOretmenDal.GetAllOzelOgretmenFiltre(filtre), "Özel Ders veren öğretmenlerin listesi getirildi.");
+        }
+
         public IDataResult<OzelDersOgretmen> GetById(int id)
         {
             return new SuccessDataResult<OzelDersOgretmen>(_ozelDersOretmenDal.Get(a => a.Id == id), "Öğretmen bilgileri getirildi.");
