@@ -76,7 +76,7 @@ namespace Business.Concrete
                 foreach (var item in result)
                 {
                     var yorums = _kurumYorumService.GetCountByKurumId(item.Id);
-                    if (yorums.Data > 100)
+                    if (yorums.Data > 20)
                         liste.Add(item);
                 }
                 return new SuccessDataResult<List<KurumDisplayDto>>(liste.OrderByDescending(a=>a.TikSayisi).ToList(), "Aranan kurs listesi getirildi.");
@@ -93,7 +93,7 @@ namespace Business.Concrete
                 foreach (var item in result)
                 {
                     var yorums = _kurumYorumService.GetCountByKurumId(item.Id);
-                    if (yorums.Data > 100)
+                    if (yorums.Data > 20)
                         liste.Add(item);
                 }
                 return new SuccessDataResult<List<KurumDisplayDto>>(liste.OrderByDescending(a => a.TikSayisi).ToList(), "Aranan okul listesi getirildi.");
