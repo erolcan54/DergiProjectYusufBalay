@@ -38,6 +38,7 @@ namespace DataAccess.Concrete
                                  DeletedDate= odo.DeletedDate,
                                  UpdatedDate = odo.UpdatedDate,
                                  Status= odo.Status,
+                                 TanitimVideo= odo.TanitimVideo,
                              };
                 return result.ToList(); 
 
@@ -70,6 +71,7 @@ namespace DataAccess.Concrete
                                  DeletedDate = odo.DeletedDate,
                                  UpdatedDate = odo.UpdatedDate,
                                  Status = odo.Status,
+                                 TanitimVideo = odo.TanitimVideo,
                              };
                 return result.ToList();
 
@@ -102,6 +104,7 @@ namespace DataAccess.Concrete
                                  DeletedDate = odo.DeletedDate,
                                  UpdatedDate = odo.UpdatedDate,
                                  Status = odo.Status,
+                                 TanitimVideo = odo.TanitimVideo,
                              };
                 return result.ToList();
             }
@@ -132,6 +135,7 @@ namespace DataAccess.Concrete
                                  DeletedDate = odo.DeletedDate,
                                  UpdatedDate = odo.UpdatedDate,
                                  Status = odo.Status,
+                                 TanitimVideo= odo.TanitimVideo,
                              };
                 return result.FirstOrDefault();
 

@@ -11,7 +11,7 @@
 </div>*@
 <div class="row mb-2">
     <div class="col-sm-4">
-        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-danger mb-2"> Kurum Detay Sayfası</a>
+        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-warning text-dark mb-2"><strong> Kurum Detay Sayfası</strong></a>
     </div>
 </div>
 <div class="row">
@@ -23,11 +23,11 @@
             @foreach (var item in Model)
             {
                 <div class="col-sm-6 col-xxl-3">
-                    <div class="card text-center" style="height:200px;">
+                    <div class="card text-center" style="height:250px;">
                         <div class="card-body">
                             <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
 
-                            <h4 class="mb-0 mt-2">@item.Ad @item.Soyad</h4>
+                            <h4 class="mb-0 mt-2">@item.Ad @item.Soyad</h4><br>
                             <p class="text-muted font-14">@item.BransAdi</p>
 
                         </div> <!-- end card-body -->

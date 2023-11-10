@@ -53,6 +53,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<BurslulukSinavDisplayDto>>(_burslulukSinvaDal.GetAllDisplay4Take(),"Listes getirildi.");
         }
 
+        public IDataResult<List<BurslulukSinavDisplayDto>> GetBurslulukSinavFiltre(BurslulukSinavFiltreDto filtre)
+        {
+            return new SuccessDataResult<List<BurslulukSinavDisplayDto>>(_burslulukSinvaDal.GetBurslulukSinavFiltre(filtre), "Listes getirildi.");
+        }
+
         public IDataResult<BurslulukSinav> GetById(int id)
         {
             return new SuccessDataResult<BurslulukSinav>(_burslulukSinvaDal.Get(a => a.Id == id), "Sinav bilgisi getirildi.");

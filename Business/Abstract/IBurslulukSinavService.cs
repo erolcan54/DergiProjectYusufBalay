@@ -19,5 +19,6 @@ namespace Business.Abstract
         IDataResult<List<BurslulukSinavDisplayDto>> GetAllDisplay4Take();
         IDataResult<List<BurslulukSinavDisplayDto>> GetAllDisplay();
         IDataResult<BurslulukSinavDisplayDto> GetByIdDisplay(int id);
+        IDataResult<List<BurslulukSinavDisplayDto>> GetBurslulukSinavFiltre(BurslulukSinavFiltreDto filtre);
     }
 }

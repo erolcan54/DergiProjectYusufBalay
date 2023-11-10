@@ -18,5 +18,6 @@ namespace Entities
         public string Hakkinda { get; set; }
         public string Email { get; set; }
         public string Telefon { get; set; }
+        public string? TanitimVideo { get; set; }
     }
 }

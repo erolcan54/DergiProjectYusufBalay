@@ -14,5 +14,6 @@ namespace DataAccess.Abstract
         List<indirimDisplayDto> GetAllByKurumId(int id);
         List<indirimDisplayDto> GetAllDisplay4Take();
         List<indirimDisplayDto> GetAllDisplay();
+        List<indirimDisplayDto> GetindirimFiltre(indirimFiltreDto filtre);
     }
 }

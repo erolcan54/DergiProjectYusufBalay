@@ -18,10 +18,21 @@
                     <label for="AdSoyad" class="form-label">Ad Soyad</label>
                     <input class="form-control" type="text" asp-for="AdSoyad" id="AdSoyad" required="" placeholder="Ad Soyad Yazınız">
                 </div>
-                <div class="mb-3">
-                    <label for="Resim" class="form-label">Resim</label>
-                    <input class="form-control" type="file" asp-for="Resim" required="" id="Resim">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="TanitimVideo" class="form-label">Örnek Ders Video (Youtube)</label>
+                            <input class="form-control" type="text" asp-for="TanitimVideo" id="TanitimVideo" placeholder="Youtube Video embed kodlarını ekleyiniz">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="Resim" class="form-label">Resim</label>
+                            <input class="form-control" type="file" asp-for="Resim" required="" id="Resim">
+                        </div>
+                    </div>
                 </div>
+               
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="mb-3">

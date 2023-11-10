@@ -12,5 +12,6 @@ namespace Entities
         public string KatalogAdi { get; set; }
         public Guid SeriNo { get; set; }
         public byte[] KatalogPDF { get; set; }
+        public byte[] Resim { get; set; }
     }
 }

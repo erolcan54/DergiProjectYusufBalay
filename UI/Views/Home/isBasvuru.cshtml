@@ -74,14 +74,14 @@
                         <label for="Hakkinda" class="form-label">Hakkında</label>
                         <textarea class="form-control" asp-for="Hakkinda" id="Hakkinda" rows="3" required="" placeholder="Öğretmen hakkında bilgileri yazınız"></textarea>
                     </div>
-                    <div class="form-check form-switch mb-1">
+                    <div class="form-check form-checkbox-warning form-switch mb-1">
                         <input type="checkbox" asp-for="KVKK" class="form-check-input" id="KVKK">
                         <label class="form-check-label" for="KVKK">
                             <a href="" data-bs-toggle="modal" data-bs-target="#Kvkk-modal">KVKK Aydınlatma Metnini Okudum, Kabul Ediyorum</a>
                         </label>
                     </div>
                     <div class="d-grid mb-0 text-center">
-                        <button class="btn btn-primary" id="btnaddisbasvuru" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
+                        <button class="btn btn-warning text-dark font-14" id="btnaddisbasvuru" type="submit"><strong><i class="mdi mdi-plus"></i> Kaydet</strong> </button>
                     </div>
                 </form>
             </div>

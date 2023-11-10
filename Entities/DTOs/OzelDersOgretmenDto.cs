@@ -24,5 +24,6 @@ namespace Entities.DTOs
         public DateTime? UpdatedDate { get; set; }
         public DateTime? DeletedDate { get; set; }
         public bool Status { get; set; }
+        public string? TanitimVideo { get; set; }
     }
 }

@@ -19,5 +19,6 @@ namespace Business.Abstract
         IDataResult<List<indirimDisplayDto>> GetAllByKurumId(int id);
         IDataResult<List<indirimDisplayDto>> GetAllDisplay4Take();
         IDataResult<List<indirimDisplayDto>> GetAllDisplay();
+        IDataResult<List<indirimDisplayDto>> GetindirimFiltre(indirimFiltreDto filtre);
     }
 }

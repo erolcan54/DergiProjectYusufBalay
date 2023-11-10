@@ -9,8 +9,7 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-            <h4 class="header-title">EĞİTİM İÇERİKLERİ / BLOG</h4>
-            <p class="text-muted font-14">Eğitim ile ilgili yazılan makalelere buradan ulaşabilirsiniz.</p>
+            <h4 class="header-title">EĞİTİM İÇERİKLERİ / BLOG</h4><br />
             <div class="row">
                 @foreach (var item in Model)
                 {
@@ -18,39 +17,40 @@
                         <!-- project card -->
                         <div class="card d-block">
                             <!-- project-thumbnail -->
-                            <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
-                            <div class="card-img-overlay">
-                                <div class="badge bg-secondary text-light p-1">@item.CreatedDate</div>
-                            </div>
-
+                            <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})">
+                                <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            </a>
                             <div class="card-body position-relative">
                                 <!-- project title-->
                                 <h4 class="mt-0">
-                                    <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})" class="text-title">@item.Baslik</a>
+                                    <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})" class="text-title text-dark"><strong>@item.Baslik</strong></a>
                                 </h4>
-
-                                <!-- project detail-->
                                 <p class="mb-1">
-                                    <span class="pe-2 text-nowrap">
-                                        <i class="mdi mdi-eye"></i>
-                                        <b>@item.Hit kez görüntülendi.</b>
-                                    </span>
-                                </p>
-                                @if (item.UpdatedDate != null)
-                                {
-                                    <span class="mb-3">
-                                        <span class="pe-2">
-                                            <i class="mdi mdi-update"></i>
-                                            <b>@Convert.ToDateTime(item.UpdatedDate).ToShortDateString() güncellendi.</b>
+                                    <span class="pe-2 text-muted">
+                                        <span class="badge badge-warning-lighten text-dark font-12">
+                                            <strong>
+                                                @item.AdSoyad
+                                            </strong>
                                         </span>
                                     </span>
-                                }
+                                </p>
+                                <p class="mb-1 text-muted font-13">
+                                    @item.Aciklama
+                                </p>
+                                <!-- project detail-->
+                                <p class="mb-1">
+                                    <span class="badge badge-warning-lighten text-dark font-12">
+                                        <i class="mdi mdi-eye"></i><strong>
+                                            @item.Hit kez görüntülendi.
+                                        </strong>
+                                    </span>
+                                </p>
                             </div> <!-- end card-body-->
                         </div> <!-- end card-->
                     </div>
                 }
             </div>
-             <div class="row">
+            <div class="row">
                 @Html.PagedListPager((IPagedList)Model,page=>Url.Action("BlogListesi","Home",new {page}),
                 new PagedListRenderOptions {
                 LiElementClasses = new string[] { "page-item" },

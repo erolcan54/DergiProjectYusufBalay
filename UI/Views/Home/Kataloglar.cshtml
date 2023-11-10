@@ -8,58 +8,47 @@
 
 <div class="row mb-2">
     <div class="col-sm-4">
-        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-danger mb-2"> Kurum Detay Sayfası</a>
+        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-warning text-dark mb-2"><strong> Kurum Detay Sayfası</strong></a>
     </div>
 </div>
 <div class="row mt-1">
     <!-- Right Sidebar -->
     <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="mt-1">
-                    @if (Model.Count > 0)
-                    {
-                        <table id="alternative-page-datatable" class="table dt-responsive nowrap w-100">
-                            <thead>
-                                <tr>
-                                    <th>Katalog Adı</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.KatalogAdi</td>
-                                        <td>
-                                            <a href="@Url.Action("KatalogIndir","Home",new {seriNo=item.SeriNo})" id="btnkatalogdownload" class="btn btn-sm btn-primary"> İndir</a>
-                                        </td>
-                                    </tr>
-
-                                }
-
-                            </tbody>
-                        </table>
-                    }
-                    else
-                    {
-                        <div class="body">
-                            <div class="card-body">
-                                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-                                    <strong>Uyarı - </strong> Katalog listesi boş.
+        <div class="row">
+            @if (Model.Count > 0)
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="col-6 col-md-3 col-xxl-3">
+                        <!-- project card -->
+                        <div class="card d-block">
+                            <!-- project-thumbnail -->
+                            <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                            <div class="card-body position-relative">
+                                <div class="chart-widget-list mt-1 text-center">
+                                    <p><strong>@item.KatalogAdi</strong></p>
+                                    <p>
+                                        <a href="@Url.Action("KatalogIndir","Home",new {seriNo=item.SeriNo})" id="btnkatalogdownload" class="btn btn-sm btn-dark text-warning"><strong><i class="uil uil-down-arrow"></i> İndir</strong></a>
+                                    </p>
                                 </div>
                             </div>
+                        </div> <!-- end card-->
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="body">
+                    <div class="card-body">
+                        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                            <strong>Uyarı - </strong> Katalog listesi boş.
                         </div>
-                    }
-
+                    </div>
                 </div>
-                <!-- end row-->
-            </div>
-            <!-- end inbox-rightbar-->
+            }
         </div>
-        <!-- end card-body -->
-        <div class="clearfix"></div>
-    </div> <!-- end card-box -->
-
-</div> <!-- end Col -->
+    </div>
+    <!-- end row-->
+</div>
+<div class="clearfix"></div>
 

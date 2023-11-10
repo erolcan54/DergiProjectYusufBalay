@@ -1,11 +1,7 @@
-﻿@using X.PagedList
-@using X.PagedList.Mvc.Core
-@using X.PagedList.Web.Common;
-@model IPagedList<BurslulukSinavDisplayDto>
+﻿@model List<BurslulukSinavDisplayDto>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
-    List<SelectListItem> branslar = ViewData["BransListe"] as List<SelectListItem>;
 }
 
 <div class="row">
@@ -84,13 +80,6 @@
                     </div>
                 </div>
             }
-            <div class="row">
-                @Html.PagedListPager((IPagedList)Model,page=>Url.Action("SinavListesi","Home",new {page}),
-                new PagedListRenderOptions {
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-                })
-            </div>
         </div>
     </div>
 </div>
@@ -118,3 +107,4 @@
         });
     </script>
 }
+

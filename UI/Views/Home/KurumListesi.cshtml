@@ -21,21 +21,13 @@
                                     <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
                                 </a>
                                 <div class="card-body">
-                                    <h5 class="bg-warning-lighten p-2 text-dark">@item.Ad</h5>
-                                    <span class="pe-2 mb-1 text-muted font-13">
-                                        <span class="badge badge-info">@item.ilAdi.ToUpper()</span>
-                                    </span><br />
-                                    <span class="pe-2 mb-1 text-muted">
-                                        <span class="badge badge-info">@item.ilceAdi</span>
-                                    </span><br />
-                                    <span class="pe-2 mb-1 text-muted">
-                                        <span class="badge badge-warning">
-                                            <i class="mdi mdi-eye"></i> @item.TikSayisi
-                                        </span>
-                                    </span><br /><br>
-                                    <p>
-                                        <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark">İncele</a>
-                                    </p>
+                                    <div class="chart-widget-list mt-1 text-center">
+                                        <p><strong>@item.Ad</strong></p>
+                                        <p>@item.ilAdi.ToUpper()</p>
+                                        <p>@item.ilceAdi.ToUpper()</p>
+                                        <p><i class="mdi mdi-eye"></i> @item.TikSayisi Kişi İnceledi</p>
+                                        <p><a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark text-warning"><strong><i class="uil uil-corner-down-right"></i> İncele</strong></a></p>
+                                    </div>
                                 </div>
                             </div> <!-- end card-->
                         </div>

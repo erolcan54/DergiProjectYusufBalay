@@ -425,23 +425,30 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult KatalogEkle(Katalog model, IFormFile katalogpdf)
+        public IActionResult KatalogEkle(Katalog model, IFormFile katalogpdf, IFormFile Resim)
         {
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
             model.KurumId = int.Parse(kurumId);
-            if (katalogpdf != null)
+            if (katalogpdf != null || Resim!=null)
             {
                 using (var stream = new MemoryStream())
                 {
                     katalogpdf.CopyTo(stream);
                     model.KatalogPDF = stream.ToArray();
                 }
+                using (var streamResim = new MemoryStream())
+                {
+                    Resim.CopyTo(streamResim);
+                    model.Resim = streamResim.ToArray();
+                }
                 model.SeriNo = Guid.NewGuid();
                 var result = _katalogService.Add(model);
                 return Json(result);
             }
             else
-                return Json(new ErrorResult("Katalog için pdf seçiniz..."));
+                return Json(new ErrorResult("Katalog için pdf ve resim seçimi yapmadınız..."));
+
+
         }
 
         public IActionResult KatalogIndir(Guid seriNo)
@@ -780,6 +787,7 @@ namespace UI.Controllers
             return Json(result);
         }
         #endregion
+
         #region İşBaşvuruları
         public IActionResult IsBasvuru()
         {

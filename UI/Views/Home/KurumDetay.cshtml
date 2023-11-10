@@ -17,7 +17,7 @@
                 <hr />
                 <div class="row justify-content-center">
                     <div class="col-md-6">
-                        <img src="@ByteToImage.DecodeImage(result.Resim)" class="img-fluid img-thumbnail" style="max-height:400px;max-width:%75" alt="Product-img">
+                        <img src="@ByteToImage.DecodeImage(result.Resim)" class="img-fluid img-thumbnail" style="max-height:400px;max-width:%80" alt="Product-img">
                     </div>
                     <div class="col-md-6">
                         <div class="chart-widget-list mt-1">
@@ -51,17 +51,17 @@
                             </p>
                             <p class="text-muted mb-0" id="tooltip-container">
                                 <strong>Sosyal Medya Hesaplarımız :</strong>
-                                <a href="@result.Facebook" class="d-inline-block ms-2 float-end font-20" style="color:#3b5998;" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Facebook" aria-label="Facebook"><i class="uil uil-facebook"></i></a>
-                                <a href="@result.Twitter" class="d-inline-block ms-2 float-end font-20" style="color:#00ACEE;" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Twitter" aria-label="Twitter"><i class="uil uil-twitter"></i></a>
-                                <a href="https://wa.me/@Html.Raw(result.Whatsapp)" target="_blank" class="d-inline-block ms-2 float-end font-20" style="color:#128C7E;" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Whatsapp" aria-label="Whatsapp"><i class="uil uil-whatsapp"></i></a>
-                                <a href="@result.Instagram" class="d-inline-block ms-2 float-end font-20" style="color:#feda75;" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Instagram" aria-label="Instagram"><i class="uil uil-instagram"></i></a>
+                                <a href="@result.Facebook" class="d-inline-block ms-2 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Facebook" aria-label="Facebook"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-facebook-48.png" /></a>
+                                <a href="@result.Twitter" class="d-inline-block ms-2 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="X" aria-label="Twitter"><img src="~/icon/icons8-x-50.png" style="max-width:25px;max-height:25px;" /></a>
+                                <a href="https://wa.me/@Html.Raw(result.Whatsapp)" target="_blank" class="d-inline-block ms-2 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Whatsapp" aria-label="Whatsapp"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-whatsapp-48.png" /></a>
+                                <a href="@result.Instagram" class="d-inline-block ms-2 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Instagram" aria-label="Instagram"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-instagram-48.png" /></a>
                             </p>
                             <br />
                             <p class="d-grid">
-                                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#videoizle-modal">Tanıtım Videosu İzle</a>
+                                <a href="#" class="btn btn-dark text-warning" data-bs-toggle="modal" data-bs-target="#videoizle-modal">Tanıtım Videosu İzle</a>
                             </p>
                             <p class="d-grid">
-                                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#kurumbeniarasin-modal">Okul Beni Arasın</a>
+                                <a href="#" class="btn btn-warning text-dark" data-bs-toggle="modal" data-bs-target="#kurumbeniarasin-modal">Okul Beni Arasın</a>
                             </p>
 
                         </div>
@@ -130,7 +130,7 @@
                     <textarea class="form-control form-control-light mb-2" name="Yorum" required placeholder="Mesajınızı yazınız..." id="example-textarea" rows="3"></textarea>
                     <div class="text-end">
                         <div class="btn-group mb-2 ms-2">
-                            <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
+                            <button type="submit" class="btn btn-warning text-dark btn-sm"><i class="uil uil-arrow-right"></i> Gönder</button>
                         </div>
                     </div>
                 </form>
@@ -238,14 +238,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-check form-switch mb-1">
+                    <div class="form-check form-checkbox-warning form-switch mb-1">
                         <input type="checkbox" asp-for="KVKK" class="form-check-input" id="KVKK">
                         <label class="form-check-label" for="KVKK">
                             <a href="" data-bs-toggle="modal" data-bs-target="#Kvkk-modal">KVKK Aydınlatma Metnini Okudum, Kabul Ediyorum</a>
                         </label>
                     </div>
                     <div class="d-grid mb-0 text-center">
-                        <button class="btn btn-primary" id="btnaddBeniArasin" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
+                        <button class="btn btn-dark text-warning" id="btnaddBeniArasin" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
                     </div>
                 </form>
             </div>

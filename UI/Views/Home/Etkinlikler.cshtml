@@ -7,69 +7,52 @@
 }
 <div class="row mb-2">
     <div class="col-sm-4">
-        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-danger mb-2"> Kurum Detay Sayfası</a>
+        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-warning text-dark mb-2"><strong> Kurum Detay Sayfası</strong></a>
     </div>
 </div>
 <div class="row mt-1">
     <!-- Right Sidebar -->
     <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="mt-1">
-                    @if (Model.Count > 0)
+        <div class="mt-1">
+            @if (Model.Count > 0)
+            {
+                <div class="row">
+                    @foreach (var item in Model)
                     {
-                        <div class="row">
-                            @foreach (var item in Model)
-                            {
-                                <div class="col-md-6 col-xxl-3">
-                                    <!-- project card -->
-                                    <div class="card d-block">
+                        <div class="col-md-6 col-xxl-3">
+                            <!-- project card -->
+                            <div class="card d-block">
 
-                                        <div class="card-body position-relative">
-                                            <!-- project title-->
-                                            <h4 class="mt-0">
-                                                <a href="/Home/EtkinlikDetay/@item.Id" class="text-title">@item.Baslik</a>
-                                            </h4>
-
-                                            @if (item.UpdatedDate != null)
-                                            {
-                                                <p class="mb-3">
-                                                    <span class="pe-2 text-nowrap">
-                                                        <i class="mdi mdi-update"></i>
-                                                        <b>@item.UpdatedDate</b>
-                                                    </span>
-                                                </p>
-                                            }
-                                            <div class="mb-1">
-                                                
-                                                <a href="@Url.Action("EtkinlikDetay","Home",new {id=item.Id })" class="btn btn-info btn-sm ">Detay</a>
-                                            </div>
-                                        </div> <!-- end card-body-->
-                                    </div> <!-- end card-->
-                                </div> <!-- end col -->
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="body">
-                            <div class="card-body">
-                                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-                                    <strong>Uyarı - </strong> Etkinlik listesi boş.
-                                </div>
-                            </div>
-                        </div>
+                                <div class="card-body position-relative">
+                                    <div class="chart-widget-list mt-1 text-center">
+                                        <p><a href="@Url.Action("EtkinlikDetay","Home",new {id=item.Id })" class="text-title">@item.Baslik</a></p>
+                                        <p><a href="@Url.Action("EtkinlikDetay","Home",new {id=item.Id })" class="btn btn-dark text-warning btn-sm"><strong>Detay</strong></a></p>
+                                    </div>
+                                    <!-- project title-->
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
                     }
                 </div>
-                <!-- end row-->
-            </div>
-            <!-- end inbox-rightbar-->
+            }
+            else
+            {
+                <div class="body">
+                    <div class="card-body">
+                        <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                            <strong>Uyarı - </strong> Etkinlik listesi boş.
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
-        <!-- end card-body -->
-        <div class="clearfix"></div>
-    </div> <!-- end card-box -->
+        <!-- end row-->
+    </div>
+    <!-- end inbox-rightbar-->
+</div>
+<!-- end card-body -->
+<div class="clearfix"></div>
 
-</div> <!-- end Col -->
 
 
 @section Scripts{

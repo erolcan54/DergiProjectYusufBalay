@@ -7,7 +7,7 @@
 }
 <div class="row mb-2">
     <div class="col-sm-4">
-        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-danger mb-2"> Kurum Detay Sayfası</a>
+        <a href="@Url.Action("KurumDetay","Home",new {id=int.Parse(kurumId)})" class="btn btn-warning text-dark mb-2"><strong> Kurum Detay Sayfası</strong></a>
     </div>
 </div>
 <div class="row mt-1">
@@ -18,21 +18,19 @@
                 <div class="mt-1">
                     @if (Model.Count > 0)
                     {
-                        <div class="row">
-                            @foreach (var item in Model)
-                            {
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" style="height:200px; object-fit : scale-down">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <p>@Html.Raw(item.Ad)</p>
-                                        <p>@Html.Raw(item.Icerik)</p>
-                                    </div>
-                                    <hr />
+                        @foreach (var item in Model)
+                        {
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" style="max-height:200px; object-fit : scale-down">
                                 </div>
-                            }
-                        </div>
+                                <div class="col-sm-8">
+                                    <p>@Html.Raw(item.Ad)</p>
+                                    <p>@Html.Raw(item.Icerik)</p>
+                                </div>
+                            </div>
+                            <hr />
+                        }
                     }
                     else
                     {
@@ -55,4 +53,3 @@
     </div> <!-- end card-box -->
 
 </div> <!-- end Col -->
-

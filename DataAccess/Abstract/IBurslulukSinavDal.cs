@@ -14,7 +14,7 @@ namespace DataAccess.Abstract
     {
         List<BurslulukSinavDisplayDto> GetAllDisplay4Take();
         BurslulukSinavDisplayDto GetByIdDisplay(int id);
-
         List<BurslulukSinavDisplayDto> GetAllDisplay();
+        List<BurslulukSinavDisplayDto> GetBurslulukSinavFiltre(BurslulukSinavFiltreDto filtre);
     }
 }

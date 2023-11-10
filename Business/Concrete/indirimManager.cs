@@ -65,6 +65,11 @@ namespace Business.Concrete
             return new SuccessDataResult<indirim>(_indirimDal.Get(a => a.Id == id), "İndirim bilgisi getirildi.");
         }
 
+        public IDataResult<List<indirimDisplayDto>> GetindirimFiltre(indirimFiltreDto filtre)
+        {
+            return new SuccessDataResult<List<indirimDisplayDto>>(_indirimDal.GetindirimFiltre(filtre), "İndirim listesi getirildi.");
+        }
+
         public IResult Update(indirim entity)
         {
             entity.UpdatedDate = DateTime.Now;

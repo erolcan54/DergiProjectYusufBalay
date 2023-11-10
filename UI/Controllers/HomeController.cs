@@ -175,7 +175,7 @@ namespace UI.Controllers
                 kursAraDto.KurumYorumSecenekKurs = model.KurumYorumSecenekKurs;
                 liste = _okulService.GetKursListFilter(kursAraDto).Data;
             }
-            ViewData["Liste"] = liste.OrderBy(a => a.TikSayisi).ToList();
+            ViewData["Liste"] = liste.OrderByDescending(a => a.TikSayisi).ToList();
             return View(model);
             //return RedirectToAction("KurumListesi", "Home", new { liste = liste });
         }
@@ -316,7 +316,30 @@ namespace UI.Controllers
         {
             var result = _indirimService.GetAllDisplay();
             var data = result.Data.Where(a => a.Status).OrderByDescending(a => a.Id).ToPagedList(page, 12);
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
             return View(data);
+        }
+
+        [HttpPost]
+        public IActionResult indirimFiltre(indirimFiltreDto filtre)
+        {
+            var result = _indirimService.GetindirimFiltre(filtre);
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
+            return View(result.Data);
         }
 
         public IActionResult OzelDersOgretmenListesi(int page = 1)
@@ -436,9 +459,32 @@ namespace UI.Controllers
 
         public IActionResult SinavListesi(int page = 1)
         {
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
             var result = _burslulukSinavService.GetAllDisplay();
             var data = result.Data.Where(a => a.Status).ToPagedList(page, 2);
             return View(data);
+        }
+
+        [HttpPost]
+        public IActionResult BurslulukSinavFiltre(BurslulukSinavFiltreDto filtre)
+        {
+            var result = _burslulukSinavService.GetBurslulukSinavFiltre(filtre);
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
+            return View(result.Data);
         }
 
         public IActionResult OgretmenKadrosu()
@@ -483,7 +529,7 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
 
             var katalogliste = _katalogService.GetAllByKurumId(int.Parse(kurumId));
-            return View(katalogliste.Data);
+            return View(katalogliste.Data.OrderByDescending(a=>a.Id).ToList());
         }
 
         public IActionResult KatalogIndir(Guid seriNo)
