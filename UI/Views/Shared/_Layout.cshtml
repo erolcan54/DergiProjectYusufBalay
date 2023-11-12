@@ -39,10 +39,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><strong>Anasayfa</strong></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="isBasvuru">İş Başvuru</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="isBasvuru"><strong>İş Başvuru</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-warning btn-dark" asp-area="" asp-controller="Home" asp-action="UcretsizDanisman"><strong>Ücretsiz Eğitim Danışmanı</strong></a>
                         </li>
                         @*<li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -59,11 +62,11 @@
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Giriş İşlemleri
+                                <strong>Giriş İşlemleri</strong>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-controller="Home" asp-action="KullaniciGiris">Kurum Girişi</a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="YoneticiGiris">Yönetici Girişi</a>
+                                <a class="dropdown-item" asp-controller="Home" asp-action="KullaniciGiris"><strong>Kurum Girişi</strong></a>
+                                <a class="dropdown-item" asp-controller="Home" asp-action="YoneticiGiris"><strong>Yönetici Girişi</strong></a>
                                 @*<div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" asp-controller="Uye" asp-action="CikisYap">Çıkış Yap</a>*@
                             </div>

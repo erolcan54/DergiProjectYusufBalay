@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.MemoryCaching;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
@@ -13,9 +14,12 @@ namespace Business.Concrete
     public class BlogManager : IBlogService
     {
         IBlogDal _blogDal;
-        public BlogManager(IBlogDal blogDal)
+        private ICacheManager _cacheManager;
+
+        public BlogManager(IBlogDal blogDal, ICacheManager cacheManager)
         {
             _blogDal = blogDal;
+            _cacheManager = cacheManager;
         }
 
         public IResult Add(Blog entity)
@@ -24,6 +28,9 @@ namespace Business.Concrete
             entity.Status = true;
             entity.Hit = 0;
             _blogDal.Add(entity);
+
+            _cacheManager.Remove("Blogs");
+
             return new SuccessResult("Blog yazısı eklendi");
         }
 
@@ -33,13 +40,24 @@ namespace Business.Concrete
             result.Status= false;
             result.DeletedDate= DateTime.Now;
             _blogDal.Update(result);
+
+            _cacheManager.Remove("Blogs");
+
             return new SuccessResult("Blog silindi.");
         }
 
         public IDataResult<List<Blog>> Get4LastList()
         {
-            var result = _blogDal.GetAll(a => a.Status).OrderByDescending(a => a.Id).Take(4).ToList();
-            return new SuccessDataResult<List<Blog>>(result);
+            var list= new List<Blog>();
+            if (!_cacheManager.IsAdd("Blogs"))
+            {
+                list = _blogDal.GetAll(a => a.Status).OrderByDescending(a => a.Id).Take(4).ToList();
+                _cacheManager.Add("Blogs", list);
+            }
+            else
+                list = _cacheManager.Get<List<Blog>>("Blogs");
+            
+            return new SuccessDataResult<List<Blog>>(list);
         }
 
         public IDataResult<List<Blog>> GetAll()
@@ -57,6 +75,9 @@ namespace Business.Concrete
             entity.UpdatedDate = DateTime.Now;
             entity.Status = true;
             _blogDal.Update(entity);
+
+            _cacheManager.Remove("Blogs");
+
             return new SuccessResult("Blog güncellendi.");
         }
     }

@@ -19,5 +19,6 @@ namespace Business.Abstract
         IResult Delete(int id);
         IDataResult<List<KurumDisplayDto>> GetOkulListFilter(OkulAraDto model);
         IDataResult<List<KurumDisplayDto>> GetKursListFilter(KursAraDto model);
+        IDataResult<List<KurumDisplayDto>> GetTikKurum4Take();
     }
 }

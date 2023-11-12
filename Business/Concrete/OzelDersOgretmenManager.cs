@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.MemoryCaching;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
@@ -15,10 +16,12 @@ namespace Business.Concrete
     public class OzelDersOgretmenManager : IOzelDersOgretmenService
     {
         private IOzelDersOretmenDal _ozelDersOretmenDal;
+        private ICacheManager _cacheManager;
 
-        public OzelDersOgretmenManager(IOzelDersOretmenDal ozelDersOretmenDal)
+        public OzelDersOgretmenManager(IOzelDersOretmenDal ozelDersOretmenDal, ICacheManager cacheManager)
         {
             _ozelDersOretmenDal = ozelDersOretmenDal;
+            _cacheManager = cacheManager;
         }
 
         public IResult Add(OzelDersOgretmen entity)
@@ -26,6 +29,9 @@ namespace Business.Concrete
             entity.CreatedDate = DateTime.Now;
             entity.Status = true;
             _ozelDersOretmenDal.Add(entity);
+
+            _cacheManager.Remove("OzelDersOgretmens");
+
             return new SuccessResult("Öğretmen bilgileri eklendi");
         }
 
@@ -35,6 +41,7 @@ namespace Business.Concrete
             result.Status = false;
             result.DeletedDate = DateTime.Now;
             _ozelDersOretmenDal.Update(result);
+            _cacheManager.Remove("OzelDersOgretmens");
             return new SuccessResult("Öğretmen bilgileri silindi.");
         }
 
@@ -56,7 +63,15 @@ namespace Business.Concrete
 
         public IDataResult<List<OzelDersOgretmenDto>> GetAllDisplay4Take()
         {
-            return new SuccessDataResult<List<OzelDersOgretmenDto>>(_ozelDersOretmenDal.GetAllDisplay4Take(), "Özel ders öğretmen display listesi getirildi.");
+            var list=new List<OzelDersOgretmenDto>();
+            if (!_cacheManager.IsAdd("OzelDersOgretmens"))
+            {
+                list = _ozelDersOretmenDal.GetAllDisplay4Take();
+                _cacheManager.Add("OzelDersOgretmens", list);
+            }
+            else
+                list = _cacheManager.Get<List<OzelDersOgretmenDto>>("OzelDersOgretmens");
+            return new SuccessDataResult<List<OzelDersOgretmenDto>>(list, "Özel ders öğretmen display listesi getirildi.");
         }
 
         public IDataResult<List<OzelDersOgretmenDto>> GetAllOzelOgretmenFiltre(OzelOgretmenFiltreDto filtre)
@@ -79,6 +94,7 @@ namespace Business.Concrete
             entity.UpdatedDate = DateTime.Now;
             entity.Status = true;
             _ozelDersOretmenDal.Update(entity);
+            _cacheManager.Remove("OzelDersOgretmens");
             return new SuccessResult("Öğretmen bilgileri güncellendi.");
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.MemoryCaching;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
@@ -15,10 +16,12 @@ namespace Business.Concrete
     public class indirimManager : IindirimService
     {
         IindirimDal _indirimDal;
+        private ICacheManager _cacheManager;
 
-        public indirimManager(IindirimDal indirimDal)
+        public indirimManager(IindirimDal indirimDal, ICacheManager cacheManager)
         {
             _indirimDal = indirimDal;
+            _cacheManager = cacheManager;
         }
 
         public IResult Add(indirim entity)
@@ -26,6 +29,9 @@ namespace Business.Concrete
             entity.Status = true;
             entity.CreatedDate = DateTime.Now;
             _indirimDal.Add(entity);
+
+            _cacheManager.Remove("indirims");
+
             return new SuccessResult("İndirim bilgileri eklendi.");
         }
 
@@ -35,6 +41,9 @@ namespace Business.Concrete
             result.Status = false;
             result.DeletedDate = DateTime.Now;
             _indirimDal.Update(result);
+
+            _cacheManager.Remove("indirims");
+
             return new SuccessResult("İndirim silindi.");
         }
 
@@ -56,8 +65,16 @@ namespace Business.Concrete
 
         public IDataResult<List<indirimDisplayDto>> GetAllDisplay4Take()
         {
-            var result = _indirimDal.GetAllDisplay4Take();
-            return new SuccessDataResult<List<indirimDisplayDto>>(result, "İndirim listesi getirildi.");
+            var list=new List<indirimDisplayDto>();
+            if (!_cacheManager.IsAdd("indirims"))
+            {
+                list = _indirimDal.GetAllDisplay4Take();
+                _cacheManager.Add("indirims", list);
+            }
+            else
+                list = _cacheManager.Get<List<indirimDisplayDto>>("indirims");
+            
+            return new SuccessDataResult<List<indirimDisplayDto>>(list, "İndirim listesi getirildi.");
         }
 
         public IDataResult<indirim> GetById(int id)
@@ -74,6 +91,7 @@ namespace Business.Concrete
         {
             entity.UpdatedDate = DateTime.Now;
             _indirimDal.Update(entity);
+            _cacheManager.Remove("indirims");
             return new SuccessResult("İndirim bilgisi güncellendi.");
         }
     }

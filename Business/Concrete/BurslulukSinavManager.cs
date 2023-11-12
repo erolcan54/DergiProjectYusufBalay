@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.MemoryCaching;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
@@ -16,10 +17,12 @@ namespace Business.Concrete
     public class BurslulukSinavManager : IBurslulukSinavService
     {
         IBurslulukSinavDal _burslulukSinvaDal;
+        private ICacheManager _cacheManager;
 
-        public BurslulukSinavManager(IBurslulukSinavDal burslulukSinvaDal)
+        public BurslulukSinavManager(IBurslulukSinavDal burslulukSinvaDal, ICacheManager cacheManager)
         {
             _burslulukSinvaDal = burslulukSinvaDal;
+            _cacheManager = cacheManager;
         }
 
         public IResult Add(BurslulukSinav entity)
@@ -27,6 +30,9 @@ namespace Business.Concrete
             entity.Status = true;
             entity.CreatedDate = DateTime.Now;
             _burslulukSinvaDal.Add(entity);
+
+            _cacheManager.Remove("Sinavs");
+
             return new SuccessResult("Sınav bilgileri eklendi.");
         }
         public IResult Delete(int id)
@@ -35,6 +41,7 @@ namespace Business.Concrete
             result.Status = false;
             result.DeletedDate = DateTime.Now;
             _burslulukSinvaDal.Update(result);
+            _cacheManager.Remove("Sinavs");
             return new SuccessResult("Sınav silindi.");
         }
 
@@ -50,7 +57,15 @@ namespace Business.Concrete
 
         public IDataResult<List<BurslulukSinavDisplayDto>> GetAllDisplay4Take()
         {
-            return new SuccessDataResult<List<BurslulukSinavDisplayDto>>(_burslulukSinvaDal.GetAllDisplay4Take(),"Listes getirildi.");
+            var list=new List<BurslulukSinavDisplayDto>();
+            if (!_cacheManager.IsAdd("Sinavs"))
+            {
+                list = _burslulukSinvaDal.GetAllDisplay4Take();
+                _cacheManager.Add("Sinavs", list);
+            }
+            else
+                list = _cacheManager.Get<List<BurslulukSinavDisplayDto>>("Sinavs");
+            return new SuccessDataResult<List<BurslulukSinavDisplayDto>>(list,"Listes getirildi.");
         }
 
         public IDataResult<List<BurslulukSinavDisplayDto>> GetBurslulukSinavFiltre(BurslulukSinavFiltreDto filtre)
@@ -72,6 +87,7 @@ namespace Business.Concrete
         {
             entity.UpdatedDate = DateTime.Now;
             _burslulukSinvaDal.Update(entity);
+            _cacheManager.Remove("Sinavs");
             return new SuccessResult("Sınva bilgileri güncellendi.");
         }
     }

@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using Business.Abstract;
 using Business.Concrete;
+using Business.MemoryCaching;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -100,6 +102,14 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<isBasvuruManager>().As<IisBasvuruService>().SingleInstance();
             builder.RegisterType<EfisBasvuruDal>().As<IisBasvuruDal>().SingleInstance();
+
+            builder.RegisterType<SliderManager>().As<ISliderService>().SingleInstance();
+            builder.RegisterType<EfSliderDal>().As<ISliderDal>().SingleInstance();
+
+            var MemoryCacheInstance = new MemoryCache(new MemoryCacheOptions());
+            builder.RegisterInstance<IMemoryCache>(MemoryCacheInstance);
+
+            builder.RegisterType<CacheManager>().As<ICacheManager>().SingleInstance();
 
             //var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

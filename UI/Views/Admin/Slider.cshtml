@@ -1,0 +1,38 @@
+﻿@model List<Slider>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+
+            <h3 class="header-title">RESİMLER</h3><br />
+            @if (Model.Count > 0)
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="row mb-1">
+                        <!-- project card -->
+                        <div class="card d-block">
+                            <!-- project-thumbnail -->
+                            <div class="chart-widget-list mt-1 text-center">
+                                <p><img class="card-img-top" style="height:150px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap"></p>
+                                <p><a href="@Url.Action("SliderResimSil","Admin",new {id=item.Id})" class="btn btn-sm btn-danger text-dark"><strong> Sil</strong></a></p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+            else
+            {
+                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <strong>Uyarı - </strong> Slider alanı için henüz resim eklenmedi.
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+

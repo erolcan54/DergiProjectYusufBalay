@@ -88,8 +88,8 @@ namespace UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            HttpContext.Session.Clear();
-            await HttpContext.SignOutAsync();
+            //HttpContext.Session.Clear();
+            //await HttpContext.SignOutAsync();
             var ilListe = _ilService.GetAll();
             var ilSelectList = (from i in ilListe.Data
                                 select new SelectListItem
@@ -107,21 +107,6 @@ namespace UI.Controllers
                                          Value = i.Id.ToString()
                                      }).ToList();
             ViewData["okulTurleri"] = okulTurSelectList;
-
-            var blogs = _blogService.Get4LastList();
-            ViewData["Bloglar"] = blogs.Data;
-
-            var ozeldersogretmen = _ozelDersOgretmenService.GetAllDisplay4Take();
-            ViewData["OzelDersOgretmen"] = ozeldersogretmen.Data;
-
-            var indirimler = _indirimService.GetAllDisplay4Take();
-            ViewData["indirimler"] = indirimler.Data;
-
-            var encokgorunenler = _okulService.GetAllKurum().Data.OrderByDescending(a => a.TikSayisi).Take(4).ToList();
-            ViewData["EnCokTiklananlar"] = encokgorunenler;
-
-            var sinavlar = _burslulukSinavService.GetAllDisplay4Take();
-            ViewData["Sinavlar"] = sinavlar.Data;
 
             KurumAraDto model = new KurumAraDto();
             return View(model);

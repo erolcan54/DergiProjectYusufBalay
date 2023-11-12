@@ -3,11 +3,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
     List<SelectListItem> okulTurleri = ViewData["okulTurleri"] as List<SelectListItem>;
-    List<Blog> blogs = ViewData["Bloglar"] as List<Blog>;
-    List<OzelDersOgretmenDto> ozelDersOgretmens = ViewData["OzelDersOgretmen"] as List<OzelDersOgretmenDto>;
-    List<indirimDisplayDto> indirimler = ViewData["indirimler"] as List<indirimDisplayDto>;
-    List<KurumDisplayDto> enCokZiyaretEdilenler = ViewData["EnCokTiklananlar"] as List<KurumDisplayDto>;
-    List<BurslulukSinavDisplayDto> sinavlar = ViewData["Sinavlar"] as List<BurslulukSinavDisplayDto>;
 }
 
 <div class="row">
@@ -142,224 +137,54 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="card">
-        <div class="card-body">
-            @* @if (enCokZiyaretEdilenler.Count > 0)
-            {
-            <div class="float-end"><a href="@Url.Action("KurumListesi","Home",new {liste=enCokZiyaretEdilenler})" class="btn btn-warning btn-sm">Tümünü Gör</a></div>
-            }*@
-            <h3 class="header-title">EN ÇOK ZİYARET EDİLENLER</h3><br />
-            <div class="row">
-                @foreach (var item in enCokZiyaretEdilenler)
-                {
-                    <div class="col-6 col-sm-6 col-xxl-3">
-                        <!-- project card -->
-                        <div class="card">
-                            <!-- project-thumbnail -->
-                            <a href="@Url.Action("KurumDetay","Home",new {id=item.Id})">
-                                <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
-                            </a>
-                            <div class="card-body">
-                                <div class="chart-widget-list mt-1 text-center">
-                                    <p><strong>@item.Ad</strong></p>
-                                    <p>@item.ilAdi.ToUpper()</p>
-                                    <p>@item.ilceAdi.ToUpper()</p>
-                                    <p><i class="mdi mdi-eye"></i> @item.TikSayisi Kişi İnceledi</p>
-                                    <p><a href="@Url.Action("KurumDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark text-warning"><strong><i class="uil uil-corner-down-right"></i> İncele</strong></a></p>
-                                </div>
-                            </div>
-                        </div> <!-- end card-->
-                    </div>
-                }
+<div class="row mb-3">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/assets/027d1279-10f7-4d0a-b828-fef25500ccc2.jpg" style="height:150px;" width="100%" />
             </div>
-            @if (enCokZiyaretEdilenler.Count > 0)
-            {
-                <div class="float-end"><a href="@Url.Action("KurumListesi","Home")" class="btn btn-warning btn-sm text-dark"><strong>Tümünü Gör</strong></a></div>
-            }
+            <div class="carousel-item">
+                <img src="~/assets/phpnaexmz.jpg" style="height:150px;" width="100%" />
+            </div>
+            <div class="carousel-item">
+                <img src="~/assets/egitimdedektifi_sitetasarimlari_bursluluksinavi.png" style="height:150px;" width="100%" />
+            </div>
         </div>
-
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
 </div>
 
-<div class="row">
-    <div class="card">
-        <div class="card-body">
+@await Component.InvokeAsync("EnCokTiklananlar")
 
-            <h3 class="header-title">ÖZEL İNDİRİMLER</h3><br />
-            <div class="row">
-                @foreach (var item in indirimler)
-                {
-                    <div class="col-6 col-md-3 col-xxl-3">
-                        <!-- project card -->
-                        <div class="card d-block">
-                            <!-- project-thumbnail -->
-                            <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
-                            <div class="card-body position-relative">
-                                <div class="chart-widget-list mt-1 text-center">
-                                    <p><strong>@item.KurumAdi</strong></p>
-                                    <p>@item.ilAdi.ToUpper()</p>
-                                    <p>@item.ilceAdi.ToUpper()</p>
-                                    <p>Oran : <span class="badge badge-warning text-dark font-14">% @item.indirimOrani</span></p>
-                                    <p>Son Başvuru : <span class="badge badge-warning text-dark font-14"> @Convert.ToDateTime(item.SonTarih).ToShortDateString()</span></p>
-                                </div>
-                            </div>
-                        </div> <!-- end card-->
-                    </div>
-                }
+@await Component.InvokeAsync("indirimler")
+
+@await Component.InvokeAsync("Sinavlar")
+
+@await Component.InvokeAsync("Bloglar")
+
+@await Component.InvokeAsync("OzelDersOgretmenler")
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            @if (indirimler.Count > 0)
-            {
-                <div class="float-end"><a href="@Url.Action("indirimListesi","Home")" class="btn btn-warning btn-sm text-dark"><strong>Tümünü Gör</strong></a></div>
-            }
-        </div>
-
-    </div>
-</div>
-
-<div class="row">
-    <div class="card">
-        <div class="card-body">
-            <h3 class="header-title">BURSLULUK SINAVLARI</h3><br />
-            <div class="row">
-                @foreach (var item in sinavlar)
-                {
-                    <div class="col-6 col-md-3 col-xxl-3">
-                        <!-- project card -->
-                        <div class="card d-block">
-                            <!-- project-thumbnail -->
-                            <a href="@Url.Action("SinavDetay","Home",new {id=item.Id})">
-                                <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
-                            </a>
-                            <div class="card-body position-relative text-center">
-                                <div class="chart-widget-list mt-1 text-center">
-                                    <p><strong>@item.KurumAdi</strong></p>
-                                    <p>@item.ilAdi.ToUpper()</p>
-                                    <p>@item.ilceAdi.ToUpper()</p>
-                                    <p>@item.SinavAdi</p>
-                                    <p>Son Başvuru : <span class="badge badge-warning text-dark font-14">@Convert.ToDateTime(item.SonBasvuruTarih).ToShortDateString()</span></p>
-                                    <p>Sınav Tarihi : <span class="badge badge-warning text-dark font-14">@Convert.ToDateTime(item.SinavTarih).ToShortDateString()</span></p>
-                                    <p>Sınav Saati : <span class="badge badge-warning text-dark font-14">@item.SinavSaat</span></p>
-                                    <p><a href="@Url.Action("SinavDetay","Home",new {id=item.Id})" class="btn btn-sm btn-dark text-warning"><strong><i class="uil uil-corner-down-right"></i> İncele</strong></a></p>
-                                </div>
-                            </div>
-                        </div> <!-- end card-->
-                    </div>
-                }
+            <div class="modal-body">
+                ...
             </div>
-            @if (sinavlar.Count > 0)
-            {
-                <div class="float-end"><a href="@Url.Action("SinavListesi","Home")" class="btn btn-warning btn-sm text-dark"><strong>Tümünü Gör</strong></a></div>
-            }
-            else
-            {
-                <div class="alert alert-danger" role="alert">
-                    <strong>Uyarı - </strong> Aktif Bursluluk Sınavı duyurusu yok !
-                </div>
-            }
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="card">
-        <div class="card-body">
-            <h3 class="header-title">EĞİTİM İÇERİKLERİ / BLOG</h3><br />
-            <div class="row">
-                @foreach (var item in blogs)
-                {
-                    <div class="col-6 col-md-3 col-xxl-3">
-                        <!-- project card -->
-                        <div class="card d-block" style="max-width:250px;">
-                            <!-- project-thumbnail -->
-                            <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})">
-                                <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
-                            </a>
-                            <div class="card-body position-relative">
-                                <div class="card-body position-relative text-center">
-                                    <!-- project title-->
-                                    <p>
-                                        <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})" class="text-title text-dark"><strong>@item.Baslik</strong></a>
-                                    </p>
-                                    <p>
-                                        <span class="pe-2 text-muted">
-                                            <span class="badge badge-warning-lighten text-dark font-12">
-                                                <strong>
-                                                    @item.AdSoyad
-                                                </strong>
-                                            </span>
-                                        </span>
-                                    </p>
-                                    <p class="text-muted font-13">
-                                        @item.Aciklama
-                                    </p>
-                                    <!-- project detail-->
-                                    <p>
-                                        <span class="badge badge-warning-lighten text-dark font-12">
-                                            <i class="mdi mdi-eye"></i><strong>
-                                                @item.Hit kez görüntülendi.
-                                            </strong>
-                                        </span>
-                                    </p>
-                                    <p><a href="@Url.Action("BlogDetail","Home",new {id=item.Id})" class="btn btn-sm btn-dark text-warning"><strong><i class="uil uil-corner-down-right"></i> İncele</strong></a></p>
-                                </div>
-                            </div> <!-- end card-body-->
-                        </div> <!-- end card-->
-                    </div>
-                }
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
-            @if (blogs.Count > 0)
-            {
-                <div class="float-end"><a href="@Url.Action("BlogListesi","Home")" class="btn btn-warning btn-sm text-dark"><strong>Tümünü Gör</strong></a></div>
-            }
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="card">
-        <div class="card-body">
-
-            <h3 class="header-title">ÖZEL DERS VERENLER</h3><br />
-            <div class="row">
-                @foreach (var item in ozelDersOgretmens)
-                {
-                    <div class="col-6 col-md-4 col-xxl-3">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">
-                                    <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
-                                </a>
-                                <h4 class="mb-0 mt-2" style="height:50px;"><a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">@item.AdSoyad</a></h4>
-                                <p class="text-muted font-14">@item.BransAdi</p>
-                                <p class="text-muted font-14">@item.ilAdi</p>
-
-                                @if (item.Online)
-                                {
-                                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Online</button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Online</button>
-                                }
-                                @if (item.Yuzyuze)
-                                {
-                                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Yüzyüze</button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Yüzyüze</button>
-                                }
-                            </div> <!-- end card-body -->
-                        </div> <!-- end card -->
-                        <!-- Messages-->
-                    </div>
-                }
-            </div>
-            @if (ozelDersOgretmens.Count > 0)
-            {
-                <div class="float-end"><a href="@Url.Action("OzelDersOgretmenListesi","Home")" class="btn btn-warning btn-sm text-dark"><strong>Tümünü Gör</strong></a></div>
-            }
         </div>
     </div>
 </div>
@@ -367,7 +192,10 @@
 @section Scripts{
 
     <script>
-
+        var myModal = new bootstrap.Modal(document.getElementById("exampleModal"), {});
+        document.onreadystatechange = function () {
+            myModal.show();
+        };
         $(window).on('load',
             function () {
                 $('#loading').hide();

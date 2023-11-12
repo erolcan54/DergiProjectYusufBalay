@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.MemoryCaching;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
@@ -16,11 +17,13 @@ namespace Business.Concrete
         private IOkulDal _okulDal;
         private IOkulTurService _okulTurService;
         private IKurumYorumService _kurumYorumService;
-        public OkulManager(IOkulDal okulDal, IOkulTurService okulTurService, IKurumYorumService kurumYorumService)
+        private ICacheManager _cacheManager;
+        public OkulManager(IOkulDal okulDal, IOkulTurService okulTurService, IKurumYorumService kurumYorumService, ICacheManager cacheManager)
         {
             _okulDal = okulDal;
             _okulTurService = okulTurService;
             _kurumYorumService = kurumYorumService;
+            _cacheManager = cacheManager;
         }
 
         public IResult Add(Okul entity)
@@ -28,6 +31,9 @@ namespace Business.Concrete
             entity.Status = true;
             entity.CreatedDate= DateTime.Now;
             _okulDal.Add(entity);
+
+            _cacheManager.Remove("Kurums");
+
             return new SuccessResult("Okul bilgisi eklendi.");
         }
 
@@ -37,6 +43,9 @@ namespace Business.Concrete
             result.Status= false;
             result.DeletedDate= DateTime.Now;
             _okulDal.Update(result);
+
+            _cacheManager.Remove("Kurums");
+
             return new SuccessResult("Okul bilgisi silindi.");
         }
 
@@ -101,11 +110,27 @@ namespace Business.Concrete
             return new SuccessDataResult<List<KurumDisplayDto>>(result.OrderByDescending(a => a.TikSayisi).ToList(), "Aranan okul listesi getirildi.");
         }
 
+        public IDataResult<List<KurumDisplayDto>> GetTikKurum4Take()
+        {
+            var list=new List<KurumDisplayDto>();
+            if (!_cacheManager.IsAdd("Kurums"))
+            {
+                list = _okulDal.GetTikKurum4Take();
+                _cacheManager.Add("Kurums", list);
+            }
+            else
+                list = _cacheManager.Get<List<KurumDisplayDto>>("Kurums");
+            return new SuccessDataResult<List<KurumDisplayDto>>(list, "Kurum listesi getirildi.");
+        }
+
         public IResult Update(Okul entity)
         {
             entity.Status= true;
             entity.UpdatedDate =DateTime.Now;
             _okulDal.Update(entity);
+
+            _cacheManager.Remove("Kurums");
+
             return new SuccessResult("Okul bilgisi güncellendi.");
         }
     }
