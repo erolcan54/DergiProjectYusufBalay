@@ -4,6 +4,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
 using Entities.DTOs;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,6 +116,9 @@ namespace Business.Concrete
             var list=new List<KurumDisplayDto>();
             if (!_cacheManager.IsAdd("Kurums"))
             {
+                MemoryCacheEntryOptions cacheExpirationOptions = new MemoryCacheEntryOptions();
+                cacheExpirationOptions.AbsoluteExpiration = DateTime.Now.AddDays(30);
+                cacheExpirationOptions.Priority = CacheItemPriority.Normal;
                 list = _okulDal.GetTikKurum4Take();
                 _cacheManager.Add("Kurums", list);
             }

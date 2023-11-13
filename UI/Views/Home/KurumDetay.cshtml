@@ -346,7 +346,7 @@
             $("#btnaddBeniArasin").prop("disabled", true);
             $("#btnaddBeniArasin").html('Lütfen Bekleyin...');
             $('#loading').show();
-            $('#kurumbeniarasin-modal').modal().hide();
+            // $('#kurumbeniarasin-modal').modal().hide();
         };
         var OnKurumAraComplete = function () {
             $("#btnaddBeniArasin").prop("disabled", false);
@@ -355,6 +355,7 @@
         };
         var OnKurumAraSuccess = function (data) {
             if (data.Success) {
+                $('#kurumbeniarasin-modal').modal().hide();
                 swal({
                     title: 'BAŞARILI',
                     text: "Bilgileriniz kaydedilmiştir. En kısa sürede tarafınıza ulaşılacaktır. Teşekkür ederiz.",

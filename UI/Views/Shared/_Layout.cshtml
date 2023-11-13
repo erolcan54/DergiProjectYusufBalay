@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dergi Okullar</title>
+    <title>Eğitim Dedektifi</title>
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     @*<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />*@
@@ -17,11 +17,6 @@
     <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css">
     <link href="~/assets/css/app.min.css" rel="stylesheet" type="text/css" id="light-style">
     <link href="~/assets/css/app-dark.min.css" rel="stylesheet" type="text/css" id="dark-style">
-    <!-- third party css -->
-    <link href="~/assets/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css">
-    <link href="~/assets/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css">
-    <link href="~/assets/css/vendor/buttons.bootstrap5.css" rel="stylesheet" type="text/css">
-    <link href="~/assets/css/vendor/select.bootstrap5.css" rel="stylesheet" type="text/css">
     <!-- third party css end -->
     <link href="~/toastr.js/toastr.min.css" rel="stylesheet" />
     <link href="~/bootstrap-sweetalert/sweetalert.min.css" rel="stylesheet" />
@@ -39,13 +34,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><strong>Anasayfa</strong></a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><strong><i class="uil uil-home-alt"></i> Anasayfa</strong></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="isBasvuru"><strong>İş Başvuru</strong></a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="isBasvuru"><strong><i class="uil uil-user-check"></i> İş Başvuru</strong></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-warning btn-dark" asp-area="" asp-controller="Home" asp-action="UcretsizDanisman"><strong>Ücretsiz Eğitim Danışmanı</strong></a>
+                            <a class="nav-link text-warning btn-dark" asp-area="" asp-controller="Home" asp-action="UcretsizDanisman"><strong><i class="uil uil-users-alt"></i> Ücretsiz Eğitim Danışmanı</strong></a>
                         </li>
                         @*<li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -61,8 +56,8 @@
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <strong>Giriş İşlemleri</strong>
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <strong><i class="uil uil-arrow-to-right"></i> Giriş İşlemleri</strong>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" asp-controller="Home" asp-action="KullaniciGiris"><strong>Kurum Girişi</strong></a>
@@ -71,6 +66,9 @@
                                 <a class="dropdown-item text-danger" asp-controller="Uye" asp-action="CikisYap">Çıkış Yap</a>*@
                             </div>
                         </li>
+                        @* <li class="nav-item">
+                            <a class="nav-link text-dark btn-warning" asp-area="" asp-controller="Home" asp-action="Iletisim"><strong><i class="uil uil-forwaded-call"></i> İletişim</strong></a>
+                        </li> *@
                     </ul>
                 </div>
             </div>
@@ -82,7 +80,8 @@
         </main>
     </div>
 
-
+    @await Component.InvokeAsync("LayoutFooter")
+    
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -115,16 +114,11 @@
     <!-- end demo js-->
     <!-- third party js -->
     <script src="~/assets/js/vendor/jquery.dataTables.min.js"></script>
-    <script src="~/assets/js/vendor/dataTables.bootstrap5.js"></script>
-    <script src="~/assets/js/vendor/dataTables.responsive.min.js"></script>
     <script src="~/assets/js/vendor/responsive.bootstrap5.min.js"></script>
-    <script src="~/assets/js/vendor/dataTables.buttons.min.js"></script>
     <script src="~/assets/js/vendor/buttons.bootstrap5.min.js"></script>
     <script src="~/assets/js/vendor/buttons.html5.min.js"></script>
     <script src="~/assets/js/vendor/buttons.flash.min.js"></script>
     <script src="~/assets/js/vendor/buttons.print.min.js"></script>
-    <script src="~/assets/js/vendor/dataTables.keyTable.min.js"></script>
-    <script src="~/assets/js/vendor/dataTables.select.min.js"></script>
     <!-- third party js ends -->
     <!-- demo app -->
     <script src="~/assets/js/pages/demo.datatable-init.js"></script>

@@ -49,9 +49,12 @@ namespace UI.Controllers
         private IKulupService _kulupService;
         private IBransService _bransService;
         private IisBasvuruService _basvuruService;
+        private ISliderService _sliderService;
+        private IPopupModalService _popupModalService;
+        private IUcretsizDanismanService _ucretsizDanismanService;
         private IHttpContextAccessor _contextAccessor;
 
-        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IEgitimModeliResimService egitimModeliResimService, IEgitimModeliService egitimModeliService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IBransService bransService, IisBasvuruService basvuruService)
+        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IEgitimModeliResimService egitimModeliResimService, IEgitimModeliService egitimModeliService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IBransService bransService, IisBasvuruService basvuruService, ISliderService sliderService, IPopupModalService popupModalService, IUcretsizDanismanService ucretsizDanismanService)
         {
             _logger = logger;
             _ilService = ilService;
@@ -84,54 +87,43 @@ namespace UI.Controllers
             _kulupService = kulupService;
             _bransService = bransService;
             _basvuruService = basvuruService;
+            _sliderService = sliderService;
+            _popupModalService = popupModalService;
+            _ucretsizDanismanService = ucretsizDanismanService;
         }
 
         public async Task<IActionResult> Index()
         {
             //HttpContext.Session.Clear();
             //await HttpContext.SignOutAsync();
-            var ilListe = _ilService.GetAll();
-            var ilSelectList = (from i in ilListe.Data
-                                select new SelectListItem
-                                {
-                                    Text = i.Ad.ToUpper(),
-                                    Value = i.Id.ToString()
-                                }).ToList();
-            ViewData["iller"] = ilSelectList;
+            //var ilListe = _ilService.GetAll();
+            //var ilSelectList = (from i in ilListe.Data
+            //                    select new SelectListItem
+            //                    {
+            //                        Text = i.Ad.ToUpper(),
+            //                        Value = i.Id.ToString()
+            //                    }).ToList();
+            //ViewData["iller"] = ilSelectList;
 
-            var okulTurleri = _okulTurService.GetAll();
-            var okulTurSelectList = (from i in okulTurleri.Data
-                                     select new SelectListItem
-                                     {
-                                         Text = i.Tip.ToUpper(),
-                                         Value = i.Id.ToString()
-                                     }).ToList();
-            ViewData["okulTurleri"] = okulTurSelectList;
+            //var okulTurleri = _okulTurService.GetAll();
+            //var okulTurSelectList = (from i in okulTurleri.Data
+            //                         select new SelectListItem
+            //                         {
+            //                             Text = i.Tip.ToUpper(),
+            //                             Value = i.Id.ToString()
+            //                         }).ToList();
+            //ViewData["okulTurleri"] = okulTurSelectList;
 
-            KurumAraDto model = new KurumAraDto();
-            return View(model);
+            var popup = _popupModalService.GetByStatus();
+            ViewData["Popup"] = popup.Data;
+            //KurumAraDto model = new KurumAraDto();
+            return View();
         }
 
         [HttpPost]
         public IActionResult KurumAra(KurumAraDto model)
         {
-            var ilListe = _ilService.GetAll();
-            var ilSelectList = (from i in ilListe.Data
-                                select new SelectListItem
-                                {
-                                    Text = i.Ad.ToUpper(),
-                                    Value = i.Id.ToString()
-                                }).ToList();
-            ViewData["iller"] = ilSelectList;
-
-            var okulTurleri = _okulTurService.GetAll();
-            var okulTurSelectList = (from i in okulTurleri.Data
-                                     select new SelectListItem
-                                     {
-                                         Text = i.Tip.ToUpper(),
-                                         Value = i.Id.ToString()
-                                     }).ToList();
-            ViewData["okulTurleri"] = okulTurSelectList;
+            
             List<KurumDisplayDto>? liste = new List<KurumDisplayDto>();
             if (model.OkulArama && !model.KursArama)
             {
@@ -214,7 +206,7 @@ namespace UI.Controllers
         public IActionResult KurumBeniArasin(KurumBeniAra model)
         {
             if (!model.KVKK)
-                return Json("KVKK metnini onaylamanız gerekmektedir.");
+                return Json(new ErrorResult("KVKK metnini onaylamanız gerekmektedir."));
             var result = _kurumBeniAraService.Add(model);
             return Json(result);
         }
@@ -616,5 +608,39 @@ namespace UI.Controllers
 
             return Json(result);
         }
+
+        public IActionResult UcretsizDanisman()
+        {
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
+            ViewData["iller"] = ilSelectList;
+            
+            UcretsizDanisman model=new UcretsizDanisman();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UcretsizDanismanBasvuruEkle(UcretsizDanisman model)
+        {
+            if (!model.OkulMu && !model.KursMu)
+                return Json(new ErrorResult("Okul veya Kurs tercihi yapmadınız."));
+            if (model.Sinif == null || model.Sinif==0)
+                return Json(new ErrorResult("Sınıf tercihi yapmadınız."));
+            if(model.ilId==null || model.ilId==0)
+                return Json(new ErrorResult("İl tercihi yapmadınız."));
+            if (model.ilceId == null || model.ilceId == 0)
+                return Json(new ErrorResult("İlçe tercihi yapmadınız."));
+            if (!model.KVKK)
+                return Json(new ErrorResult("KVKK tercihini işsaretlemeniz gerekmektedir."));
+
+            var result = _ucretsizDanismanService.Add(model);
+            return Json(result);
+        }
+
     }
 }

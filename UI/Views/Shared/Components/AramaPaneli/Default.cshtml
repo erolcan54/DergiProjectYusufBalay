@@ -1,0 +1,170 @@
+﻿@model KurumAraDto
+@{
+    List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
+    List<SelectListItem> okulTurleri = ViewData["okulTurleri"] as List<SelectListItem>;
+}
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">ARAMA PANELİ</h4>
+            <ul class="nav nav-tabs nav-bordered mb-3">
+                <li class="nav-item">
+                    <a href="#home-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                        @* <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                        <span class="d-none d-md-block">Okul Ara</span>*@
+                        <span class="d-md-block">Okul Ara</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#profile-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                        @* <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                        <span class="d-none d-md-block">Kurs Ara</span>*@
+                        <span class="d-md-block">Kurs Ara</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane show active" id="home-b1">
+                    <form class="form-vertical" method="post" asp-action="KurumAra" asp-controller="Home">
+                        <div class="row">
+                            <input type="hidden" asp-for="OkulArama" value="true" />
+                            <input type="hidden" asp-for="KursArama" value="false" />
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="il1" asp-for="il1" onchange="getvalOkul(this);" class="form-control select2" data-toggle="select2">
+                                        <option value="0">İl Seçiniz</option>
+                                        @foreach (var item in iller)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div> <!-- end col -->
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="ilce1" asp-for="ilce1" class="form-control select2" data-toggle="select2">
+                                        <option value="0">İlçe Seçiniz</option>
+                                    </select>
+                                </div>
+
+                            </div> <!-- end col -->
+                            <div class="col-lg-3">
+                                <div class="mb-2">
+                                    <select id="okulTurId" asp-for="okulTurId" class="form-control select2" data-toggle="select2">
+                                        <option value="0">Okul Türü Seçiniz</option>
+                                        @foreach (var item in okulTurleri)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+
+                            </div> <!-- end col -->
+                            @* <div class="col-lg-2">
+                            <div class="mb-2">
+                            <div class="form-check form-switch">
+                            <input type="checkbox" asp-for="KurumYorumSecenekOkul" class="form-check-input" id="KurumYorumSecenekOkul">
+                            <label class="form-check-label" for="KurumYorumSecenekOkul">En az 100 yorum olan kurumları listele</label>
+                            </div>
+                            </div>
+
+                            </div> <!-- end col --> *@
+                            <div class="col-lg-3 d-grid mb-2">
+                                <button id="btnOkulAra" type="submit" class="btn btn-warning text-dark"><strong><i class="uil uil-search"></i> Okul Ara</strong></button>
+
+                            </div> <!-- end col -->
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane show" id="profile-b1">
+                    <form class="form-vertical" method="post" asp-action="KurumAra" asp-controller="Home">
+                        <div class="row">
+                            <input type="hidden" asp-for="OkulArama" value="false" />
+                            <input type="hidden" asp-for="KursArama" value="true" />
+                            <div class="col-lg-4 mb-2">
+                                <select id="il2" asp-for="il2" onchange="getvalKurs(this);" class="form-control select2" data-toggle="select2">
+                                    <option value="0">İl Seçiniz</option>
+                                    @foreach (var item in iller)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div> <!-- end col -->
+                            <div class="col-lg-4 mb-2">
+                                <select id="ilce2" asp-for="ilce2" class="form-control select2" data-toggle="select2">
+                                    <option>İlçe Seçiniz</option>
+                                </select>
+                            </div> <!-- end col -->
+                            @*  <div class="col-lg-3">
+                            <div class="mb-2">
+                            <div class="form-check form-switch">
+                            <input type="checkbox" asp-for="KurumYorumSecenekKurs" class="form-check-input" id="KurumYorumSecenekKurs">
+                            <label class="form-check-label" for="KurumYorumSecenekKurs">En az 100 yorum olan kurumları listele</label>
+                            </div>
+                            </div>
+
+                            </div> <!-- end col --> *@
+                            <div class="col-lg-4 d-grid mb-2">
+                                <button id="btnKursAra" type="submit" class="btn btn-dark text-warning"><strong><i class="uil uil-search"></i> Kurs Ara</strong></button>
+                            </div> <!-- end col -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function getvalOkul(sel) {
+        alert(sel.value);
+        var id = sel.value;
+        var ilceListe = $("#ilce1");
+        ilceListe.empty();
+        $.ajax({
+            url: '../Home/GetSelectListilce/',
+            type: 'POST',
+            dataType: 'json',
+            data: { 'ilId': id },
+            success: function (data) {
+                $.each(data, function (index, option) {
+                    ilceListe.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                });
+            }
+        });
+    };
+
+    function getvalOkul(sel) {
+        var id = sel.value;
+        var ilceListe = $("#ilce1");
+        ilceListe.empty();
+        $.ajax({
+            url: '../Home/GetSelectListilce/',
+            type: 'POST',
+            dataType: 'json',
+            data: { 'ilId': id },
+            success: function (data) {
+                $.each(data, function (index, option) {
+                    ilceListe.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                });
+            }
+        });
+    };
+
+    function getvalKurs(sel) {
+        var id = sel.value;
+        var ilceListe = $("#ilce2");
+        ilceListe.empty();
+        $.ajax({
+            url: '../Home/GetSelectListilce/',
+            type: 'POST',
+            dataType: 'json',
+            data: { 'ilId': id },
+            success: function (data) {
+                $.each(data, function (index, option) {
+                    ilceListe.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                });
+            }
+        });
+    };
+</script>

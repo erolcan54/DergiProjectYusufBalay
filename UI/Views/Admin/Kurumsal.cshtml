@@ -1,0 +1,104 @@
+﻿@model Kurumsal
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">KURUMSAL BİLGİLER PANELİ</h4><br />
+            <form class="form-vertical" data-ajax="true"
+                  data-ajax-success="OnUpdateKurumsalSuccess"
+                  data-ajax-begin="OnUpdateKurumsalBegin"
+                  data-ajax-complete="OnUpdateKurumsalComplete" data-ajax-method="POST" asp-action="KurumsalBilgiGuncelle" asp-controller="Admin">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <input type="hidden" asp-for="DeletedDate" />
+                <input type="hidden" asp-for="UpdatedDate" />
+                <input type="hidden" asp-for="Status" />
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="Telefon" class="form-label">Telefon</label>
+                            <input type="tel" asp-for="Telefon" class="form-control" id="Telefon" data-toggle="input-mask" data-mask-format="(000) 000-0000" maxlength="14" placeholder="Telefon Bilgilerinizi Yazınız">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="Email" class="form-label">Email</label>
+                            <input class="form-control" type="email" asp-for="Email" id="Email" placeholder="Email Yazınız">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="Facebook" class="form-label">Facebook</label>
+                            <input type="text" asp-for="Facebook" class="form-control" id="Facebook" placeholder="Facebook Adresinizi Yazınız">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="Instagram" class="form-label">Instagram</label>
+                            <input type="text" asp-for="Instagram" class="form-control" id="Instagram" placeholder="Instagram Adresinizi Yazınız">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="X (Twitter)" class="form-label">Twitter</label>
+                            <input type="text" asp-for="Twitter" class="form-control" id="Twitter" placeholder="X(Twitter) Adresinizi Yazınız">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid mb-0 text-center">
+                    <button class="btn btn-primary" id="btnupdateKurumsal" type="submit"><i class="mdi mdi-pencil"></i> Güncelle </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnUpdateKurumsalBegin = function () {
+            $("#btnupdateKurumsal").prop("disabled", true);
+            $("#btnupdateKurumsal").html('Lütfen Bekleyin...');
+            $('#loading').show();
+
+
+        };
+        var OnUpdateKurumsalComplete = function () {
+            $("#btnupdateKurumsal").prop("disabled", false);
+            $("#btnupdateKurumsal").html('<i class="mdi mdi-pencil"></i> Güncelle ');
+            $('#loading').hide();
+        }
+        var OnUpdateKurumsalSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("Kurumsal","Admin"))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.Message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+    </script>
+}
+
+

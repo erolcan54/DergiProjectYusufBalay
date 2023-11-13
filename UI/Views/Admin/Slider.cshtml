@@ -3,10 +3,37 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="row mb-2 mt-1">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
+                      data-ajax-success="OnAddSliderSuccess"
+                      data-ajax-begin="OnAddSliderBegin"
+                      data-ajax-complete="OnAddSliderComplete"
+                      asp-action="SliderResimEkle"
+                      asp-controller="Admin"
+                      data-ajax-method="POST">
+                    <div class="row mb-3">
+                        <label class="col-3 col-form-label text-right">Resim :</label>
+                        <div class="col-9">
+                            <input type="file" name="Resim" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="justify-content-end row">
+                        <div class="col-9">
+                            <button class="btn btn-primary" id="btnaddresim" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
 <div class="row">
     <div class="card">
         <div class="card-body">
-
             <h3 class="header-title">RESİMLER</h3><br />
             @if (Model.Count > 0)
             {
@@ -18,7 +45,9 @@
                             <!-- project-thumbnail -->
                             <div class="chart-widget-list mt-1 text-center">
                                 <p><img class="card-img-top" style="height:150px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap"></p>
-                                <p><a href="@Url.Action("SliderResimSil","Admin",new {id=item.Id})" class="btn btn-sm btn-danger text-dark"><strong> Sil</strong></a></p>
+                                <p>
+                                    <a href="#" id="btnresimSil" data-id="@item.Id" class="btn btn-sm btn-danger text-dark"><strong> Sil</strong></a>
+                                    </p>
                             </div>
                         </div>
                     </div>
@@ -33,6 +62,84 @@
             }
         </div>
     </div>
-
 </div>
 
+@section Scripts{
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        var OnAddSliderBegin = function () {
+            $("#btnaddresim").prop("disabled", true);
+            $("#btnaddresim").html('Lütfen Bekleyin...');
+            $('#loading').show();
+        };
+        var OnAddSliderComplete = function () {
+            $("#btnaddresim").prop("disabled", false);
+            $("#btnaddresim").html('<i class="mdi mdi-plus"></i> Kaydet ');
+            $('#loading').hide();
+        }
+        var OnAddSliderSuccess = function (data) {
+            if (data.Success) {
+                window.location.href = '@Html.Raw(Url.Action("Slider","Admin"))';
+            }
+            else {
+                swal({
+                    title: 'UYARI',
+                    text: data.message,
+                    type: 'error',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Tamam',
+                });
+            }
+        };
+
+        $(document).on("click", "#btnresimSil", function () {
+            var id = $(this).data("id");
+            swal({
+                title: "UYARI",
+                text: "Resmi silmek istediğinize emin misiniz?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                cancelButtonClass: 'btn-success',
+                confirmButtonText: "EVET",
+                cancelButtonText: "HAYIR",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: '/Admin/SliderResimSil/' + id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.Success == true) {
+                            swal({
+                                title: "BAŞARILI!",
+                                type: "success",
+                                text: result.Message,
+                                confirmButtonClass: 'btn-success',
+                                confirmButtonText: "Tamam"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    window.location.href = '@Url.Action("Slider", "Admin")';
+                                }
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'HATA',
+                                text: result.Message,
+                                type: 'error',
+                                confirmButtonClass: 'btn-danger',
+                                confirmButtonText: 'Tamam',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+}

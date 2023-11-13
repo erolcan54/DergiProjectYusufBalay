@@ -106,6 +106,15 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<SliderManager>().As<ISliderService>().SingleInstance();
             builder.RegisterType<EfSliderDal>().As<ISliderDal>().SingleInstance();
 
+            builder.RegisterType<KurumsalManager>().As<IKurumsalService>().SingleInstance();
+            builder.RegisterType<EfKurumsalDal>().As<IKurumsalDal>().SingleInstance();
+
+            builder.RegisterType<PopupModalManager>().As<IPopupModalService>().SingleInstance();
+            builder.RegisterType<EfPopopModalDal>().As<IPopupModalDal>().SingleInstance();
+
+            builder.RegisterType<UcretsizDanismanManager>().As<IUcretsizDanismanService>().SingleInstance();
+            builder.RegisterType<EfUcretsizDanismanDal>().As<IUcretsizDanismanDal>().SingleInstance();
+
             var MemoryCacheInstance = new MemoryCache(new MemoryCacheOptions());
             builder.RegisterInstance<IMemoryCache>(MemoryCacheInstance);
 
