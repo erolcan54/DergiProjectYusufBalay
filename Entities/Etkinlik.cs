@@ -11,5 +11,6 @@ namespace Entities
         public int KurumId { get; set; }
         public string Baslik { get; set; }
         public string Aciklama { get; set; }
+        public byte[] Resim { get; set; }
     }
 }

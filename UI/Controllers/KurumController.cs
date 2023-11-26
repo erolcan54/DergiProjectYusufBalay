@@ -555,8 +555,19 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult EtkinlikEkle(Etkinlik model)
+        public IActionResult EtkinlikEkle(Etkinlik model,IFormFile Resim)
         {
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    model.Resim = stream.ToArray();
+                }
+            }
+            else
+                return Json(new ErrorResult("Resim seçmediniz."));
+
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
             model.KurumId = int.Parse(kurumId);
             var result = _etkinlikService.Add(model);
@@ -593,8 +604,16 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult EtkinlikGuncelle(Etkinlik model)
+        public IActionResult EtkinlikGuncelle(Etkinlik model, IFormFile Resim)
         {
+            if (Resim != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Resim.CopyTo(stream);
+                    model.Resim = stream.ToArray();
+                }
+            }
             var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
             model.KurumId = int.Parse(kurumId);
             var result = _etkinlikService.Update(model);

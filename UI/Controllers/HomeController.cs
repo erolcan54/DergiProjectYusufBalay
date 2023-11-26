@@ -471,6 +471,7 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
 
             var ogretmenKadrosu = _ogretmenService.GetAllGetByKurumId(int.Parse(kurumId));
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View(ogretmenKadrosu.Data.OrderBy(a => a.Ad).ToList());
 
         }
@@ -485,7 +486,7 @@ namespace UI.Controllers
             var resimler = _egitimModeliResimService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["Model"] = model.Data;
             ViewData["ModelResimler"] = resimler.Data;
-
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View();
         }
 
@@ -496,6 +497,7 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
 
             var model = _basariService.GetAllByKurumId(int.Parse(kurumId));
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View(model.Data);
         }
 
@@ -506,6 +508,7 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
 
             var katalogliste = _katalogService.GetAllByKurumId(int.Parse(kurumId));
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View(katalogliste.Data.OrderByDescending(a=>a.Id).ToList());
         }
 
@@ -522,6 +525,7 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
 
             var liste = _icGorselService.GetAllByKurumId(int.Parse(kurumId));
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View(liste.Data);
         }
 
@@ -532,6 +536,7 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
 
             var liste = _disGorselService.GetAllByKurumId(int.Parse(kurumId));
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View(liste.Data);
         }
 
@@ -542,6 +547,7 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
 
             var etkinlikler = _etkinlikService.GetAllByKurumId(int.Parse(kurumId));
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View(etkinlikler.Data);
         }
 
@@ -553,6 +559,7 @@ namespace UI.Controllers
             var etkinlik = _etkinlikService.GetById(id);
             var resimler = _etkinlikResimService.GetAllByEtkinlikId(id);
             ViewData["Resimler"] = resimler.Data;
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View(etkinlik.Data);
         }
 
@@ -563,6 +570,7 @@ namespace UI.Controllers
                 return RedirectToAction("Index");
 
             var kulupler = _kulupService.GetAllByKurumId(int.Parse(kurumId));
+            ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
             return View(kulupler.Data);
         }
 

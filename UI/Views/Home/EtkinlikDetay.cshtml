@@ -16,11 +16,16 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
+                <h4 class="header-title">@ViewData["KurumAdi"]</h4><hr />
                 <div class="mt-1">
                     @if (Model != null)
                     {
                         <div class="row">
                             <div class="col-md-12">
+                                <p>
+                                        <img class="card-img-top" src="@ByteToImage.DecodeImage(Model.Resim)" style="height:200px; object-fit : scale-down">
+                                  
+                                </p>
                                 <p class="w-100">
                                     <b>
                                         @Html.Raw(Model.Baslik)

@@ -14,6 +14,7 @@
     <!-- Right Sidebar -->
     <div class="col-12">
         <div class="mt-1">
+            <h4 class="header-title">@ViewData["KurumAdi"]</h4><hr />
             @if (Model.Count > 0)
             {
                 <div class="row">
@@ -25,6 +26,9 @@
 
                                 <div class="card-body position-relative">
                                     <div class="chart-widget-list mt-1 text-center">
+                                        <p>
+                                            <a href="@Url.Action("EtkinlikDetay","Home",new {id=item.Id })" class="text-title">
+                                            <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" style="height:200px; object-fit : scale-down"></a></p>
                                         <p><a href="@Url.Action("EtkinlikDetay","Home",new {id=item.Id })" class="text-title">@item.Baslik</a></p>
                                         <p><a href="@Url.Action("EtkinlikDetay","Home",new {id=item.Id })" class="btn btn-dark text-warning btn-sm"><strong>Detay</strong></a></p>
                                     </div>

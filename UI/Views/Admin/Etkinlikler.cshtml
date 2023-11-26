@@ -48,6 +48,7 @@
 
                                             <div class="card-body position-relative">
                                                 <!-- project title-->
+                                                <img class="card-img-top" src="@ByteToImage.DecodeImage(item.Resim)" style="height:200px; object-fit : scale-down">
                                                 <h4 class="mt-0">
                                                     <a href="/Admin/EtkinlikDetay/@item.Id" class="text-title">@item.Baslik</a>
                                                 </h4>
@@ -102,7 +103,7 @@
             </div>
             <div class="modal-body">
 
-                <form class="form-horizontal" data-ajax="true"
+                <form class="form-horizontal" data-ajax="true" enctype="multipart/form-data"
                       data-ajax-success="OnEtkinlikEkleSuccess"
                       data-ajax-begin="OnEtkinlikEkleBegin"
                       data-ajax-complete="OnEtkinlikEkleComplete" data-ajax-method="POST" asp-action="EtkinlikEkle" asp-controller="Admin">
@@ -110,6 +111,10 @@
                     <div class="mb-2">
                         <label for="Baslik" class="form-label">Başlık</label>
                         <input class="form-control" type="text" name="Baslik" id="Baslik">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Resim" class="form-label">Resim</label>
+                        <input class="form-control" type="file" name="Resim" required="" id="Resim">
                     </div>
                     <div class="mb-3">
                         <label for="Aciklama" class="form-label">Açıklama</label>

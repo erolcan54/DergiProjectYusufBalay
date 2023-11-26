@@ -31,7 +31,7 @@
                             </p>
                             <p>
                                 Web
-                                <span class="float-end">@result.Web</span>
+                                <span class="float-end"><a href="@result.Web" target="_blank">@result.Web</a></span>
                             </p>
                             <p>
                                 Email
@@ -49,12 +49,15 @@
                                 Görüntülenme Sayısı
                                 <span class="float-end">@result.TikSayisi</span>
                             </p>
-                            <p class="text-muted mb-0" id="tooltip-container">
-                                <strong>Sosyal Medya Hesaplarımız :</strong>
-                                <a href="@result.Facebook" class="d-inline-block ms-2 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Facebook" aria-label="Facebook"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-facebook-48.png" /></a>
-                                <a href="@result.Twitter" class="d-inline-block ms-2 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="X" aria-label="Twitter"><img src="~/icon/icons8-x-50.png" style="max-width:25px;max-height:25px;" /></a>
-                                <a href="https://wa.me/@Html.Raw(result.Whatsapp)" target="_blank" class="d-inline-block ms-2 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Whatsapp" aria-label="Whatsapp"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-whatsapp-48.png" /></a>
-                                <a href="@result.Instagram" class="d-inline-block ms-2 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Instagram" aria-label="Instagram"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-instagram-48.png" /></a>
+                            <p>
+                                Sosyal Medya Hesaplarımız :
+                                <span class="float-end">
+                                    <a href="@result.Facebook" class="d-inline-block ms-1 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Facebook" aria-label="Facebook"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-facebook-48.png" /></a>
+                                    <a href="@result.Twitter" class="d-inline-block ms-1 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="X" aria-label="Twitter"><img src="~/icon/icons8-x-50.png" style="max-width:25px;max-height:25px;" /></a>
+                                    <a href="https://wa.me/@Html.Raw(result.Whatsapp)" target="_blank" class="d-inline-block ms-1 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Whatsapp" aria-label="Whatsapp"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-whatsapp-48.png" /></a>
+                                    <a href="@result.Instagram" class="d-inline-block ms-1 float-end font-20" data-bs-container="#tooltip-container" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Instagram" aria-label="Instagram"><img style="max-width:30px;max-height:30px;" src="~/icon/icons8-instagram-48.png" /></a>
+                                </span>
+                                
                             </p>
                             <br />
                             <p class="d-grid">
@@ -68,93 +71,81 @@
                     </div>
                 </div>
                 <hr />
-               @*  <div class="row justify-content-center"> *@
+                @*  <div class="row justify-content-center"> *@
+
+
                 <div class="row">
+                    <div class="col-lg-3 col-xl-3 col-sm-6">
+                        <div class="card card-body">
+                            <p class="card-text">
+                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
+                            </p>
+                            <a href="@Url.Action("OgretmenKadrosu","Home")" class="btn btn-dark text-warning btn-sm"><b>Öğretmen Kadrosu</b></a>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                    <div class="col-lg-3 col-xl-3 col-sm-6">
+                        <div class="card card-body">
+                            
+                            <p class="card-text">
+                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
+                            </p>
+                            <a href="@Url.Action("EgitimModeli","Home")" class="btn btn-dark text-warning btn-sm"><b>Eğitim Modeli</b></a>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                    <div class="col-lg-3 col-xl-3 col-sm-6">
+                        <div class="card card-body">
+                            <p class="card-text">
+                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
+                            </p>
+                            <a href="@Url.Action("Basarilar","Home")" class="btn btn-dark text-warning btn-sm mt-0"><b>Başarılar</b></a>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                    <div class="col-lg-3 col-xl-3 col-sm-6">
+                        <div class="card card-body">
 
+                            <p class="card-text">
+                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
+                            </p>
+                            <a href="@Url.Action("Kataloglar","Home")" class="btn btn-dark text-warning btn-sm mt-0"><b>Kataloglar</b></a>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
 
-                    <div class="col-3 col-lg-3 col-xl-3 mb-1">
-                        <div class="row align-items-center">
-                            <div class="card d-block">
+                    <div class="col-lg-3 col-xl-3 col-sm-6">
+                        <div class="card card-body">
+                            <p class="card-text">
                                 <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="@Url.Action("OgretmenKadrosu","Home")" class="btn btn-dark text-warning btn-sm mt-0 w-100"><b>Öğretmen Kadrosu</b></a>
-                                </div> <!-- end card-body-->
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end col -->
+                            </p>
+                            <a href="@Url.Action("IcGorseller","Home")" class="btn btn-dark text-warning btn-sm mt-0"><b>İç Görseller</b></a>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                    <div class="col-lg-3 col-xl-3 col-sm-6">
+                        <div class="card card-body">
 
-                    <div class="col-3 col-lg-3 col-xl-3 mb-1">
-                        <div class="row align-items-center">
-                            <div class="card d-block">
+                            <p class="card-text">
                                 <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="@Url.Action("EgitimModeli","Home")" class="btn btn-dark text-warning btn-sm mt-0 w-100"><b>Eğitim Modeli</b></a>
-                                </div> <!-- end card-body-->
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end col -->
+                            </p>
+                            <a href="@Url.Action("DisGorseller","Home")" class="btn btn-dark text-warning btn-sm mt-0"><b>Dış Görseller</b></a>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                    <div class="col-lg-3 col-xl-3 col-sm-6">
+                        <div class="card card-body">
+                            <p class="card-text">
+                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
+                            </p>
+                            <a href="@Url.Action("Etkinlikler","Home")" class="btn btn-dark text-warning btn-sm mt-0"><b>Etkinlikler</b></a>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                    <div class="col-lg-3 col-xl-3 col-sm-6">
+                        <div class="card card-body">
 
-                    <div class="col-3 col-lg-3 col-xl-3 mb-1">
-                        <div class="row align-items-center">
-                            <div class="card d-block">
+                            <p class="card-text">
                                 <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="@Url.Action("Basarilar","Home")" class="btn btn-dark text-warning btn-sm mt-0 w-100"><b>Başarılar</b></a>
-                                </div> <!-- end card-body-->
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end col -->
-                    <div class="col-3 col-lg-3 col-xl-3 mb-1">
-                        <div class="row align-items-center">
-                            <div class="card d-block">
-                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="@Url.Action("Kataloglar","Home")" class="btn btn-dark text-warning btn-sm mt-0 w-100"><b>Kataloglar</b></a>
-                                </div> <!-- end card-body-->
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end col -->
-                    <div class="col-3 col-lg-3 col-xl-3 mb-1">
-                        <div class="row align-items-center">
-                            <div class="card d-block">
-                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="@Url.Action("IcGorseller","Home")" class="btn btn-dark text-warning btn-sm mt-0 w-100"><b>İç Görseller</b></a>
-                                </div> <!-- end card-body-->
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end col -->
-                    <div class="col-3 col-lg-3 col-xl-3 mb-1">
-                        <div class="row align-items-center">
-                            <div class="card d-block">
-                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="@Url.Action("DisGorseller","Home")" class="btn btn-dark text-warning btn-sm mt-0 w-100"><b>Dış Görseller</b></a>
-                                </div> <!-- end card-body-->
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end col -->
-                    <div class="col-3 col-lg-3 col-xl-3 mb-1">
-                        <div class="row align-items-center">
-                            <div class="card d-block">
-                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="@Url.Action("Etkinlikler","Home")" class="btn btn-dark text-warning btn-sm mt-0 w-100"><b>Etkinlikler</b></a>
-                                </div> <!-- end card-body-->
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end col -->
-                    <div class="col-3 col-lg-3 col-xl-3 mb-1">
-                        <div class="row align-items-center">
-                            <div class="card d-block">
-                                <img class="card-img-top" src="~/assets/images/small/small-1.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="@Url.Action("Kulupler","Home")" class="btn btn-dark text-warning btn-sm mt-0 w-100"><b>Kulüpler</b></a>
-                                </div> <!-- end card-body-->
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end col -->
+                            </p>
+                            <a href="@Url.Action("Kulupler","Home")" class="btn btn-dark text-warning btn-sm mt-0"><b>Kulüpler</b></a>
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
                 </div>
+
                 <hr>
                 <div class="row">
                     <div class="col-12">

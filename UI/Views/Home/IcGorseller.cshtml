@@ -18,6 +18,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
+                <h4 class="header-title">@ViewData["KurumAdi"]</h4><hr />
                 <div class="mt-1">
                     <div class="row">
                         @if (Model.Count > 0)
@@ -32,6 +33,7 @@
                                             <a href="@ByteToImage.DecodeImage(item.Resim)" data-lightbox="image-1" data-title="@item.Aciklama">
                                                 <img src="@ByteToImage.DecodeImage(item.Resim)" class="w-100" style="height:200px; object-fit : scale-down">
                                             </a>
+                                            <p class="m-2 text-dark">@item.Aciklama</p>
                                         </div> <!-- end card-->
                                     </div> <!-- end col -->
                                 }

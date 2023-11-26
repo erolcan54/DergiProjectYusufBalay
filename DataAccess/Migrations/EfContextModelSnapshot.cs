@@ -305,6 +305,10 @@ namespace DataAccess.Migrations
                     b.Property<int>("KurumId")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("Resim")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 

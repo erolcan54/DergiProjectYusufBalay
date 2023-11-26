@@ -1,32 +1,38 @@
 ﻿@model Kurumsal
 
-<footer class="bg-dark py-5">
+<footer class="bg-warning py-5">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6">
-                <img src="assets/images/logo.png" alt="" class="logo-dark" height="18">
-                <p class="text-muted mt-4">
+            <div class="col-lg-3">
+                <img src="~/assets/images/egitimdedektifi_logo_png-01.png" height="50" />
+                @* <p class="text-muted mt-4">
                     Hyper makes it easier to build better websites with
                     <br> great speed. Save hundreds of hours of design
                     <br> and development by using it.
-                </p>
+                </p> *@
 
             </div>
 
-            <div class="col-lg-2 mt-3 mt-lg-0">
-                <h5 class="text-light">İletişim</h5>
-
-                <ul class="list-unstyled ps-0 mb-0 mt-3 text-muted">
+            <div class="col-lg-3 mt-3 mt-lg-0">
+                <h5 class="text-dark">İletişim</h5>
+                <ul class="list-unstyled ps-0 mb-0 mt-3 text-dark">
                     <li class="mt-2"><strong><i class="uil uil-phone"></i> @Model.Telefon</strong></li>
                     <li class="mt-2"><strong><i class="uil uil-envelope-info"></i> @Model.Email</strong></li>
                 </ul>
 
             </div>
-            <div class="col-lg-2 mt-3 mt-lg-0">
+            <div class="col-lg-3 mt-3 mt-lg-0">
+                <h5 class="text-dark">Menü</h5>
+
+                <ul class="list-unstyled ps-0 mb-0 mt-3 text-dark">
+                    <li class="mt-2"><a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index"><strong><i class="uil uil-home-alt"></i> Anasayfa</strong></a></li>
+                    <li class="mt-2"><a class="text-dark" asp-area="" asp-controller="Home" asp-action="isBasvuru"><strong><i class="uil uil-user-check"></i> İş Başvuru</strong></a></li>
+                    <li class="mt-2"><a class="text-dark" asp-area="" asp-controller="Home" asp-action="UcretsizDanisman"><strong><i class="uil uil-users-alt"></i> Ücretsiz Eğitim Danışmanı</strong></a></li>
+                </ul>
             </div>
 
-            <div class="col-lg-2 mt-3 mt-lg-0">
-                <h5 class="text-light">Sosyal Medya</h5>
+            <div class="col-lg-3 mt-3 mt-lg-0">
+                <h5 class="text-dark">Sosyal Medya</h5>
 
                 <ul class="list-unstyled ps-0 mb-0 mt-3">
                     <li class="mt-2">
@@ -45,7 +51,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="mt-5">
-                    <p class="text-muted mt-4 text-center mb-0">
+                    <p class="text-dark mt-4 text-center mb-0">
                         © @DateTime.Now.Year Eğitim Dedektifi. Tüm Hakları Saklıdır.
                     </p>
                 </div>

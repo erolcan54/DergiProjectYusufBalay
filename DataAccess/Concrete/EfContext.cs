@@ -13,7 +13,7 @@ namespace DataAccess.Concrete
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer("server=DESKTOP-1VTRAI5\\SQLEXPRESS;database=OkulDbProject;integrated security=true");
-            optionsBuilder.UseSqlServer(@"Server=89.252.180.91\MSSQLSERVER2016;Database=OkulDbProject;user id=erolcann_dergi;password=?Xvb8352z;Trusted_Connection=true;Integrated Security=false");
+            optionsBuilder.UseSqlServer(@"Server=104.247.167.130\MSSQLSERVER2019;Database=egitimd9_EgitimDedektifiDb;user id=egitimd9_adminED;password=Yusuf+2021;Trusted_Connection=true;Integrated Security=false");
         }
 
         public DbSet<il> il { get; set; }

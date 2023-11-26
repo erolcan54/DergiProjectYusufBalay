@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(EfContext))]
-    [Migration("20231112190829_ucretsizdanismanentity")]
-    partial class ucretsizdanismanentity
+    [Migration("20231126193628_gmig1")]
+    partial class gmig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -306,6 +306,10 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("KurumId")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("Resim")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -1251,6 +1255,60 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Slider");
+                });
+
+            modelBuilder.Entity("Entities.UcretsizDanisman", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AdSoyad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("KVKK")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("KursMu")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("OkulMu")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Sinif")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Telefon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ilId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ilceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UcretsizDanisman");
                 });
 
             modelBuilder.Entity("Entities.Yonetici", b =>
