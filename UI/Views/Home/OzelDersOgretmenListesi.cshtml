@@ -75,28 +75,34 @@
                     <div class="col-md-4 col-xxl-3">
                         <div class="card text-center">
                             <div class="card-body">
-                                <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
-
-                                <h4 class="mb-0 mt-2"><a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">@item.AdSoyad</a></h4>
-                                <p class="text-muted font-14">@item.BransAdi</p>
-                                <p class="text-muted font-14">@item.ilAdi</p>
-
-                                @if (item.Online)
-                                {
-                                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Online</button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Online</button>
-                                }
-                                @if (item.Yuzyuze)
-                                {
-                                    <button type="button" class="btn btn-success btn-sm mb-2" disabled>Yüzyüze</button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-danger btn-sm mb-2" disabled>Yüzyüze</button>
-                                }
+                                <a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})">
+                                    <img src="@ByteToImage.DecodeImage(item.Resim)" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+                                </a>
+                                <div class="chart-widget-list mt-1 text-center">
+                                    <p><strong><a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})" class="text-title text-dark"><strong>@item.AdSoyad</strong></a></strong></p>
+                                    <p>@item.BransAdi</p>
+                                    <p>
+                                        @if (item.Online)
+                                        {
+                                            <span><i class="dripicons-checkmark text-success"></i> Online</span>
+                                        }
+                                        else
+                                        {
+                                            <span><i class="dripicons-cross text-danger"></i> Online</span>
+                                        }
+                                    </p>
+                                    <p>
+                                        @if (item.Yuzyuze)
+                                        {
+                                            <span><i class="dripicons-checkmark text-success"></i> Yüzyüze</span>
+                                        }
+                                        else
+                                        {
+                                            <span><i class="dripicons-cross text-danger"></i> Yüzyüze</span>
+                                        }
+                                    </p>
+                                    <p><a href="@Url.Action("ProfileDetail","Home",new {id=item.Id})" class="btn btn-sm btn-dark text-warning"><strong><i class="uil uil-corner-down-right"></i> İncele</strong></a></p>
+                                </div>
                             </div> <!-- end card-body -->
                         </div> <!-- end card -->
                         <!-- Messages-->
