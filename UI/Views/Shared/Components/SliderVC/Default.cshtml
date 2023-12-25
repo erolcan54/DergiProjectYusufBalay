@@ -8,14 +8,14 @@
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="@ByteToImage.DecodeImage(Model[0].Resim)" style="height:200px;" width="100%" />
+                            <img src="@ByteToImage.DecodeImage(Model[0].Resim)" style="min-height:100px;max-height:200px; max-width:100%;overflow:auto; " />
                     </div>
                     @if (Model.Count > 1)
                     {
                         for (int i = 1; i < Model.Count; i++)
                         {
                             <div class="carousel-item">
-                                <img src="@ByteToImage.DecodeImage(Model[i].Resim)" style="height:200px;" width="100%" />
+                                <img src="@ByteToImage.DecodeImage(Model[i].Resim)" style="min-height:100px; max-height:200px;max-width:100%;overflow:auto;" />
                             </div>
                         }
                     }
