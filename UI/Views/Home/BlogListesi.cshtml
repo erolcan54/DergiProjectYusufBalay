@@ -18,7 +18,7 @@
                         <div class="card d-block">
                             <!-- project-thumbnail -->
                             <a href="@Url.Action("BlogDetail","Home",new {id=item.Id})">
-                                <img class="card-img-top" style="height:200px;" src="@ByteToImage.DecodeImage(item.Resim)" alt="blog image cap">
+                                <img class="card-img-top" style="max-height:150px;overflow:auto;object-fit:contain;" src="@ByteToImage.DecodeImage(item.Resim)">
                             </a>
                             <div class="card-body position-relative">
                                 <!-- project title-->

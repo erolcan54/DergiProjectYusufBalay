@@ -117,7 +117,7 @@ namespace Business.Concrete
             if (!_cacheManager.IsAdd("Kurums"))
             {
                 MemoryCacheEntryOptions cacheExpirationOptions = new MemoryCacheEntryOptions();
-                cacheExpirationOptions.AbsoluteExpiration = DateTime.Now.AddDays(30);
+                cacheExpirationOptions.AbsoluteExpiration = DateTime.Now.AddDays(5);
                 cacheExpirationOptions.Priority = CacheItemPriority.Normal;
                 list = _okulDal.GetTikKurum4Take();
                 _cacheManager.Add("Kurums", list);

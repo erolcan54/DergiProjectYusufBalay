@@ -29,7 +29,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(b =>
 var app = builder.Build();
 
 app.UseSession();
-
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

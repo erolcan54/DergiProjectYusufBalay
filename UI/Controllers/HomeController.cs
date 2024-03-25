@@ -94,33 +94,31 @@ namespace UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //HttpContext.Session.Clear();
-            //await HttpContext.SignOutAsync();
-            //var ilListe = _ilService.GetAll();
-            //var ilSelectList = (from i in ilListe.Data
-            //                    select new SelectListItem
-            //                    {
-            //                        Text = i.Ad.ToUpper(),
-            //                        Value = i.Id.ToString()
-            //                    }).ToList();
-            //ViewData["iller"] = ilSelectList;
-
-            //var okulTurleri = _okulTurService.GetAll();
-            //var okulTurSelectList = (from i in okulTurleri.Data
-            //                         select new SelectListItem
-            //                         {
-            //                             Text = i.Tip.ToUpper(),
-            //                             Value = i.Id.ToString()
-            //                         }).ToList();
-            //ViewData["okulTurleri"] = okulTurSelectList;
-
             var popup = _popupModalService.GetByStatus();
             ViewData["Popup"] = popup.Data;
-            //KurumAraDto model = new KurumAraDto();
-            return View();
+
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                select new SelectListItem
+                {
+                    Text = i.Ad.ToUpper(),
+                    Value = i.Id.ToString()
+                }).ToList();
+            ViewData["iller"] = ilSelectList;
+
+            var okulTurleri = _okulTurService.GetAll();
+            var okulTurSelectList = (from i in okulTurleri.Data
+                select new SelectListItem
+                {
+                    Text = i.Tip.ToUpper(),
+                    Value = i.Id.ToString()
+                }).ToList();
+            ViewData["okulTurleri"] = okulTurSelectList;
+            KurumAraDto model = new KurumAraDto();
+            return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult KurumAra(KurumAraDto model)
         {
             
@@ -139,6 +137,15 @@ namespace UI.Controllers
                 okara.ilce1 = model.ilce1;
                 okara.KurumYorumSecenekOkul = model.KurumYorumSecenekOkul;
                 liste = _okulService.GetOkulListFilter(okara).Data;
+
+                var ilceListe = _ilceService.GetByilIdToList(model.il1);
+                var ilceSelectList = (from i in ilceListe.Data
+                    select new SelectListItem
+                    {
+                        Text = i.Ad.ToUpper(),
+                        Value = i.Id.ToString()
+                    }).ToList();
+                ViewData["ilceler"] = ilceSelectList;
             }
             else if (!model.OkulArama && model.KursArama)
             {
@@ -151,8 +158,35 @@ namespace UI.Controllers
                 kursAraDto.ilce2 = model.ilce2;
                 kursAraDto.KurumYorumSecenekKurs = model.KurumYorumSecenekKurs;
                 liste = _okulService.GetKursListFilter(kursAraDto).Data;
+                var ilceListe = _ilceService.GetByilIdToList(model.il2);
+                var ilceSelectList = (from i in ilceListe.Data
+                    select new SelectListItem
+                    {
+                        Text = i.Ad.ToUpper(),
+                        Value = i.Id.ToString()
+                    }).ToList();
+                ViewData["ilceler"] = ilceSelectList;
             }
+
+            var okulTurleri = _okulTurService.GetAll();
+            var okulTurSelectList = (from i in okulTurleri.Data
+                select new SelectListItem
+                {
+                    Text = i.Tip.ToUpper(),
+                    Value = i.Id.ToString()
+                }).ToList();
+            ViewData["okulTurleri"] = okulTurSelectList;
+
             ViewData["Liste"] = liste.OrderByDescending(a => a.TikSayisi).ToList();
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                select new SelectListItem
+                {
+                    Text = i.Ad.ToUpper(),
+                    Value = i.Id.ToString()
+                }).ToList();
+            ViewData["iller"] = ilSelectList;
+
             return View(model);
             //return RedirectToAction("KurumListesi", "Home", new { liste = liste });
         }
