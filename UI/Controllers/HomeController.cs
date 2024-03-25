@@ -194,7 +194,26 @@ namespace UI.Controllers
         public IActionResult KurumListesi()
         {
             var result = _okulService.GetAllKurum().Data.OrderByDescending(a => a.TikSayisi).ToList();
-            return View(result);
+            ViewData["Kurumlistesi"] = result;
+            var ilListe = _ilService.GetAll();
+            var ilSelectList = (from i in ilListe.Data
+                select new SelectListItem
+                {
+                    Text = i.Ad.ToUpper(),
+                    Value = i.Id.ToString()
+                }).ToList();
+            ViewData["iller"] = ilSelectList;
+
+            var okulTurleri = _okulTurService.GetAll();
+            var okulTurSelectList = (from i in okulTurleri.Data
+                select new SelectListItem
+                {
+                    Text = i.Tip.ToUpper(),
+                    Value = i.Id.ToString()
+                }).ToList();
+            ViewData["okulTurleri"] = okulTurSelectList;
+            KurumAraDto model = new KurumAraDto();
+            return View(model);
         }
 
         public IActionResult KurumDetay(int id)
