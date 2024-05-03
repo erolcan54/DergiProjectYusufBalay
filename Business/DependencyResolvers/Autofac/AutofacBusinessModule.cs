@@ -115,6 +115,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<UcretsizDanismanManager>().As<IUcretsizDanismanService>().SingleInstance();
             builder.RegisterType<EfUcretsizDanismanDal>().As<IUcretsizDanismanDal>().SingleInstance();
 
+            builder.RegisterType<UyeManager>().As<IUyeService>().SingleInstance();
+            builder.RegisterType<EfUyeDal>().As<IUyeDal>().SingleInstance();
+
             var MemoryCacheInstance = new MemoryCache(new MemoryCacheOptions());
             builder.RegisterInstance<IMemoryCache>(MemoryCacheInstance);
 

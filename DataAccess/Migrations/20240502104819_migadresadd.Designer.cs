@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(EfContext))]
-    [Migration("20231126193628_gmig1")]
-    partial class gmig1
+    [Migration("20240502104819_migadresadd")]
+    partial class migadresadd
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -761,6 +761,10 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Adres")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -1309,6 +1313,67 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UcretsizDanisman");
+                });
+
+            modelBuilder.Entity("Entities.Uye", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Ad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("KVKK")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MailCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("MailCodeActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Sifre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SmsCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("SmsCodeActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Soyad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Telefon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UyeGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Uye");
                 });
 
             modelBuilder.Entity("Entities.Yonetici", b =>

@@ -50,6 +50,7 @@ namespace DataAccess.Concrete
         public DbSet<Kurumsal> Kurumsal { get; set; }
         public DbSet<PopupModal> PopupModal { get; set; }
         public DbSet<UcretsizDanisman> UcretsizDanisman { get; set; }
+        public DbSet<Uye> Uye { get; set; }
 
     }
 }

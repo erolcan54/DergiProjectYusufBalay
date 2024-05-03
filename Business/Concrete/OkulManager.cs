@@ -47,12 +47,12 @@ namespace Business.Concrete
 
             _cacheManager.Remove("Kurums");
 
-            return new SuccessResult("Okul bilgisi silindi.");
+            return new SuccessResult("Kurum bilgisi silindi.");
         }
 
         public IDataResult<List<Okul>> GetAll()
         {
-            return new SuccessDataResult<List<Okul>>(_okulDal.GetAll(),"Okul listesi getirildi.");
+            return new SuccessDataResult<List<Okul>>(_okulDal.GetAll(),"Kurum listesi getirildi.");
         }
 
         public IDataResult<List<KurumDisplayDto>> GetAllKurum()
@@ -63,7 +63,7 @@ namespace Business.Concrete
 
         public IDataResult<Okul> GetById(int id)
         {
-            return new SuccessDataResult<Okul>(_okulDal.Get(a => a.Id == id), "Okul bilgisi getirildi.");
+            return new SuccessDataResult<Okul>(_okulDal.Get(a => a.Id == id), "Kurum bilgisi getirildi.");
         }
 
         public IDataResult<KurumDisplayDto> GetByIdDisplay(int id)
@@ -89,9 +89,9 @@ namespace Business.Concrete
                     if (yorums.Data > 20)
                         liste.Add(item);
                 }
-                return new SuccessDataResult<List<KurumDisplayDto>>(liste.OrderByDescending(a=>a.TikSayisi).ToList(), "Aranan kurs listesi getirildi.");
+                return new SuccessDataResult<List<KurumDisplayDto>>(liste.OrderByDescending(a=>a.TikSayisi).Where(a=>a.Status).ToList(), "Aranan kurs listesi getirildi.");
             }
-            return new SuccessDataResult<List<KurumDisplayDto>>(result.OrderByDescending(a => a.TikSayisi).ToList(), "Aranan kurs listesi getirildi.");
+            return new SuccessDataResult<List<KurumDisplayDto>>(result.OrderByDescending(a => a.TikSayisi).Where(a=>a.Status).ToList(), "Aranan kurs listesi getirildi.");
         }
 
         public IDataResult<List<KurumDisplayDto>> GetOkulListFilter(OkulAraDto model)
@@ -106,9 +106,9 @@ namespace Business.Concrete
                     if (yorums.Data > 20)
                         liste.Add(item);
                 }
-                return new SuccessDataResult<List<KurumDisplayDto>>(liste.OrderByDescending(a => a.TikSayisi).ToList(), "Aranan okul listesi getirildi.");
+                return new SuccessDataResult<List<KurumDisplayDto>>(liste.OrderByDescending(a => a.TikSayisi).Where(a => a.Status).ToList(), "Aranan okul listesi getirildi.");
             }
-            return new SuccessDataResult<List<KurumDisplayDto>>(result.OrderByDescending(a => a.TikSayisi).ToList(), "Aranan okul listesi getirildi.");
+            return new SuccessDataResult<List<KurumDisplayDto>>(result.OrderByDescending(a => a.TikSayisi).Where(a=>a.Status).ToList(), "Aranan okul listesi getirildi.");
         }
 
         public IDataResult<List<KurumDisplayDto>> GetTikKurum4Take()
@@ -120,7 +120,7 @@ namespace Business.Concrete
                 cacheExpirationOptions.AbsoluteExpiration = DateTime.Now.AddDays(5);
                 cacheExpirationOptions.Priority = CacheItemPriority.Normal;
                 list = _okulDal.GetTikKurum4Take();
-                _cacheManager.Add("Kurums", list);
+                _cacheManager.Add("Kurums", list.Where(a=>a.Status).ToList());
             }
             else
                 list = _cacheManager.Get<List<KurumDisplayDto>>("Kurums");
@@ -135,7 +135,7 @@ namespace Business.Concrete
 
             _cacheManager.Remove("Kurums");
 
-            return new SuccessResult("Okul bilgisi güncellendi.");
+            return new SuccessResult("Kurum bilgisi güncellendi.");
         }
     }
 }

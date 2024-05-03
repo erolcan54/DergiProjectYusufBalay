@@ -8,11 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using System.Security.Claims;
+using Core.Utilities.Crypto;
+using Core.Utilities.PasswordCreate;
 using UI.Filters;
 using X.PagedList;
 using X.PagedList.Mvc.Core;
 using UI.Utilities;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using static Core.Utilities.Crypto.CryptoClass;
 
 namespace UI.Controllers
 {
@@ -52,9 +55,10 @@ namespace UI.Controllers
         private ISliderService _sliderService;
         private IPopupModalService _popupModalService;
         private IUcretsizDanismanService _ucretsizDanismanService;
+        private IUyeService _uyeService;
         private IHttpContextAccessor _contextAccessor;
 
-        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IEgitimModeliResimService egitimModeliResimService, IEgitimModeliService egitimModeliService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IBransService bransService, IisBasvuruService basvuruService, ISliderService sliderService, IPopupModalService popupModalService, IUcretsizDanismanService ucretsizDanismanService)
+        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IEgitimModeliResimService egitimModeliResimService, IEgitimModeliService egitimModeliService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IBransService bransService, IisBasvuruService basvuruService, ISliderService sliderService, IPopupModalService popupModalService, IUcretsizDanismanService ucretsizDanismanService, IUyeService uyeService)
         {
             _logger = logger;
             _ilService = ilService;
@@ -90,29 +94,31 @@ namespace UI.Controllers
             _sliderService = sliderService;
             _popupModalService = popupModalService;
             _ucretsizDanismanService = ucretsizDanismanService;
+            _uyeService = uyeService;
         }
 
         public async Task<IActionResult> Index()
         {
+
             var popup = _popupModalService.GetByStatus();
             ViewData["Popup"] = popup.Data;
 
             var ilListe = _ilService.GetAll();
             var ilSelectList = (from i in ilListe.Data
-                select new SelectListItem
-                {
-                    Text = i.Ad.ToUpper(),
-                    Value = i.Id.ToString()
-                }).ToList();
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
             ViewData["iller"] = ilSelectList;
 
             var okulTurleri = _okulTurService.GetAll();
             var okulTurSelectList = (from i in okulTurleri.Data
-                select new SelectListItem
-                {
-                    Text = i.Tip.ToUpper(),
-                    Value = i.Id.ToString()
-                }).ToList();
+                                     select new SelectListItem
+                                     {
+                                         Text = i.Tip.ToUpper(),
+                                         Value = i.Id.ToString()
+                                     }).ToList();
             ViewData["okulTurleri"] = okulTurSelectList;
             KurumAraDto model = new KurumAraDto();
             return View(model);
@@ -121,7 +127,7 @@ namespace UI.Controllers
         [HttpGet]
         public IActionResult KurumAra(KurumAraDto model)
         {
-            
+
             List<KurumDisplayDto>? liste = new List<KurumDisplayDto>();
             if (model.OkulArama && !model.KursArama)
             {
@@ -140,11 +146,11 @@ namespace UI.Controllers
 
                 var ilceListe = _ilceService.GetByilIdToList(model.il1);
                 var ilceSelectList = (from i in ilceListe.Data
-                    select new SelectListItem
-                    {
-                        Text = i.Ad.ToUpper(),
-                        Value = i.Id.ToString()
-                    }).ToList();
+                                      select new SelectListItem
+                                      {
+                                          Text = i.Ad.ToUpper(),
+                                          Value = i.Id.ToString()
+                                      }).ToList();
                 ViewData["ilceler"] = ilceSelectList;
             }
             else if (!model.OkulArama && model.KursArama)
@@ -160,31 +166,31 @@ namespace UI.Controllers
                 liste = _okulService.GetKursListFilter(kursAraDto).Data;
                 var ilceListe = _ilceService.GetByilIdToList(model.il2);
                 var ilceSelectList = (from i in ilceListe.Data
-                    select new SelectListItem
-                    {
-                        Text = i.Ad.ToUpper(),
-                        Value = i.Id.ToString()
-                    }).ToList();
+                                      select new SelectListItem
+                                      {
+                                          Text = i.Ad.ToUpper(),
+                                          Value = i.Id.ToString()
+                                      }).ToList();
                 ViewData["ilceler"] = ilceSelectList;
             }
 
             var okulTurleri = _okulTurService.GetAll();
             var okulTurSelectList = (from i in okulTurleri.Data
-                select new SelectListItem
-                {
-                    Text = i.Tip.ToUpper(),
-                    Value = i.Id.ToString()
-                }).ToList();
+                                     select new SelectListItem
+                                     {
+                                         Text = i.Tip.ToUpper(),
+                                         Value = i.Id.ToString()
+                                     }).ToList();
             ViewData["okulTurleri"] = okulTurSelectList;
 
             ViewData["Liste"] = liste.OrderByDescending(a => a.TikSayisi).ToList();
             var ilListe = _ilService.GetAll();
             var ilSelectList = (from i in ilListe.Data
-                select new SelectListItem
-                {
-                    Text = i.Ad.ToUpper(),
-                    Value = i.Id.ToString()
-                }).ToList();
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
             ViewData["iller"] = ilSelectList;
 
             return View(model);
@@ -197,20 +203,20 @@ namespace UI.Controllers
             ViewData["Kurumlistesi"] = result;
             var ilListe = _ilService.GetAll();
             var ilSelectList = (from i in ilListe.Data
-                select new SelectListItem
-                {
-                    Text = i.Ad.ToUpper(),
-                    Value = i.Id.ToString()
-                }).ToList();
+                                select new SelectListItem
+                                {
+                                    Text = i.Ad.ToUpper(),
+                                    Value = i.Id.ToString()
+                                }).ToList();
             ViewData["iller"] = ilSelectList;
 
             var okulTurleri = _okulTurService.GetAll();
             var okulTurSelectList = (from i in okulTurleri.Data
-                select new SelectListItem
-                {
-                    Text = i.Tip.ToUpper(),
-                    Value = i.Id.ToString()
-                }).ToList();
+                                     select new SelectListItem
+                                     {
+                                         Text = i.Tip.ToUpper(),
+                                         Value = i.Id.ToString()
+                                     }).ToList();
             ViewData["okulTurleri"] = okulTurSelectList;
             KurumAraDto model = new KurumAraDto();
             return View(model);
@@ -224,7 +230,7 @@ namespace UI.Controllers
             ViewData["Yorumlar"] = kurumYorum.Data.OrderByDescending(a => a.Id).ToList();
             ViewData["yorumSayisi"] = _kurumYorumService.GetCountByKurumId(id).Data;
             var kurumId = HttpContext.Session.GetString("HomeKurumId");
-            if (kurumId == null)
+            if (kurumId != id.ToString())
             {
                 var kurum = _okulService.GetById(id);
                 kurum.Data.TikSayisi++;
@@ -383,7 +389,7 @@ namespace UI.Controllers
                                 }).ToList();
             ViewData["iller"] = ilSelectList;
 
-            var bransListe=_bransService.GetAll();
+            var bransListe = _bransService.GetAll();
             var bransSelectList = (from i in bransListe.Data
                                    select new SelectListItem
                                    {
@@ -562,7 +568,7 @@ namespace UI.Controllers
 
             var katalogliste = _katalogService.GetAllByKurumId(int.Parse(kurumId));
             ViewData["KurumAdi"] = _okulService.GetById(int.Parse(kurumId)).Data.Ad;
-            return View(katalogliste.Data.OrderByDescending(a=>a.Id).ToList());
+            return View(katalogliste.Data.OrderByDescending(a => a.Id).ToList());
         }
 
         public IActionResult KatalogIndir(Guid seriNo)
@@ -680,8 +686,8 @@ namespace UI.Controllers
                                     Value = i.Id.ToString()
                                 }).ToList();
             ViewData["iller"] = ilSelectList;
-            
-            UcretsizDanisman model=new UcretsizDanisman();
+
+            UcretsizDanisman model = new UcretsizDanisman();
             return View(model);
         }
 
@@ -690,17 +696,82 @@ namespace UI.Controllers
         {
             if (!model.OkulMu && !model.KursMu)
                 return Json(new ErrorResult("Okul veya Kurs tercihi yapmadınız."));
-            if (model.Sinif == null || model.Sinif==0)
+            if (model.Sinif == null || model.Sinif == 0)
                 return Json(new ErrorResult("Sınıf tercihi yapmadınız."));
-            if(model.ilId==null || model.ilId==0)
+            if (model.ilId == null || model.ilId == 0)
                 return Json(new ErrorResult("İl tercihi yapmadınız."));
             if (model.ilceId == null || model.ilceId == 0)
                 return Json(new ErrorResult("İlçe tercihi yapmadınız."));
             if (!model.KVKK)
-                return Json(new ErrorResult("KVKK tercihini işsaretlemeniz gerekmektedir."));
+                return Json(new ErrorResult("KVKK tercihini işaretlemeniz gerekmektedir."));
 
             var result = _ucretsizDanismanService.Add(model);
             return Json(result);
+        }
+
+        public IActionResult KayitOl()
+        {
+            Uye model = new Uye();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult KayitOl(Uye user,string SifreTekrar)
+        {
+
+            if(user.Sifre!=SifreTekrar)
+                return Json(new ErrorResult("Yazdığınız şifreler aynı değildir. Lütfen kontrol ediniz."));
+            if (!user.KVKK)
+                return Json(new ErrorResult("KVKK tercihini işaretlemeniz gerekmektedir."));
+            if (String.IsNullOrEmpty(user.Email) && String.IsNullOrEmpty(user.Telefon))
+              return Json(new ErrorResult("Email ve telefon bilgilerinden en az biri yazılmalıdır."));
+
+            user.Sifre = Kripto.Encrypt(user.Sifre);
+            user.UyeGuid = Guid.NewGuid();
+           user.CreatedDate = DateTime.Now;
+           user.Status = false;
+           var result=_uyeService.Add(user);
+           HttpContext.Session.SetString("UyeGuid",user.UyeGuid.ToString());
+           
+           if (!result.Success)
+               return Json(result);
+           return Json(new SuccessDataResult<Uye>("Bilgileriniz kaydedildi."));
+        }
+
+        public IActionResult UserActivation()
+        {
+            var uye = CodeGuncelleGonder();
+            if (uye!=null)
+            {
+                return View(uye);
+            }
+            else
+                return RedirectToAction("KayitOl");
+        }
+
+        public Uye CodeGuncelleGonder()
+        {
+            string uyeGuid = HttpContext.Session.GetString("UyeGuid");
+            var uye = _uyeService.GetByUyeGuid(uyeGuid);
+            if (uye.Success)
+            {
+                string code = PasswordCr.CodeGenereate();
+                if (!String.IsNullOrEmpty(uye.Data.Email))
+                {
+                    uye.Data.MailCode = code;
+                    uye.Data.MailCodeActive = true;
+                    var result = _uyeService.Update(uye.Data);
+                    if (result.Success)
+                    {
+                        //mail gönderilecek..
+                    }
+                }
+
+                return uye.Data;
+            }
+            else
+                return null;
+
         }
 
     }
