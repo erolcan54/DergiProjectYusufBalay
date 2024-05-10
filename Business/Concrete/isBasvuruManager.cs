@@ -23,8 +23,7 @@ namespace Business.Concrete
 
         public IResult Add(isBasvuru entity)
         {
-            if (!KayitKontrol(entity.Email, entity.Telefon).Success)
-                return new ErrorResult("Daha önce yapılmış iş başvurunuz var.");
+
             entity.CreatedDate = DateTime.Now;
             entity.Status = true;
             _isBasvuruDal.Add(entity);
@@ -33,7 +32,7 @@ namespace Business.Concrete
 
         public IResult KayitKontrol(string email, string telefon)
         {
-            var model = _isBasvuruDal.Get(a => (a.Telefon == telefon || a.Email == email) && a.Status);
+            var model = _isBasvuruDal.Get(a => a.Telefon == telefon && a.Status);
             if (model != null)
                 return new ErrorResult("Kayıt var");
             return new SuccessResult("Kayıt yapılabilir.");

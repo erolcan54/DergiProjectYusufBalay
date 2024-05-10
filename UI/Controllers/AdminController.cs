@@ -1195,45 +1195,34 @@ namespace UI.Controllers
         public IActionResult isBasvuruGuncelle(int id)
         {
             var result = _isBasvuruService.GetById(id);
-            var ilListe = _ilService.GetAll();
-            var ilSelectList = (from i in ilListe.Data
-                                select new SelectListItem
-                                {
-                                    Text = i.Ad.ToUpper(),
-                                    Value = i.Id.ToString()
-                                }).ToList();
-            ViewData["iller"] = ilSelectList;
-
-            var bransListe = _bransService.GetAll();
-            var bransSelectList = (from i in bransListe.Data
-                                   select new SelectListItem
-                                   {
-                                       Text = i.Ad.ToUpper(),
-                                       Value = i.Id.ToString()
-                                   }).ToList();
-            ViewData["branslar"] = bransSelectList;
             return View(result.Data);
         }
 
         [HttpPost]
-        public IActionResult isBasvuruGuncelle(isBasvuru model, IFormFile Resim)
+        public IActionResult isBasvuruGuncelle(isBasvuru model, IFormFile CvPDF)
         {
             var isb = _isBasvuruService.GetById(model.Id);
-            if (Resim != null)
+            if (CvPDF != null)
             {
                 using (var stream = new MemoryStream())
                 {
-                    Resim.CopyTo(stream);
-                    model.Resim = stream.ToArray();
+                    CvPDF.CopyTo(stream);
+                    model.CvPDF = stream.ToArray();
                 }
             }
             else
             {
-                model.Resim = isb.Data.Resim;
+                model.CvPDF = isb.Data.CvPDF;
             }
             var result = _isBasvuruService.Update(model);
 
             return Json(result);
+        }
+
+        public IActionResult CvIndir(int Id)
+        {
+            var result = _isBasvuruService.GetById(Id);
+            return File(result.Data.CvPDF, "application/pdf", result.Data.Ad+" "+result.Data.Soyad+".pdf");
         }
         public IActionResult OgretmenDetay(int id)
         {

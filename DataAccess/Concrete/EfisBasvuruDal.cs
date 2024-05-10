@@ -17,26 +17,18 @@ namespace DataAccess.Concrete
             using (var context = new EfContext())
             {
                 var result = from isbasvuru in context.isBasvuru
-                             where isbasvuru.ilId == id && isbasvuru.Status
-                             join brans in context.Brans on isbasvuru.BransId equals brans.Id
-                             join iltable in context.il on isbasvuru.ilId equals iltable.Id
+                             where isbasvuru.Status
                              select new isBasvuruDisplayDto
                              {
-                                 AdSoyad = isbasvuru.AdSoyad,
-                                 BransAdi = brans.Ad,
-                                 BransId = isbasvuru.BransId,
+                                 Ad = isbasvuru.Ad,
+                                 Soyad = isbasvuru.Soyad,
                                  CreatedDate = isbasvuru.CreatedDate,
                                  DeletedDate = isbasvuru.DeletedDate,
-                                 Email = isbasvuru.Email,
-                                 Hakkinda = isbasvuru.Hakkinda,
                                  Id = isbasvuru.Id,
-                                 ilId = isbasvuru.ilId,
                                  KVKK = isbasvuru.KVKK,
-                                 Resim = isbasvuru.Resim,
                                  Status = isbasvuru.Status,
                                  Telefon = isbasvuru.Telefon,
                                  UpdatedDate = isbasvuru.UpdatedDate,
-                                 ilAdi = iltable.Ad
                              };
                 return result.ToList();
             }
@@ -48,25 +40,17 @@ namespace DataAccess.Concrete
             {
                 var result = from isbasvuru in context.isBasvuru
                              where isbasvuru.Status
-                             join brans in context.Brans on isbasvuru.BransId equals brans.Id
-                             join iltable in context.il on isbasvuru.ilId equals iltable.Id
                              select new isBasvuruDisplayDto
                              {
-                                 AdSoyad = isbasvuru.AdSoyad,
-                                 BransAdi = brans.Ad,
-                                 BransId = isbasvuru.BransId,
+                                 Ad = isbasvuru.Ad,
+                                 Soyad = isbasvuru.Soyad,
                                  CreatedDate = isbasvuru.CreatedDate,
                                  DeletedDate = isbasvuru.DeletedDate,
-                                 Email = isbasvuru.Email,
-                                 Hakkinda = isbasvuru.Hakkinda,
                                  Id = isbasvuru.Id,
-                                 ilId = isbasvuru.ilId,
                                  KVKK = isbasvuru.KVKK,
-                                 Resim = isbasvuru.Resim,
                                  Status = isbasvuru.Status,
                                  Telefon = isbasvuru.Telefon,
                                  UpdatedDate = isbasvuru.UpdatedDate,
-                                 ilAdi = iltable.Ad
                              };
                 return result.ToList();
             }
@@ -78,25 +62,17 @@ namespace DataAccess.Concrete
             {
                 var result = from isbasvuru in context.isBasvuru
                              where isbasvuru.Id == id && isbasvuru.Status
-                             join brans in context.Brans on isbasvuru.BransId equals brans.Id
-                             join iltable in context.il on isbasvuru.ilId equals iltable.Id
                              select new isBasvuruDisplayDto
                              {
-                                 AdSoyad = isbasvuru.AdSoyad,
-                                 BransAdi = brans.Ad,
-                                 BransId = isbasvuru.BransId,
+                                 Ad = isbasvuru.Ad,
+                                 Soyad = isbasvuru.Soyad,
                                  CreatedDate = isbasvuru.CreatedDate,
                                  DeletedDate = isbasvuru.DeletedDate,
-                                 Email = isbasvuru.Email,
-                                 Hakkinda = isbasvuru.Hakkinda,
                                  Id = isbasvuru.Id,
-                                 ilId = isbasvuru.ilId,
                                  KVKK = isbasvuru.KVKK,
-                                 Resim = isbasvuru.Resim,
                                  Status = isbasvuru.Status,
                                  Telefon = isbasvuru.Telefon,
                                  UpdatedDate = isbasvuru.UpdatedDate,
-                                 ilAdi = iltable.Ad
                              };
                 return result.FirstOrDefault();
             }

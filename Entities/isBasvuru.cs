@@ -8,13 +8,11 @@ namespace Entities
 {
     public class isBasvuru:EntityBase
     {
-        public string AdSoyad { get; set; }
-        public int ilId { get; set; }
-        public int BransId { get; set; }
+        public string Ad { get; set; }
+        public string Soyad { get; set; }
+
         public string Telefon { get; set; }
-        public string Email { get; set; }
-        public byte[] Resim { get; set; }
-        public string Hakkinda { get; set; }
+        public byte[] CvPDF { get; set; }
         public bool KVKK { get; set; }
     }
 }

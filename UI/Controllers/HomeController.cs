@@ -635,42 +635,25 @@ namespace UI.Controllers
 
         public IActionResult isBasvuru()
         {
-            var ilListe = _ilService.GetAll();
-            var ilSelectList = (from i in ilListe.Data
-                                select new SelectListItem
-                                {
-                                    Text = i.Ad.ToUpper(),
-                                    Value = i.Id.ToString()
-                                }).ToList();
-            ViewData["iller"] = ilSelectList;
-
-            var bransListe = _bransService.GetAll();
-            var bransSelectList = (from i in bransListe.Data
-                                   select new SelectListItem
-                                   {
-                                       Text = i.Ad.ToUpper(),
-                                       Value = i.Id.ToString()
-                                   }).ToList();
-            ViewData["branslar"] = bransSelectList;
             isBasvuru model = new isBasvuru();
             return View(model);
         }
 
-        public IActionResult AddisBasvuru(isBasvuru model, IFormFile Resim)
+        public IActionResult AddisBasvuru(isBasvuru model, IFormFile CvPDF)
         {
             if (!model.KVKK)
                 return Json(new ErrorResult("KVKK Metni işaretlenmek zorundadır."));
 
-            if (Resim != null)
+            if (CvPDF != null)
             {
                 using (var stream = new MemoryStream())
                 {
-                    Resim.CopyTo(stream);
-                    model.Resim = stream.ToArray();
+                    CvPDF.CopyTo(stream);
+                    model.CvPDF = stream.ToArray();
                 }
             }
             else
-                return Json(new ErrorResult("Resim alanı boş bırakılamaz."));
+                return Json(new ErrorResult("CV PDF alanı boş bırakılamaz."));
             var result = _basvuruService.Add(model);
 
             return Json(result);

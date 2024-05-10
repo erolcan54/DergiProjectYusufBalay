@@ -1,33 +1,36 @@
 ﻿@model isBasvuru
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    List<SelectListItem> iller = ViewData["iller"] as List<SelectListItem>;
-    List<SelectListItem> branslar = ViewData["branslar"] as List<SelectListItem>;
 }
 
 <div class="row">
     <div class="card">
         <div class="card-body">
             <h4 class="header-title">İŞ BAŞVURU FORMU</h4>
-            <p class="text-muted font-14">İş başvuru bilgilerinizi doldurunuz.</p>
+            <p class="text-muted font-14">İş başvuru bilgilerini doldurunuz.</p>
             <div class="row">
                 <form class="form-vertical" data-ajax="true" enctype="multipart/form-data"
                       data-ajax-success="OnAddisBasvuruSuccess"
                       data-ajax-begin="OnAddisBasvuruBegin"
                       data-ajax-complete="OnAddisBasvuruComplete" data-ajax-method="POST" asp-action="isBasvuruGuncelle" asp-controller="Admin">
-                    <div class="mb-3">
-                        <label for="AdSoyad" class="form-label">Ad Soyad</label>
-                        <input class="form-control" type="text" asp-for="AdSoyad" id="AdSoyad" required="" placeholder="Ad Soyad Yazınız">
-                    </div>
-                    <input type="hidden" asp-for="Id" value="@Model.Id" />
-                    <input type="hidden" asp-for="CreatedDate" value="@Model.CreatedDate" />
-                    <input type="hidden" asp-for="DeletedDate" value="@Model.DeletedDate" />
-                    <input type="hidden" asp-for="UpdatedDate" value="@Model.UpdatedDate" />
-                    <input type="hidden" asp-for="Status" value="@Model.Status" />
-                    <input type="hidden" asp-for="KVKK" value="@Model.KVKK" />
-                    <div class="mb-3">
-                        <label for="Resim" class="form-label">Resim</label>
-                        <input class="form-control" type="file" asp-for="Resim" id="Resim">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CreatedDate" />
+                    <input type="hidden" asp-for="DeletedDate" />
+                    <input type="hidden" asp-for="UpdatedDate" />
+                    <input type="hidden" asp-for="Status" />
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Ad" class="form-label">Ad</label>
+                                <input class="form-control" type="text" asp-for="Ad" id="Ad" required="" placeholder="Adınızı Yazınız">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="Soyad" class="form-label">Soyad</label>
+                                <input class="form-control" type="text" asp-for="Soyad" id="Soyad" required="" placeholder="Soyadınızı Yazınız">
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -38,40 +41,10 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="Email" class="form-label">Email</label>
-                                <input class="form-control" type="email" asp-for="Email" id="Email" required="" placeholder="Email Yazınız">
+                                <label for="CvPDF" class="form-label">CV (PDF Formatında)</label>
+                                <input class="form-control" type="file" name="CvPDF" accept="application/pdf" required id="CvPDF">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="ilId" class="form-label">İl</label>
-                                <select id="ilId" name="ilId" asp-for="ilId" class="form-control select2" data-toggle="select2">
-                                    <option value="0">İl Seçiniz</option>
-                                    @foreach (var item in iller)
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                </select>
-                            </div>
-                        </div> <!-- end col -->
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="BransId" class="form-label">Branş</label>
-                                <select id="BransId" asp-for="BransId" name="BransId" class="form-control select2" data-toggle="select2">
-                                    <option value="0">Branş Seçiniz</option>
-                                    @foreach (var item in branslar)
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                </select>
-                            </div>
-                        </div> <!-- end col -->
-                    </div>
-                    <div class="mb-3">
-                        <label for="Hakkinda" class="form-label">Hakkında</label>
-                        <textarea class="form-control" asp-for="Hakkinda" id="Hakkinda" rows="3" required="" placeholder="Öğretmen hakkında bilgileri yazınız"></textarea>
                     </div>
                     <div class="d-grid mb-0 text-center">
                         <button class="btn btn-primary" id="btnaddisbasvuru" type="submit"><i class="mdi mdi-plus"></i> Kaydet </button>
@@ -82,10 +55,6 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/ckeditor/ckeditor.js"></script>
-    <script>
-        CKEDITOR.replace("Hakkinda");
-    </script>
     <script>
         $(window).on('load',
             function () {

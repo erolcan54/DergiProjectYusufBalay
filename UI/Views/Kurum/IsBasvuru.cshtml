@@ -14,32 +14,28 @@
                     {
                         <table id="alternative-page-datatable" class="table dt-responsive nowrap w-100">
                             <thead>
-                                <tr>
-                                    <th>Ad Soyad</th>
-                                    <th>İl Adı</th>
-                                    <th>Branş Adı</th>
-                                    <th>Kayıt Tarihi</th>
-                                    <th>Email</th>
-                                    <th>Telefon</th>
-                                    <th></th>
-                                </tr>
+                            <tr>
+                                <th>Ad</th>
+                                <th>Soyad</th>
+                                <th>Kayıt Tarihi</th>
+                                <th>Telefon</th>
+                                <th></th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.AdSoyad</td>
-                                        <td>@item.ilAdi</td>
-                                        <td>@item.BransAdi</td>
-                                        <td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString()</td>
-                                        <td>@item.Email</td>
-                                        <td>@item.Telefon</td>
-                                        <td>
-                                            <a href="@Url.Action("OgretmenDetay","Kurum",new {id=item.Id})" class="btn btn-sm btn-info">Detay</a>
-                                            
-                                        </td>
-                                    </tr>
-                                }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Ad</td>
+                                    <td>@item.Soyad</td>
+                                    <td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString()</td>
+                              
+                                    <td>@item.Telefon</td>
+                                    <td>
+                                        <a href="@Url.Action("OgretmenDetay","Kurum",new {id=item.Id})" class="btn btn-sm btn-info">Detay</a>
+                                    </td>
+                                </tr>
+                            }
 
                             </tbody>
                         </table>

@@ -808,19 +808,19 @@ namespace UI.Controllers
         #endregion
 
         #region İşBaşvuruları
-        public IActionResult IsBasvuru()
-        {
-            var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
-            var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
-            var isbavurulari=_isBasvuruService.GetAllByilId(kurum.Data.ilId);
-            return View(isbavurulari.Data);
-        }
+        //public IActionResult IsBasvuru()
+        //{
+        //    var kurumId = _contextAccessor.HttpContext.Session.GetString("KurumId");
+        //    var kurum = _okulService.GetByIdDisplay(int.Parse(kurumId));
+        //    var isbavurulari=_isBasvuruService.GetAllByilId(kurum.Data.ilId);
+        //    return View(isbavurulari.Data);
+        //}
 
-        public IActionResult OgretmenDetay(int id)
-        {
-            var result = _isBasvuruService.GetByIdDisplay(id);
-            return View(result.Data);
-        }
+        //public IActionResult OgretmenDetay(int id)
+        //{
+        //    var result = _isBasvuruService.GetByIdDisplay(id);
+        //    return View(result.Data);
+        //}
         #endregion
     }
 }
