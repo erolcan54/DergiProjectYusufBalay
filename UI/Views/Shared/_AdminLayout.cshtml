@@ -26,6 +26,7 @@
     <link href="~/toastr.js/toastr.css" rel="stylesheet" />
     <link href="~/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" />
     <link href="~/css/loader.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/favicon.ico" />
     @*<link href="~/assets/css/vendor/simplemde.min.css" rel="stylesheet" />*@
 
 </head>
@@ -81,10 +82,17 @@
                             <span> Blog Yazıları </span>
                         </a>
                     </li>
-                     <li class="side-nav-item">
-                       <a href="@Url.Action("KurumListesi","Admin")" class="side-nav-link">
+                    <li class="side-nav-item">
+                        <a href="@Url.Action("KurumListesi","Admin")" class="side-nav-link">
                             <i class="uil-notes"></i>
                             <span> Kurumlar </span>
+                        </a>
+                    </li>
+                    </li>
+                    <li class="side-nav-item">
+                        <a href="@Url.Action("KurumBeniArasinListesi","Admin")" class="side-nav-link">
+                            <i class="uil-notes"></i>
+                            <span> Kurum Beni Arasın Listesi </span>
                         </a>
                     </li>
                     <li class="side-nav-item">

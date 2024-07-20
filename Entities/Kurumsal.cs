@@ -14,5 +14,7 @@ namespace Entities
         public string? Instagram { get; set; }
         public string? Twitter{ get; set; }
         public string? Adres { get; set; }
+        public string? AnasayfaMesaj { get; set; }
+
     }
 }

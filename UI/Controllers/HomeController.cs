@@ -56,9 +56,10 @@ namespace UI.Controllers
         private IPopupModalService _popupModalService;
         private IUcretsizDanismanService _ucretsizDanismanService;
         private IUyeService _uyeService;
+        private IKurumsalService _kurumsalService;
         private IHttpContextAccessor _contextAccessor;
 
-        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IEgitimModeliResimService egitimModeliResimService, IEgitimModeliService egitimModeliService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IBransService bransService, IisBasvuruService basvuruService, ISliderService sliderService, IPopupModalService popupModalService, IUcretsizDanismanService ucretsizDanismanService, IUyeService uyeService)
+        public HomeController(ILogger<HomeController> logger, IilService ilService, IilceService ilceService, IOkulTurService okulTurService, IOkulService okulService, IKullaniciService kullaniciService, IYoneticiService yoneticiService, IBlogService blogService, IOzelDersOgretmenService ozelDersOgretmenService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IHttpContextAccessor contextAccessor, IindirimService indirimService, IOgretmenService ogretmenService, IKurumBeniAraService kurumBeniAraService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IEgitimModeliResimService egitimModeliResimService, IEgitimModeliService egitimModeliService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IBransService bransService, IisBasvuruService basvuruService, ISliderService sliderService, IPopupModalService popupModalService, IUcretsizDanismanService ucretsizDanismanService, IUyeService uyeService, IKurumsalService kurumsalService)
         {
             _logger = logger;
             _ilService = ilService;
@@ -95,6 +96,7 @@ namespace UI.Controllers
             _popupModalService = popupModalService;
             _ucretsizDanismanService = ucretsizDanismanService;
             _uyeService = uyeService;
+            _kurumsalService = kurumsalService;
         }
 
         public async Task<IActionResult> Index()
@@ -121,6 +123,7 @@ namespace UI.Controllers
                                      }).ToList();
             ViewData["okulTurleri"] = okulTurSelectList;
             KurumAraDto model = new KurumAraDto();
+            ViewData["AnasayfaMesaj"] = _kurumsalService.GetAll().Data.AnasayfaMesaj;
             return View(model);
         }
 
@@ -192,7 +195,6 @@ namespace UI.Controllers
                                     Value = i.Id.ToString()
                                 }).ToList();
             ViewData["iller"] = ilSelectList;
-
             return View(model);
             //return RedirectToAction("KurumListesi", "Home", new { liste = liste });
         }

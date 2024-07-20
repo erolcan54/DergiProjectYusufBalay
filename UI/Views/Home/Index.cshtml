@@ -52,7 +52,7 @@
                                 <div class="mb-2">
                                     <select id="ilce1" asp-for="ilce1" class="form-control select2" data-toggle="select2">
                                         <option value="0">İlçe Seçiniz</option>
-                                        
+
                                     </select>
                                 </div>
 
@@ -102,7 +102,7 @@
                             <div class="col-lg-4 mb-2">
                                 <select id="ilce2" asp-for="ilce2" class="form-control select2" data-toggle="select2">
                                     <option>İlçe Seçiniz</option>
-                                    
+
                                 </select>
                             </div> <!-- end col -->
                             @*  <div class="col-lg-3">
@@ -121,7 +121,12 @@
                     </form>
                 </div>
             </div>
-            <div class="alert bg-dark text-warning"><strong>Şimdilik sadece İstanbul ilinde hizmet vermekteyiz.</strong></div>
+            @if (ViewData["AnasayfaMesaj"] != null)
+            {
+                <div class="alert bg-dark text-warning">
+                    <strong>@ViewData["AnasayfaMesaj"]</strong>
+                </div>
+            }
         </div>
     </div>
 </div>

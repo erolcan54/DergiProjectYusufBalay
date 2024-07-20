@@ -52,7 +52,8 @@ namespace UI.Controllers
         private IKurumsalService _kurumsalService;
         private IPopupModalService _popupModalService;
         private IUcretsizDanismanService _ucretsizDanismanService;
-        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IindirimService indirimService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IisBasvuruService isBasvuruService, ISliderService sliderService, IKurumsalService kurumsalService, IPopupModalService popupModalService, IUcretsizDanismanService ucretsizDanismanService)
+        private IKurumBeniAraService _kurumBeniAraService;
+        public AdminController(IBlogService blogService, IYoneticiService yoneticiService, IOzelDersOgretmenService ozelDersOgretmenService, IilceService ilceService, IilService ilService, IBransService bransService, IOzelDersVeliBasvuruService ozelDersVeliBasvuruService, IOzelOgretmenYorumService ozelOgretmenYorumService, IOzelOgretmenYorumBegeniService ozelOgretmenYorumBegeniService, IOkulTurService okulTurService, IOkulService okulService, IEgitimTurService egitimTurService, IKullaniciService kullaniciService, IOgretmenService ogretmenService, IEgitimModeliService egitimModeliService, IEgitimModeliResimService egitimModeliResimService, IBasariService basariService, IKatalogService katalogService, IIcGorselService icGorselService, IDisGorselService disGorselService, IEtkinlikService etkinlikService, IEtkinlikResimService etkinlikResimService, IKulupService kulupService, IKurumYorumService kurumYorumService, IKurumYorumBegeniService kurumYorumBegeniService, IindirimService indirimService, IBurslulukSinavService burslulukSinavService, IBurslulukSinavBasvuruService burslulukSinavBasvuruService, IisBasvuruService isBasvuruService, ISliderService sliderService, IKurumsalService kurumsalService, IPopupModalService popupModalService, IUcretsizDanismanService ucretsizDanismanService, IKurumBeniAraService kurumBeniAraService)
         {
             _blogService = blogService;
             _yoneticiService = yoneticiService;
@@ -87,6 +88,7 @@ namespace UI.Controllers
             _kurumsalService = kurumsalService;
             _popupModalService = popupModalService;
             _ucretsizDanismanService = ucretsizDanismanService;
+            _kurumBeniAraService = kurumBeniAraService;
         }
 
         public IActionResult Index()
@@ -1329,6 +1331,17 @@ namespace UI.Controllers
             var result=_ucretsizDanismanService.Delete(id);
             return Json(result);
         }
+        #endregion
+
+        #region KurumBeniArasin
+
+        public IActionResult KurumBeniArasinListesi()
+        {
+            var result = _kurumBeniAraService.GetAll();
+            return View(result.Data);
+        }
+
+
         #endregion
     }
 }

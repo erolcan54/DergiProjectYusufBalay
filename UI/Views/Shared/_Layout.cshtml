@@ -21,6 +21,16 @@
     <link href="~/toastr.js/toastr.min.css" rel="stylesheet" />
     <link href="~/bootstrap-sweetalert/sweetalert.min.css" rel="stylesheet" />
     <link href="~/css/loader.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/favicon.ico" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2N6BL2TTYL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-2N6BL2TTYL');
+    </script>
 </head>
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
     <header>
@@ -46,37 +56,37 @@
                     <ul class="navbar-nav">
                         @*  @if (Context.Session.GetString("Uye") != null)
                         {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <strong><i class="uil uil-user-check"></i> Profile</strong>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="Favoriler"><strong>Favoriler</strong></a>
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="SifreIslem"><strong>Şifre İşlemleri</strong></a>
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="Cikis"><strong>Çıkış Yap</strong></a>
-                                    <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" asp-controller="Uye" asp-action="CikisYap">Çıkış Yap</a>
-                                </div>
-                            </li>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <strong><i class="uil uil-user-check"></i> Profile</strong>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Favoriler"><strong>Favoriler</strong></a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="SifreIslem"><strong>Şifre İşlemleri</strong></a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Cikis"><strong>Çıkış Yap</strong></a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" asp-controller="Uye" asp-action="CikisYap">Çıkış Yap</a>
+                        </div>
+                        </li>
                         }
-                         else
+                        else
                         { *@
-                           @*  <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="KayitOl"><strong><i class="uil uil-user-plus"></i> Kayıt Ol</strong></a>
-                            </li> *@
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <strong><i class="uil uil-arrow-to-right"></i> Giriş İşlemleri</strong>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @* <a class="dropdown-item" asp-controller="Home" asp-action="UyeGiris"><strong>Üye Girişi</strong></a> *@
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="KullaniciGiris"><strong>Kurum Girişi</strong></a>
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="YoneticiGiris"><strong>Yönetici Girişi</strong></a>
-                                    @*<div class="dropdown-divider"></div>
+                        @*  <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="KayitOl"><strong><i class="uil uil-user-plus"></i> Kayıt Ol</strong></a>
+                        </li> *@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <strong><i class="uil uil-arrow-to-right"></i> Giriş İşlemleri</strong>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @* <a class="dropdown-item" asp-controller="Home" asp-action="UyeGiris"><strong>Üye Girişi</strong></a> *@
+                                <a class="dropdown-item" asp-controller="Home" asp-action="KullaniciGiris"><strong>Kurum Girişi</strong></a>
+                                <a class="dropdown-item" asp-controller="Home" asp-action="YoneticiGiris"><strong>Yönetici Girişi</strong></a>
+                                @*<div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" asp-controller="Uye" asp-action="CikisYap">Çıkış Yap</a>*@
-                                </div>
-                            </li>
-                       @*  } *@
+                            </div>
+                        </li>
+                        @*  } *@
                         @* <li class="nav-item">
                         <a class="nav-link text-dark btn-warning" asp-area="" asp-controller="Home" asp-action="Iletisim"><strong><i class="uil uil-forwaded-call"></i> İletişim</strong></a>
                         </li> *@

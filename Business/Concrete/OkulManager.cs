@@ -18,13 +18,13 @@ namespace Business.Concrete
         private IOkulDal _okulDal;
         private IOkulTurService _okulTurService;
         private IKurumYorumService _kurumYorumService;
-        private ICacheManager _cacheManager;
-        public OkulManager(IOkulDal okulDal, IOkulTurService okulTurService, IKurumYorumService kurumYorumService, ICacheManager cacheManager)
+        //private ICacheManager _cacheManager;
+        public OkulManager(IOkulDal okulDal, IOkulTurService okulTurService, IKurumYorumService kurumYorumService)
         {
             _okulDal = okulDal;
             _okulTurService = okulTurService;
             _kurumYorumService = kurumYorumService;
-            _cacheManager = cacheManager;
+            //_cacheManager = cacheManager;
         }
 
         public IResult Add(Okul entity)
@@ -33,7 +33,7 @@ namespace Business.Concrete
             entity.CreatedDate= DateTime.Now;
             _okulDal.Add(entity);
 
-            _cacheManager.Remove("Kurums");
+            //_cacheManager.Remove("Kurums");
 
             return new SuccessResult("Okul bilgisi eklendi.");
         }
@@ -45,7 +45,7 @@ namespace Business.Concrete
             result.DeletedDate= DateTime.Now;
             _okulDal.Update(result);
 
-            _cacheManager.Remove("Kurums");
+            //_cacheManager.Remove("Kurums");
 
             return new SuccessResult("Kurum bilgisi silindi.");
         }
@@ -114,16 +114,16 @@ namespace Business.Concrete
         public IDataResult<List<KurumDisplayDto>> GetTikKurum4Take()
         {
             var list=new List<KurumDisplayDto>();
-            if (!_cacheManager.IsAdd("Kurums"))
-            {
-                MemoryCacheEntryOptions cacheExpirationOptions = new MemoryCacheEntryOptions();
-                cacheExpirationOptions.AbsoluteExpiration = DateTime.Now.AddDays(5);
-                cacheExpirationOptions.Priority = CacheItemPriority.Normal;
+            //if (!_cacheManager.IsAdd("Kurums"))
+            //{
+            //    MemoryCacheEntryOptions cacheExpirationOptions = new MemoryCacheEntryOptions();
+            //    cacheExpirationOptions.AbsoluteExpiration = DateTime.Now.AddDays(1);
+            //    cacheExpirationOptions.Priority = CacheItemPriority.Normal;
                 list = _okulDal.GetTikKurum4Take();
-                _cacheManager.Add("Kurums", list.Where(a=>a.Status).ToList());
-            }
-            else
-                list = _cacheManager.Get<List<KurumDisplayDto>>("Kurums");
+            //    _cacheManager.Add("Kurums", list.Where(a=>a.Status).ToList());
+            //}
+            //else
+            //    list = _cacheManager.Get<List<KurumDisplayDto>>("Kurums");
             return new SuccessDataResult<List<KurumDisplayDto>>(list, "Kurum listesi getirildi.");
         }
 
@@ -133,7 +133,7 @@ namespace Business.Concrete
             entity.UpdatedDate =DateTime.Now;
             _okulDal.Update(entity);
 
-            _cacheManager.Remove("Kurums");
+            //_cacheManager.Remove("Kurums");
 
             return new SuccessResult("Kurum bilgisi güncellendi.");
         }

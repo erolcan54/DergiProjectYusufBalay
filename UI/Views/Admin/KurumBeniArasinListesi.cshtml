@@ -1,0 +1,109 @@
+﻿@model List<KurumBeniAraDto>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+
+    @if (Model.Count > 0)
+    {
+        <div class="card">
+            <div class="card-body">
+                <table id="myTable" class="table dt-responsive nowrap w-100">
+                    
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Kurum Adı</th>
+                        <th>Ad Soyad</th>
+                        <th>Sınıf Düzeyi</th>
+                        <th>Telefon</th>
+                        <th>E-mail</th>
+                        <th>Tarih</th>
+                        <th>Durum</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th>@item.Id</th>
+                            <td>@item.KurumAdi<br/><span class="badge badge-info-lighten">@item.ilAdi / @item.ilceAdi</span></td>
+                            <td>@item.AdSoyad</td>
+                            <td>@item.Sinif</td>
+                            <td>@item.Telefon</td>
+                            <td>@item.Email</td>
+                            <td>@item.CreatedDate </td>
+                            <td style="display: none;">
+                                @if (item.Status)
+                                {
+                                    <span class="badge badge-success-lighten">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger-lighten">Pasif</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+
+                    @* <tbody>
+                        @foreach (var item in Model.OrderByDescending(a=>a.Id))
+                        {
+                            <tr>
+                                <tr class="bg-dark-lighten">
+                                    <td>@item.KurumAdi</td>
+                                    <td>@item.ilAdi.ToUpper()</td>
+                                    <td>@item.ilceAdi.ToUpper()</td>
+                                    <td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString() - @Convert.ToDateTime(item.CreatedDate).ToShortTimeString() </td>
+                                </tr>
+                                <tr>
+                                    <td>@item.AdSoyad</td>
+                                    <td>@item.Sinif</td>
+                                    <td style="display: none;">
+                                        @if (item.Status)
+                                        {
+                                            <span class="badge badge-success-lighten">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger-lighten">Pasif</span>
+                                        }
+                                    </td>
+                                    <td>@item.Telefon</td>
+                                    <td>@item.Email</td>
+                                </tr>
+                            </tr>
+                            
+                        }
+                    </tbody> *@
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="body">
+            <div class="card-body">
+                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <strong>Uyarı - </strong> Kurum listesi boş.
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+
+    <script>
+        $(window).on('load',
+            function () {
+                $('#loading').hide();
+            });
+
+        $('#myTable').DataTable({
+            aaSorting: [[0, 'desc']]
+        });
+    </script>
+}

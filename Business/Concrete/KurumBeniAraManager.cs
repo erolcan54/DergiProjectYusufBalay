@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -37,9 +38,10 @@ namespace Business.Concrete
             return new SuccessResult("Kayıt silindi.");
         }
 
-        public IDataResult<List<KurumBeniAra>> GetAll()
+        public IDataResult<List<KurumBeniAraDto>> GetAll()
         {
-            throw new NotImplementedException();
+            var result = _kurumBeniAraDal.GetAllDisplay();
+            return new SuccessDataResult<List<KurumBeniAraDto>>(result, "Kurum aranması isteyenler listelendi.");
         }
 
         public IDataResult<KurumBeniAra> GetById(int id)
